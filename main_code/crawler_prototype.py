@@ -9,6 +9,35 @@ DOMAIN = "https://www.goodreads.com"
 URL = DOMAIN + "/choiceawards/best-books-2020"
 
 
+def get_link_to_books(links):
+    """
+    extracts links to specific books from the given list of pages
+    :param links: a list containing pages of top books per genre
+    :return: dictionary where key is genre and value is a list of books
+    """
+    user_agent = {'User-agent': 'Mozilla/5.0'}
+
+    links_per_genre = {}
+
+    for link in links:
+        genre = link.split('/')[-1]
+        print(f"Scraping {genre} page...")
+
+        response1 = requests.get(link, headers=user_agent)
+        soup1 = BeautifulSoup(response1.content, "html.parser")
+
+        # finds the "a" tag with class="pollAnswer__bookLink"
+        tag = soup1("a", attrs={"class": "pollAnswer__bookLink"})
+
+        # extracts all the links from the tags
+        links_to_books = [t['href'] for t in tag]
+        links_to_books = [DOMAIN + link for link in links_to_books]
+
+        links_per_genre[genre] = links_to_books
+
+    return links_per_genre
+
+
 def get_links_to_top_genres():
     """
     goes to the predefined URL and extracts the links to the top books
@@ -38,8 +67,16 @@ def get_links_to_top_genres():
 def main():
     links_to_top_genres = get_links_to_top_genres()
 
-    for link in links_to_top_genres:
-        print(link)
+    # for link in links_to_top_genres:
+    #     print(link)
+
+    links_to_top_books = get_link_to_books(links_to_top_genres)
+
+    for genre, books in links_to_top_books.items():
+        print(f"Links for {genre}:")
+
+        for book in books:
+            print(book)
 
 
 if __name__ == "__main__":
