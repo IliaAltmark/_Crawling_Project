@@ -2,6 +2,8 @@
 Authors: Ilia Altmark and Tovi Benoni
 First crawler
 """
+import csv
+
 from bs4 import BeautifulSoup
 import requests
 
@@ -72,11 +74,15 @@ def main():
 
     links_to_top_books = get_link_to_books(links_to_top_genres)
 
-    for genre, books in links_to_top_books.items():
-        print(f"Links for {genre}:")
+    with open('links_to_books.csv', 'w', newline='') as csv_file:
+        writer = csv.writer(csv_file)
 
-        for book in books:
-            print(book)
+        for genre, books in links_to_top_books.items():
+            print(f"Links for {genre}:")
+
+            for book in books:
+                writer.writerow([book, genre])
+                print(book)
 
 
 if __name__ == "__main__":
