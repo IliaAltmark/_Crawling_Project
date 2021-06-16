@@ -1,8 +1,7 @@
 from bs4 import BeautifulSoup
-import requests
 from crawler_prototype import DOMAIN
-from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
+from utils import quiet_selenium_chrome_driver
 
 
 class BookRating:
@@ -12,12 +11,12 @@ class BookRating:
         self.number_of_reviews = number_of_ratings
         self.rating_histogram = rating_histogram
         # TODO: assert that average_rating is indeed the average
-        # TODO: assert that number of ratings is indeed number_of_ratungs
-
+        # TODO: assert that number of ratings is indeed number_of_ratings
+    # TODO: write __str__()
 
 class Book:
     # TODO: describe genres and rating structure
-    # TODO: write the rating and genres func
+    # TODO: write the genres func
 
     def __init__(self, name, author, rating, genres, description, link, soup=None):
         self.name = name
@@ -47,12 +46,14 @@ class Book:
 
     def soup_from_link(self):
         # runs chrome, browse to the link
-        driver = webdriver.Chrome()
+        driver = quiet_selenium_chrome_driver()
         driver.get(self.link)
 
         # clicks on the rating_details button
         elem = driver.find_element_by_id('rating_details')
         elem.send_keys(Keys.RETURN)
+
+        #TODO:find the way to click on the more button in the description
 
         self.soup = BeautifulSoup(driver.page_source, features="lxml")
         driver.close()
@@ -100,6 +101,10 @@ class Book:
         tag = self.soup.find("div", attrs={"class": "bigBoxContent containerWithHeaderContent"})
         genres_dict = {}
     """
+
+    def __str__(self):
+        return f"-----The Book: {self.name}-----"+"\n"+f"By:{self.author}\n\ndescription: {self.description}\n" \
+                                                       f"rating:{self.rating}\nlink: {self.link}"
 
 
 def main():
