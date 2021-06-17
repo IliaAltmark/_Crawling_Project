@@ -17,9 +17,10 @@ def main():
         reader = csv.reader(csv_file)
 
         for i, row in enumerate(reader):
-            print(f"Printing row number {i}...")
             if i >= 1:
                 break
+
+            print(f"Scraping row number {i}...")
 
             link = row[0]
             book = Book.book_from_link(link)
