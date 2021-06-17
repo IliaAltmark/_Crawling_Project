@@ -1,4 +1,5 @@
 from bs4 import BeautifulSoup
+import requests
 from crawler_prototype import DOMAIN
 from selenium.webdriver.common.keys import Keys
 from utils import quiet_selenium_chrome_driver
@@ -51,17 +52,22 @@ class Book:
 
     def soup_from_link(self):
         # runs chrome, browse to the link
-        driver = quiet_selenium_chrome_driver()
-        driver.get(self.link)
+        # driver = quiet_selenium_chrome_driver()
+        # driver.get(self.link)
 
         # clicks on the rating_details button
-        elem = driver.find_element_by_id('rating_details')
-        elem.send_keys(Keys.RETURN)
+        # elem = driver.find_element_by_id('rating_details')
+        # elem.send_keys(Keys.RETURN)
 
         # TODO:find the way to click on the more button in the description
 
-        self.soup = BeautifulSoup(driver.page_source, features="lxml")
-        driver.close()
+        # self.soup = BeautifulSoup(driver.page_source, features="lxml")
+        # driver.close()
+
+        user_agent = {'User-agent': 'Mozilla/5.0'}
+        response1 = requests.get(self.link, headers=user_agent)
+
+        self.soup = BeautifulSoup(response1.content, "html.parser")
 
     def _name_from_link(self):
         if self.soup is None:
