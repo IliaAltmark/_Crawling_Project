@@ -12,7 +12,12 @@ class BookRating:
         self.rating_histogram = rating_histogram
         # TODO: assert that average_rating is indeed the average
         # TODO: assert that number of ratings is indeed number_of_ratings
+
     # TODO: write __str__()
+
+    def __str__(self):
+        return f"Rating information:\nAverage rating= {self.average_rating}\nNumber of reviews: {self.number_of_reviews}\nRating histogram:{self.rating_histogram}"
+
 
 class Book:
     # TODO: describe genres and rating structure
@@ -53,7 +58,7 @@ class Book:
         elem = driver.find_element_by_id('rating_details')
         elem.send_keys(Keys.RETURN)
 
-        #TODO:find the way to click on the more button in the description
+        # TODO:find the way to click on the more button in the description
 
         self.soup = BeautifulSoup(driver.page_source, features="lxml")
         driver.close()
@@ -90,7 +95,7 @@ class Book:
         rating_histogram = {}
         for i, tag3 in enumerate(tags3):
             rating_per_stars = tag3.findAll("td")[1].text.strip()
-            rating_histogram[5 - i] = int(rating_per_stars[rating_per_stars.find("(") + 1 : rating_per_stars.find(")")])
+            rating_histogram[5 - i] = int(rating_per_stars[rating_per_stars.find("(") + 1: rating_per_stars.find(")")])
         self.rating = BookRating(average_rating=rating, number_of_ratings=num_ratings,
                                  rating_histogram=rating_histogram)
 
@@ -103,8 +108,8 @@ class Book:
     """
 
     def __str__(self):
-        return f"-----The Book: {self.name}-----"+"\n"+f"By:{self.author}\n\ndescription: {self.description}\n" \
-                                                       f"rating:{self.rating}\nlink: {self.link}"
+        return f"--------The Book: {self.name}--------" + "\n" + f"--------By:{self.author}\n\ndescription: {self.description}\n" \
+                                                                 f"\nlink: {self.link}\nrating:{self.rating}"
 
 
 def main():
