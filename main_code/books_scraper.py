@@ -1,4 +1,5 @@
 from bs4 import BeautifulSoup
+import requests
 from crawler_prototype import DOMAIN
 from selenium.webdriver.common.keys import Keys
 from utils import quiet_selenium_chrome_driver
@@ -60,6 +61,10 @@ class Book:
         self.soup = BeautifulSoup(driver.page_source, features="lxml")
         driver.close()
 
+        # user_agent = {'User-agent': 'Mozilla/5.0'}
+        # response1 = requests.get(self.link, headers=user_agent)
+        # self.soup = BeautifulSoup(response1.content, "html.parser")
+
     def _name_from_soup(self):
         if self.soup is None:
             self.soup_from_link()
@@ -108,7 +113,7 @@ class Book:
         for rating in genres_user_ratings:
             genre_tags = rating.parent.parent.findAll('a', attrs={'class': 'actionLinkLite bookPageGenreLink'})
             genre = tuple(map(lambda x: x.text, genre_tags))
-            genres_dict[genre] = int(rating.text.strip().split(" ")[0].replace(",",""))
+            genres_dict[genre] = int(rating.text.strip().split(" ")[0].replace(",", ""))
         self.genres = genres_dict
 
     def __str__(self):
