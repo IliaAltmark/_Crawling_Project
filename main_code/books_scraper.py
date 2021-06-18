@@ -39,11 +39,11 @@ class Book:
         """
         book = Book(name=None, author=None, rating=None, genres=None, description=None, link=link, soup=None)
         book.soup_from_link()
-        book._name_from_link()
-        book._genres_from_link()
-        book._author_from_link()
-        book._rating_from_link()
-        book._description_from_link()
+        book._name_from_soup()
+        book._genres_from_soup()
+        book._author_from_soup()
+        book._rating_from_soup()
+        book._description_from_soup()
         if not to_save_soup:
             book.soup = None
         return book
@@ -60,28 +60,28 @@ class Book:
         self.soup = BeautifulSoup(driver.page_source, features="lxml")
         driver.close()
 
-    def _name_from_link(self):
+    def _name_from_soup(self):
         if self.soup is None:
             self.soup_from_link()
         tag = self.soup.find("h1", attrs={"id": "bookTitle"})
         name = tag.text.strip()
         self.name = name
 
-    def _author_from_link(self):
+    def _author_from_soup(self):
         if self.soup is None:
             self.soup_from_link()
         tag = self.soup.find("a", attrs={"class": "authorName"})
         author = tag.text
         self.author = author
 
-    def _description_from_link(self):
+    def _description_from_soup(self):
         if self.soup is None:
             self.soup_from_link()
         tag = self.soup.find("div", attrs={"id": "description"})
         description = tag.text.strip()
         self.description = description
 
-    def _rating_from_link(self):
+    def _rating_from_soup(self):
         if self.soup is None:
             self.soup_from_link()
         tag = self.soup.find("span", attrs={"itemprop": "ratingValue"})
@@ -97,7 +97,7 @@ class Book:
         self.rating = BookRating(average_rating=rating, number_of_ratings=num_ratings,
                                  rating_histogram=rating_histogram)
 
-    def _genres_from_link(self):
+    def _genres_from_soup(self):
         if self.soup is None:
             self.soup_from_link()
         genres_dict = {}
