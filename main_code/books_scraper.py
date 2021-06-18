@@ -13,15 +13,12 @@ class BookRating:
         # TODO: assert that average_rating is indeed the average
         # TODO: assert that number of ratings is indeed number_of_ratings
 
-    # TODO: write __str__()
-
     def __str__(self):
         return f"Rating information:\nAverage rating= {self.average_rating}\nNumber of reviews: {self.number_of_reviews}\nRating histogram:{self.rating_histogram}"
 
 
 class Book:
     # TODO: describe genres and rating structure
-    # TODO: write the genres func
 
     def __init__(self, name, author, rating, genres, description, link, soup=None):
         self.name = name
@@ -43,10 +40,12 @@ class Book:
         book = Book(name=None, author=None, rating=None, genres=None, description=None, link=link, soup=None)
         book.soup_from_link()
         book._name_from_link()
-        # book._genres_from_link()
+        book._genres_from_link()
         book._author_from_link()
         book._rating_from_link()
         book._description_from_link()
+        if not to_save_soup:
+            book.soup = None
         return book
 
     def soup_from_link(self):
@@ -57,8 +56,6 @@ class Book:
         # clicks on the rating_details button
         elem = driver.find_element_by_id('rating_details')
         elem.send_keys(Keys.RETURN)
-
-        # TODO:find the way to click on the more button in the description
 
         self.soup = BeautifulSoup(driver.page_source, features="lxml")
         driver.close()
@@ -91,7 +88,8 @@ class Book:
         rating = float(tag.text.strip())
         tag2 = self.soup.find("meta", attrs={"itemprop": "ratingCount"})
         num_ratings = int(tag2.attrs["content"])
-        tags3 = tag.findAll("tr", limit=5)
+        rating_dist_tag = self.soup.find("table", attrs={"id": "rating_distribution"})
+        tags3 = rating_dist_tag.findAll("tr", limit=5)
         rating_histogram = {}
         for i, tag3 in enumerate(tags3):
             rating_per_stars = tag3.findAll("td")[1].text.strip()
@@ -99,24 +97,30 @@ class Book:
         self.rating = BookRating(average_rating=rating, number_of_ratings=num_ratings,
                                  rating_histogram=rating_histogram)
 
-    """
     def _genres_from_link(self):
         if self.soup is None:
             self.soup_from_link()
-        tag = self.soup.find("div", attrs={"class": "bigBoxContent containerWithHeaderContent"})
         genres_dict = {}
-    """
+
+        # Find all genres' user ratings
+        genres_user_ratings = self.soup.findAll("div", attrs={"class": "greyText bookPageGenreLink"})
+        # For each rating finds the corresponding genre
+        for rating in genres_user_ratings:
+            genre_tags = rating.parent.parent.findAll('a', attrs={'class': 'actionLinkLite bookPageGenreLink'})
+            genre = tuple(map(lambda x: x.text, genre_tags))
+            genres_dict[genre] = int(rating.text.strip().split(" ")[0].replace(",",""))
+        self.genres = genres_dict
 
     def __str__(self):
         return f"--------The Book: {self.name}--------" + "\n" + f"--------By:{self.author}\n\ndescription: {self.description}\n" \
-                                                                 f"\nlink: {self.link}\nrating:{self.rating}"
+                                                                 f"\nlink: {self.link}\nrating:{self.rating}\ngenre: {self.genres}"
 
 
 def main():
     """
     Tests the books scraper
     """
-    link = "https://www.goodreads.com/book/show/51231889-nobody-will-tell-you-this-but-me"
+    link = "https://www.goodreads.com/book/show/51792100-a-burning?from_choice=true,best-fiction-books-2020"
     book = Book.book_from_link(link)
     print(book)
 
