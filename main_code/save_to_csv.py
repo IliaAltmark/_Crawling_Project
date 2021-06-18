@@ -18,7 +18,7 @@ def main():
         reader = csv.reader(csv_file)
 
         for i, row in enumerate(reader):
-            if i >= 5:
+            if i >= 20:
                 break
 
             print(f"Scraping row number {i}...")
@@ -37,7 +37,7 @@ def main():
                 book.rating.number_of_reviews)
             book_dict['top_of'].append(row[1])
 
-    with open('books.csv', 'w', newline='', encoding='utf-8') as csv_file:
+    with open('books_with_selenium_test.csv', 'w', newline='', encoding='utf-8') as csv_file:
 
         writer = csv.writer(csv_file)
         writer.writerow(book_dict.keys())
