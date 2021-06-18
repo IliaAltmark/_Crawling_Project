@@ -9,6 +9,12 @@ import requests
 
 DOMAIN = "https://www.goodreads.com"
 URL = DOMAIN + "/choiceawards/best-books-2020"
+USER_AGENT = {'User-agent': 'Mozilla/5.0'}
+
+
+def get_soup(link):
+    response = requests.get(link, headers=USER_AGENT)
+    return BeautifulSoup(response.content, "html.parser")
 
 
 def get_link_to_books(links):
@@ -17,7 +23,6 @@ def get_link_to_books(links):
     :param links: a list containing pages of top books per genre
     :return: dictionary where key is genre and value is a list of books
     """
-    user_agent = {'User-agent': 'Mozilla/5.0'}
 
     links_per_genre = {}
 
@@ -25,11 +30,10 @@ def get_link_to_books(links):
         genre = link.split('/')[-1]
         print(f"Scraping {genre} page...")
 
-        response1 = requests.get(link, headers=user_agent)
-        soup1 = BeautifulSoup(response1.content, "html.parser")
+        soup = get_soup(link)
 
         # finds the "a" tag with class="pollAnswer__bookLink"
-        tag = soup1("a", attrs={"class": "pollAnswer__bookLink"})
+        tag = soup("a", attrs={"class": "pollAnswer__bookLink"})
 
         # extracts all the links from the tags
         links_to_books = [t['href'] for t in tag]
@@ -45,13 +49,10 @@ def get_links_to_top_genres():
     goes to the predefined URL and extracts the links to the top books
     :return: a list containing the top books per genre
     """
-    user_agent = {'User-agent': 'Mozilla/5.0'}
-    response1 = requests.get(URL, headers=user_agent)
-
-    soup1 = BeautifulSoup(response1.content, "html.parser")
+    soup = get_soup(URL)
 
     # finds the div with id="categories"
-    tag = soup1.find("div", attrs={"id": "categories"})
+    tag = soup.find("div", attrs={"id": "categories"})
 
     # extracts all the links from the div
     links_to_pages = [t['href'] for t in tag.findAll("a")]
@@ -68,9 +69,6 @@ def get_links_to_top_genres():
 
 def main():
     links_to_top_genres = get_links_to_top_genres()
-
-    # for link in links_to_top_genres:
-    #     print(link)
 
     links_to_top_books = get_link_to_books(links_to_top_genres)
 

@@ -1,6 +1,5 @@
 from bs4 import BeautifulSoup
 import requests
-from crawler_prototype import DOMAIN
 from selenium.webdriver.common.keys import Keys
 from utils import quiet_selenium_chrome_driver
 

@@ -3,7 +3,7 @@ Authors: Ilia Altmark and Tovi Benoni
 First crawler
 """
 import csv
-from books_scraper import Book
+from book_scraper import Book
 
 
 # DOMAIN = "https://www.goodreads.com"
