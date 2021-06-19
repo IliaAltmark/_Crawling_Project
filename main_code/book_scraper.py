@@ -1,6 +1,10 @@
 from bs4 import BeautifulSoup
 # import requests
 from selenium.webdriver.common.keys import Keys
+from selenium.webdriver.support.wait import WebDriverWait
+from selenium.webdriver.support import expected_conditions as ec
+from selenium.webdriver.common.by import By
+
 from utils import quiet_selenium_chrome_driver
 import time
 
@@ -56,10 +60,20 @@ class Book:
         driver = quiet_selenium_chrome_driver()
         driver.get(self.link)
 
+        while True:
+            try:
+                elem = WebDriverWait(driver, 10).until(
+                    ec.element_to_be_clickable((By.ID, 'rating_details')))
+            except Exception:
+                print(Exception)
+                time.sleep(5)
+            else:
+                break
+
         # clicks on the rating_details button
-        elem = driver.find_element_by_id('rating_details')
-        while not elem.is_displayed():
-            time.sleep(1)
+        # elem = driver.find_element_by_id('rating_details')
+        # while not elem.is_displayed():
+        #     time.sleep(1)
         elem.send_keys(Keys.RETURN)
 
         self.soup = BeautifulSoup(driver.page_source, features="lxml")
