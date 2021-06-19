@@ -3,14 +3,17 @@ Authors: Ilia Altmark and Tovi Benoni
 First crawler
 """
 import csv
-from book_scraper import Book
 
+from selenium.common.exceptions import TimeoutException
+
+from book_scraper import Book
 
 # DOMAIN = "https://www.goodreads.com"
 # URL = DOMAIN + "/choiceawards/best-books-2020"
 from utils import quiet_selenium_chrome_driver
 
-#TODO:move book's serialization to the class Book
+
+# TODO:move book's serialization to the class Book
 def main():
     book_dict = {'name': [], 'author': [], 'description': [],
                  'average_rating': [], 'number_of_reviews': [],
@@ -24,51 +27,57 @@ def main():
     with open('../project_data/links_to_books.csv', newline='') as csv_file:
         reader = csv.reader(csv_file)
         driver = quiet_selenium_chrome_driver()
+        try:
+            for i, row in enumerate(reader):
+                print(f"Scraping row number {i}...")
 
-        for i, row in enumerate(reader):
+                link = row[0]
+                try:
+                    book = Book.book_from_link(link, web_driver=driver)
+                except TimeoutException:
+                    print(f'Could not load book from link: {link}')
+                    # TODO replace print with write to file
+                    continue
+                book_dict['name'].append(
+                    book.name)
+                book_dict['author'].append(
+                    book.author)
+                book_dict['description'].append(
+                    book.description)
+                book_dict['average_rating'].append(
+                    book.rating.average_rating)
+                book_dict['number_of_reviews'].append(
+                    book.rating.number_of_reviews)
+                book_dict['top_of'].append(row[1])
+                book_dict['rated_5'].append(
+                    book.rating.rating_histogram[5])
+                book_dict['rated_4'].append(
+                    book.rating.rating_histogram[4])
+                book_dict['rated_3'].append(
+                    book.rating.rating_histogram[3])
+                book_dict['rated_2'].append(
+                    book.rating.rating_histogram[2])
+                book_dict['rated_1'].append(
+                    book.rating.rating_histogram[1])
 
-            print(f"Scraping row number {i}...")
+                genres = iter(book.genres)
 
-            link = row[0]
-            book = Book.book_from_link(link, web_driver=driver)
-            book_dict['name'].append(
-                book.name)
-            book_dict['author'].append(
-                book.author)
-            book_dict['description'].append(
-                book.description)
-            book_dict['average_rating'].append(
-                book.rating.average_rating)
-            book_dict['number_of_reviews'].append(
-                book.rating.number_of_reviews)
-            book_dict['top_of'].append(row[1])
-            book_dict['rated_5'].append(
-                book.rating.rating_histogram[5])
-            book_dict['rated_4'].append(
-                book.rating.rating_histogram[4])
-            book_dict['rated_3'].append(
-                book.rating.rating_histogram[3])
-            book_dict['rated_2'].append(
-                book.rating.rating_histogram[2])
-            book_dict['rated_1'].append(
-                book.rating.rating_histogram[1])
+                top_voted_key = next(genres)
+                book_dict['top_voted_genre'].append(top_voted_key[0])
+                book_dict['top_voted_votes'].append(
+                    book.genres[top_voted_key])
 
-            genres = iter(book.genres)
+                second_voted_key = next(genres)
+                book_dict['2nd_voted_genre'].append(second_voted_key[0])
+                book_dict['2nd_voted_votes'].append(
+                    book.genres[second_voted_key])
 
-            top_voted_key = next(genres)
-            book_dict['top_voted_genre'].append(top_voted_key[0])
-            book_dict['top_voted_votes'].append(
-                book.genres[top_voted_key])
-
-            second_voted_key = next(genres)
-            book_dict['2nd_voted_genre'].append(second_voted_key[0])
-            book_dict['2nd_voted_votes'].append(
-                book.genres[second_voted_key])
-
-            third_voted_key = next(genres)
-            book_dict['3rd_voted_genre'].append(third_voted_key[0])
-            book_dict['3rd_voted_votes'].append(
-                book.genres[third_voted_key])
+                third_voted_key = next(genres)
+                book_dict['3rd_voted_genre'].append(third_voted_key[0])
+                book_dict['3rd_voted_votes'].append(
+                    book.genres[third_voted_key])
+        finally:
+            driver.close()
 
     with open('../project_data/books_full.csv', 'w', newline='',
               encoding='utf-8') as csv_file:
