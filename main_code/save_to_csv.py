@@ -10,7 +10,7 @@ from book_scraper import Book
 # URL = DOMAIN + "/choiceawards/best-books-2020"
 from utils import quiet_selenium_chrome_driver
 
-
+#TODO:move book's serialization to the class Book
 def main():
     book_dict = {'name': [], 'author': [], 'description': [],
                  'average_rating': [], 'number_of_reviews': [],
@@ -21,7 +21,7 @@ def main():
                  '2nd_voted_genre': [], '2nd_voted_votes': [],
                  '3rd_voted_genre': [], '3rd_voted_votes': []}
 
-    with open('links_to_books.csv', newline='') as csv_file:
+    with open('../project_data/links_to_books.csv', newline='') as csv_file:
         reader = csv.reader(csv_file)
         driver = quiet_selenium_chrome_driver()
 
@@ -70,7 +70,7 @@ def main():
             book_dict['3rd_voted_votes'].append(
                 book.genres[third_voted_key])
 
-    with open('books_full.csv', 'w', newline='',
+    with open('../project_data/books_full.csv', 'w', newline='',
               encoding='utf-8') as csv_file:
 
         writer = csv.writer(csv_file)

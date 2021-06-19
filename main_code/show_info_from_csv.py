@@ -14,7 +14,7 @@ def main():
     book_dict = {'name': [], 'author': [], 'description': [],
                  'average_rating': [], 'number_of_reviews': [], 'top_of': []}
 
-    with open('links_to_books.csv', newline='') as csv_file:
+    with open('../project_data/links_to_books.csv', newline='') as csv_file:
         reader = csv.reader(csv_file)
         driver = quiet_selenium_chrome_driver()
         try:
@@ -41,7 +41,7 @@ def main():
         finally:
             driver.close()
 
-    with open('books.csv', 'w', newline='', encoding='utf-8') as csv_file:
+    with open('../project_data/books.csv', 'w', newline='', encoding='utf-8') as csv_file:
 
         writer = csv.writer(csv_file)
         writer.writerow(book_dict.keys())
