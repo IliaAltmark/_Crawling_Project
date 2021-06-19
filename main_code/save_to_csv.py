@@ -24,7 +24,7 @@ def main():
         reader = csv.reader(csv_file)
 
         for i, row in enumerate(reader):
-            if i >= 10:
+            if i >= 70:
                 break
 
             print(f"Scraping row number {i}...")
