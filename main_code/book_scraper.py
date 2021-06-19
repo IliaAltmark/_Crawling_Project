@@ -1,12 +1,12 @@
 from bs4 import BeautifulSoup
-import requests
-from crawler_prototype import DOMAIN
+
 from selenium.webdriver.common.keys import Keys
-from utils import quiet_selenium_chrome_driver
 from selenium.webdriver.common.by import By
 import selenium.webdriver.support.expected_conditions as EC
 from selenium.webdriver.support.wait import WebDriverWait
 from selenium.common.exceptions import TimeoutException
+
+from utils import quiet_selenium_chrome_driver
 
 
 class BookRating:
@@ -25,7 +25,8 @@ class BookRating:
 class Book:
     # TODO: describe genres and rating structure
 
-    def __init__(self, name, author, rating, genres, description, link, soup=None):
+    def __init__(self, name, author, rating, genres, description, link,
+                 soup=None):
         self.name = name
         self.author = author
         self.rating = rating
@@ -101,6 +102,7 @@ class Book:
         if self.soup is None:
             self.soup_from_link()
         tag = self.soup.find("div", attrs={"id": "description"})
+        tag = tag("span")[1]
         description = tag.text.strip()
         self.description = description
 
@@ -111,13 +113,18 @@ class Book:
         rating = float(tag.text.strip())
         tag2 = self.soup.find("meta", attrs={"itemprop": "ratingCount"})
         num_ratings = int(tag2.attrs["content"])
-        rating_dist_tag = self.soup.find("table", attrs={"id": "rating_distribution"})
+        rating_dist_tag = self.soup.find("table",
+                                         attrs={"id": "rating_distribution"})
         tags3 = rating_dist_tag.findAll("tr", limit=5)
         rating_histogram = {}
         for i, tag3 in enumerate(tags3):
             rating_per_stars = tag3.findAll("td")[1].text.strip()
-            rating_histogram[5 - i] = int(rating_per_stars[rating_per_stars.find("(") + 1: rating_per_stars.find(")")])
-        self.rating = BookRating(average_rating=rating, number_of_ratings=num_ratings,
+            rating_histogram[5 - i] = int(rating_per_stars[
+                                          rating_per_stars.find(
+                                              "(") + 1: rating_per_stars.find(
+                                              ")")])
+        self.rating = BookRating(average_rating=rating,
+                                 number_of_ratings=num_ratings,
                                  rating_histogram=rating_histogram)
 
     def _genres_from_soup(self):
@@ -126,12 +133,15 @@ class Book:
         genres_dict = {}
 
         # Find all genres' user ratings
-        genres_user_ratings = self.soup.findAll("div", attrs={"class": "greyText bookPageGenreLink"})
+        genres_user_ratings = self.soup.findAll("div", attrs={
+            "class": "greyText bookPageGenreLink"})
         # For each rating finds the corresponding genre
         for rating in genres_user_ratings:
-            genre_tags = rating.parent.parent.findAll('a', attrs={'class': 'actionLinkLite bookPageGenreLink'})
+            genre_tags = rating.parent.parent.findAll('a', attrs={
+                'class': 'actionLinkLite bookPageGenreLink'})
             genre = tuple(map(lambda x: x.text, genre_tags))
-            genres_dict[genre] = int(rating.text.strip().split(" ")[0].replace(",", ""))
+            genres_dict[genre] = int(
+                rating.text.strip().split(" ")[0].replace(",", ""))
         self.genres = genres_dict
 
     def __str__(self):
