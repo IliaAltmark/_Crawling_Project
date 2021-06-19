@@ -24,11 +24,9 @@ def main():
         reader = csv.reader(csv_file)
 
         for i, row in enumerate(reader):
-            # if i >= 70:
-            #     break
+            # done till 130
 
-            if 70 <= i < 120:
-
+            if 130 <= i < 160:
                 print(f"Scraping row number {i}...")
 
                 link = row[0]
@@ -62,21 +60,29 @@ def main():
                 book_dict['top_voted_votes'].append(
                     book.genres[top_voted_key])
 
-                second_voted_key = next(genres)
-                book_dict['2nd_voted_genre'].append(second_voted_key[0])
-                book_dict['2nd_voted_votes'].append(
-                    book.genres[second_voted_key])
+                try:
+                    second_voted_key = next(genres)
+                    book_dict['2nd_voted_genre'].append(second_voted_key[0])
+                    book_dict['2nd_voted_votes'].append(
+                        book.genres[second_voted_key])
+                except StopIteration:
+                    book_dict['2nd_voted_genre'].append('None')
+                    book_dict['2nd_voted_votes'].append('None')
 
-                third_voted_key = next(genres)
-                book_dict['3rd_voted_genre'].append(third_voted_key[0])
-                book_dict['3rd_voted_votes'].append(
-                    book.genres[third_voted_key])
+                try:
+                    third_voted_key = next(genres)
+                    book_dict['3rd_voted_genre'].append(third_voted_key[0])
+                    book_dict['3rd_voted_votes'].append(
+                        book.genres[third_voted_key])
+                except StopIteration:
+                    book_dict['3rd_voted_genre'].append('None')
+                    book_dict['3rd_voted_votes'].append('None')
 
-    with open('books_full.csv', 'w', newline='',
+    with open('books_full.csv', 'a', newline='',
               encoding='utf-8') as csv_file:
 
         writer = csv.writer(csv_file)
-        writer.writerow(book_dict.keys())
+        # writer.writerow(book_dict.keys())
         writer.writerows(zip(*book_dict.values()))
 
 

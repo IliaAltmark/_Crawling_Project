@@ -34,6 +34,7 @@ class Book:
         self.description = description
         self.link = link
         self.soup = soup
+        self.driver = None
 
     @classmethod
     def book_from_link(cls, link, to_save_soup=True):
@@ -57,16 +58,19 @@ class Book:
 
     def soup_from_link(self):
         # runs chrome, browse to the link
-        driver = quiet_selenium_chrome_driver()
-        driver.get(self.link)
+        if not self.driver:
+            self.driver = quiet_selenium_chrome_driver()
+
+        self.driver.get(self.link)
 
         while True:
             try:
-                elem = WebDriverWait(driver, 10).until(
+                elem = WebDriverWait(self.driver, 10).until(
                     ec.element_to_be_clickable((By.ID, 'rating_details')))
             except Exception:
                 print(Exception)
-                time.sleep(5)
+                self.driver.close()
+                self.driver.get(self.link)
             else:
                 break
 
@@ -76,8 +80,8 @@ class Book:
         #     time.sleep(1)
         elem.send_keys(Keys.RETURN)
 
-        self.soup = BeautifulSoup(driver.page_source, features="lxml")
-        driver.close()
+        self.soup = BeautifulSoup(self.driver.page_source, features="lxml")
+        self.driver.close()
 
         # user_agent = {'User-agent': 'Mozilla/5.0'}
         # response1 = requests.get(self.link, headers=user_agent)
@@ -101,7 +105,12 @@ class Book:
         if self.soup is None:
             self.soup_from_link()
         tag = self.soup.find("div", attrs={"id": "description"})
-        tag = tag("span")[1]
+
+        try:
+            tag = tag("span")[1]
+        except IndexError:
+            pass
+
         description = tag.text.strip()
         self.description = description
 
