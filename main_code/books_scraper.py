@@ -3,6 +3,10 @@ import requests
 from crawler_prototype import DOMAIN
 from selenium.webdriver.common.keys import Keys
 from utils import quiet_selenium_chrome_driver
+from selenium.webdriver.common.by import By
+import selenium.webdriver.support.expected_conditions as EC
+from selenium.webdriver.support.wait import WebDriverWait
+from selenium.common.exceptions import TimeoutException
 
 
 class BookRating:
@@ -31,15 +35,16 @@ class Book:
         self.soup = soup
 
     @classmethod
-    def book_from_link(cls, link, to_save_soup=True):
+    def book_from_link(cls, link, web_driver=None, to_save_soup=True):
         """
         Creates a book object from link
+        :param web_driver:
         :param to_save_soup: TODO
         :param link to the book's page
         :return: a book object
         """
         book = Book(name=None, author=None, rating=None, genres=None, description=None, link=link, soup=None)
-        book.soup_from_link()
+        book.soup_from_link(web_driver=web_driver)
         book._name_from_soup()
         book._genres_from_soup()
         book._author_from_soup()
@@ -49,17 +54,30 @@ class Book:
             book.soup = None
         return book
 
-    def soup_from_link(self):
+    def soup_from_link(self, web_driver=None, timeout=15):
         # runs chrome, browse to the link
-        driver = quiet_selenium_chrome_driver()
-        driver.get(self.link)
+        if web_driver is None:
+            driver = quiet_selenium_chrome_driver()
+        else:
+            driver = web_driver
+        try:
+            driver.get(self.link)
 
-        # clicks on the rating_details button
-        elem = driver.find_element_by_id('rating_details')
-        elem.send_keys(Keys.RETURN)
+            # clicks on the rating_details button
+            elem = WebDriverWait(driver, timeout).until(
+                EC.presence_of_element_located(
+                    locator=(By.ID, 'rating_details')))
+            elem.send_keys(Keys.RETURN)
 
-        self.soup = BeautifulSoup(driver.page_source, features="lxml")
-        driver.close()
+            self.soup = BeautifulSoup(driver.page_source, features="lxml")
+        except TimeoutException:
+            raise TimeoutException(f"Unable to load book. Either the link {self.link} is wrong or the page took "
+                                   f"too much time to load")
+            # TODO what to do if the page takes too much time to load
+            #  (or the link is wring)
+        finally:
+            if web_driver is None:
+                driver.close()
 
         # user_agent = {'User-agent': 'Mozilla/5.0'}
         # response1 = requests.get(self.link, headers=user_agent)
