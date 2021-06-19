@@ -87,6 +87,7 @@ class Book:
         if self.soup is None:
             self.soup_from_link()
         tag = self.soup.find("div", attrs={"id": "description"})
+        tag = tag("span")[1]
         description = tag.text.strip()
         self.description = description
 
