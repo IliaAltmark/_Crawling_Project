@@ -10,7 +10,9 @@ from utils import quiet_selenium_chrome_driver
 
 
 class BookRating:
-    # TODO docstring class
+    """
+    A class for storing and manipulating a book's ratings data
+    """
     def __init__(self, rating_histogram, average_rating, number_of_ratings):
         self.average_rating = average_rating
         self.number_of_reviews = number_of_ratings
