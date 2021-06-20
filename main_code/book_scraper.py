@@ -2,7 +2,7 @@ from bs4 import BeautifulSoup
 
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.common.by import By
-import selenium.webdriver.support.expected_conditions as EC
+import selenium.webdriver.support.expected_conditions as ec
 from selenium.webdriver.support.wait import WebDriverWait
 from selenium.common.exceptions import TimeoutException
 
@@ -45,7 +45,8 @@ class Book:
         :param link: link to the book's page
         :return: a Book object
         """
-        book = Book(name=None, author=None, rating=None, genres=None, description=None, link=link, soup=None)
+        book = Book(name=None, author=None, rating=None, genres=None,
+                    description=None, link=link, soup=None)
         book.soup_from_link(web_driver=web_driver)
         book._name_from_soup()
         book._genres_from_soup()
@@ -63,25 +64,27 @@ class Book:
         :param timeout: the maximum time to wait for self.link to loud.
         """
         # runs chrome, browse to the link
-        if web_driver is None:
+        if not web_driver:
             driver = quiet_selenium_chrome_driver()
         else:
             driver = web_driver
+
         try:
             driver.get(self.link)
 
             # clicks on the rating_details button
             elem = WebDriverWait(driver, timeout).until(
-                EC.presence_of_element_located(
+                ec.presence_of_element_located(
                     locator=(By.ID, 'rating_details')))
             elem.send_keys(Keys.RETURN)
 
             self.soup = BeautifulSoup(driver.page_source, features="lxml")
         except TimeoutException:
-            raise TimeoutException(f"Unable to load book. Either the link {self.link} is wrong or the page took "
-                                   f"too much time to load")
+            raise TimeoutException(
+                f"Unable to load book. Either the link {self.link} is wrong or the page took "
+                f"too much time to load")
         finally:
-            if web_driver is None:
+            if not web_driver:
                 driver.close()
 
         # user_agent = {'User-agent': 'Mozilla/5.0'}
@@ -115,7 +118,12 @@ class Book:
         if self.soup is None:
             self.soup_from_link()
         tag = self.soup.find("div", attrs={"id": "description"})
-        tag = tag("span")[1]
+
+        try:
+            tag = tag("span")[1]
+        except IndexError:
+            pass
+
         description = tag.text.strip()
         self.description = description
 
@@ -165,16 +173,16 @@ class Book:
 
     def __str__(self):
         return f"------------------------------------------------------------------\nThe Book:{self.name}\n" \
-               f"------------------------------------------------------------------"\
+               f"------------------------------------------------------------------" \
                + "\n" + f"--------By:{self.author}\n\ndescription: {self.description}\n" \
-               f"\nlink: {self.link}\nrating:{self.rating}\ngenre: {self.genres}"
+                        f"\nlink: {self.link}\nrating:{self.rating}\ngenre: {self.genres}"
 
 
 def main():
     """
     Tests the books scraper
     """
-    link = "https://www.goodreads.com/book/show/51792100-a-burning?from_choice=true,best-fiction-books-2020"
+    link = "https://www.goodreads.com/book/show/53869658-secret-santa?from_choice=true"
     book = Book.book_from_link(link)
     print(book)
 

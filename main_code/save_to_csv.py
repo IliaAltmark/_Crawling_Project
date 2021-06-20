@@ -6,14 +6,10 @@ import csv
 
 from selenium.common.exceptions import TimeoutException
 
+from utils import quiet_selenium_chrome_driver
 from book_scraper import Book
 
-# DOMAIN = "https://www.goodreads.com"
-# URL = DOMAIN + "/choiceawards/best-books-2020"
-from utils import quiet_selenium_chrome_driver
 
-
-# TODO:move book's serialization to the class Book
 def main():
     book_dict = {'name': [], 'author': [], 'description': [],
                  'average_rating': [], 'number_of_reviews': [],
@@ -29,61 +25,74 @@ def main():
         driver = quiet_selenium_chrome_driver()
         try:
             for i, row in enumerate(reader):
-                print(f"Scraping row number {i}...")
+                # done till 140
 
-                link = row[0]
-                try:
-                    book = Book.book_from_link(link, web_driver=driver)
-                except TimeoutException:
-                    print(f'Could not load book from link: {link}')
-                    # TODO replace print with write to file
-                    continue
-                book_dict['name'].append(
-                    book.name)
-                book_dict['author'].append(
-                    book.author)
-                book_dict['description'].append(
-                    book.description)
-                book_dict['average_rating'].append(
-                    book.rating.average_rating)
-                book_dict['number_of_reviews'].append(
-                    book.rating.number_of_reviews)
-                book_dict['top_of'].append(row[1])
-                book_dict['rated_5'].append(
-                    book.rating.rating_histogram[5])
-                book_dict['rated_4'].append(
-                    book.rating.rating_histogram[4])
-                book_dict['rated_3'].append(
-                    book.rating.rating_histogram[3])
-                book_dict['rated_2'].append(
-                    book.rating.rating_histogram[2])
-                book_dict['rated_1'].append(
-                    book.rating.rating_histogram[1])
+                if 140 <= i < 150:
 
-                genres = iter(book.genres)
+                    print(f"Scraping row number {i}...")
 
-                top_voted_key = next(genres)
-                book_dict['top_voted_genre'].append(top_voted_key[0])
-                book_dict['top_voted_votes'].append(
-                    book.genres[top_voted_key])
+                    link = row[0]
+                    try:
+                        book = Book.book_from_link(link, driver)
+                    except TimeoutException as ex:
+                        print(ex)
+                        print("Don't forget to check the last row in the csv!")
+                        break
 
-                second_voted_key = next(genres)
-                book_dict['2nd_voted_genre'].append(second_voted_key[0])
-                book_dict['2nd_voted_votes'].append(
-                    book.genres[second_voted_key])
+                    book_dict['name'].append(
+                        book.name)
+                    book_dict['author'].append(
+                        book.author)
+                    book_dict['description'].append(
+                        book.description)
+                    book_dict['average_rating'].append(
+                        book.rating.average_rating)
+                    book_dict['number_of_reviews'].append(
+                        book.rating.number_of_reviews)
+                    book_dict['top_of'].append(row[1])
+                    book_dict['rated_5'].append(
+                        book.rating.rating_histogram[5])
+                    book_dict['rated_4'].append(
+                        book.rating.rating_histogram[4])
+                    book_dict['rated_3'].append(
+                        book.rating.rating_histogram[3])
+                    book_dict['rated_2'].append(
+                        book.rating.rating_histogram[2])
+                    book_dict['rated_1'].append(
+                        book.rating.rating_histogram[1])
 
-                third_voted_key = next(genres)
-                book_dict['3rd_voted_genre'].append(third_voted_key[0])
-                book_dict['3rd_voted_votes'].append(
-                    book.genres[third_voted_key])
+                    genres = iter(book.genres)
+
+                    top_voted_key = next(genres)
+                    book_dict['top_voted_genre'].append(top_voted_key[0])
+                    book_dict['top_voted_votes'].append(
+                        book.genres[top_voted_key])
+
+                    try:
+                        second_voted_key = next(genres)
+                        book_dict['2nd_voted_genre'].append(second_voted_key[0])
+                        book_dict['2nd_voted_votes'].append(
+                            book.genres[second_voted_key])
+                    except StopIteration:
+                        book_dict['2nd_voted_genre'].append('None')
+                        book_dict['2nd_voted_votes'].append('None')
+
+                    try:
+                        third_voted_key = next(genres)
+                        book_dict['3rd_voted_genre'].append(third_voted_key[0])
+                        book_dict['3rd_voted_votes'].append(
+                            book.genres[third_voted_key])
+                    except StopIteration:
+                        book_dict['3rd_voted_genre'].append('None')
+                        book_dict['3rd_voted_votes'].append('None')
         finally:
             driver.close()
 
-    with open('../project_data/books_full.csv', 'w', newline='',
+    with open('../project_data/books_full.csv', 'a', newline='',
               encoding='utf-8') as csv_file:
 
         writer = csv.writer(csv_file)
-        writer.writerow(book_dict.keys())
+        # writer.writerow(book_dict.keys())
         writer.writerows(zip(*book_dict.values()))
 
 
