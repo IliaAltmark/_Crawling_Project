@@ -1,28 +1,27 @@
 from bs4 import BeautifulSoup
-# import requests
+
 from selenium.webdriver.common.keys import Keys
-from selenium.webdriver.support.wait import WebDriverWait
-from selenium.webdriver.support import expected_conditions as ec
 from selenium.webdriver.common.by import By
+import selenium.webdriver.support.expected_conditions as ec
+from selenium.webdriver.support.wait import WebDriverWait
+from selenium.common.exceptions import TimeoutException
 
 from utils import quiet_selenium_chrome_driver
-import time
 
 
 class BookRating:
-
+    # TODO docstring class
     def __init__(self, rating_histogram, average_rating, number_of_ratings):
         self.average_rating = average_rating
         self.number_of_reviews = number_of_ratings
         self.rating_histogram = rating_histogram
-        # TODO: assert that average_rating is indeed the average
-        # TODO: assert that number of ratings is indeed number_of_ratings
 
     def __str__(self):
         return f"Rating information:\nAverage rating= {self.average_rating}\nNumber of reviews: {self.number_of_reviews}\nRating histogram:{self.rating_histogram}"
 
 
 class Book:
+    # TODO docstring class
     # TODO: describe genres and rating structure
 
     def __init__(self, name, author, rating, genres, description, link,
@@ -40,9 +39,10 @@ class Book:
     def book_from_link(cls, link, to_save_soup=True):
         """
         Creates a book object from link
-        :param to_save_soup: TODO
-        :param link to the book's page
-        :return: a book object
+        :param web_driver: a web driver to get the link's source code with.
+        :param to_save_soup: defaults to True
+        :param link: link to the book's page
+        :return: a Book object
         """
         book = Book(name=None, author=None, rating=None, genres=None,
                     description=None, link=link, soup=None)
@@ -56,38 +56,41 @@ class Book:
             book.soup = None
         return book
 
-    def soup_from_link(self):
+    def soup_from_link(self, timeout=15):
+        """
+        initializes self.soup from self.link
+        :param web_driver: a web driver to get the link's source code with.
+        :param timeout: the maximum time to wait for self.link to loud.
+        """
         # runs chrome, browse to the link
         if not self.driver:
             self.driver = quiet_selenium_chrome_driver()
 
-        self.driver.get(self.link)
+        try:
+            self.driver.get(self.link)
 
-        while True:
-            try:
-                elem = WebDriverWait(self.driver, 10).until(
-                    ec.element_to_be_clickable((By.ID, 'rating_details')))
-            except Exception:
-                print(Exception)
-                self.driver.close()
-                self.driver.get(self.link)
-            else:
-                break
+            # clicks on the rating_details button
+            elem = WebDriverWait(self.driver, timeout).until(
+                ec.presence_of_element_located(
+                    locator=(By.ID, 'rating_details')))
+            elem.send_keys(Keys.RETURN)
 
-        # clicks on the rating_details button
-        # elem = driver.find_element_by_id('rating_details')
-        # while not elem.is_displayed():
-        #     time.sleep(1)
-        elem.send_keys(Keys.RETURN)
-
-        self.soup = BeautifulSoup(self.driver.page_source, features="lxml")
-        self.driver.close()
+            self.soup = BeautifulSoup(self.driver.page_source, features="lxml")
+        except TimeoutException:
+            raise TimeoutException(
+                f"Unable to load book. Either the link {self.link} is wrong or the page took "
+                f"too much time to load")
+        finally:
+            self.driver.close()
 
         # user_agent = {'User-agent': 'Mozilla/5.0'}
         # response1 = requests.get(self.link, headers=user_agent)
         # self.soup = BeautifulSoup(response1.content, "html.parser")
 
     def _name_from_soup(self):
+        """
+        initializes self.name from self.soup
+        """
         if self.soup is None:
             self.soup_from_link()
         tag = self.soup.find("h1", attrs={"id": "bookTitle"})
@@ -95,6 +98,9 @@ class Book:
         self.name = name
 
     def _author_from_soup(self):
+        """
+        initializes self.author from self.soup
+        """
         if self.soup is None:
             self.soup_from_link()
         tag = self.soup.find("a", attrs={"class": "authorName"})
@@ -102,6 +108,9 @@ class Book:
         self.author = author
 
     def _description_from_soup(self):
+        """
+        initializes self.description from self.soup
+        """
         if self.soup is None:
             self.soup_from_link()
         tag = self.soup.find("div", attrs={"id": "description"})
@@ -115,6 +124,9 @@ class Book:
         self.description = description
 
     def _rating_from_soup(self):
+        """
+        initializes self.rating from self.soup
+        """
         if self.soup is None:
             self.soup_from_link()
         tag = self.soup.find("span", attrs={"itemprop": "ratingValue"})
@@ -136,6 +148,9 @@ class Book:
                                  rating_histogram=rating_histogram)
 
     def _genres_from_soup(self):
+        """
+        initializes self.genres from self.soup
+        """
         if self.soup is None:
             self.soup_from_link()
         genres_dict = {}
@@ -153,15 +168,17 @@ class Book:
         self.genres = genres_dict
 
     def __str__(self):
-        return f"--------The Book: {self.name}--------" + "\n" + f"--------By:{self.author}\n\ndescription: {self.description}\n" \
-                                                                 f"\nlink: {self.link}\nrating:{self.rating}\ngenre: {self.genres}"
+        return f"------------------------------------------------------------------\nThe Book:{self.name}\n" \
+               f"------------------------------------------------------------------" \
+               + "\n" + f"--------By:{self.author}\n\ndescription: {self.description}\n" \
+                        f"\nlink: {self.link}\nrating:{self.rating}\ngenre: {self.genres}"
 
 
 def main():
     """
     Tests the books scraper
     """
-    link = "https://www.goodreads.com/book/show/51792100-a-burning?from_choice=true,best-fiction-books-2020"
+    link = "https://www.goodreads.com/book/show/53869658-secret-santa?from_choice=true"
     book = Book.book_from_link(link)
     print(book)
 

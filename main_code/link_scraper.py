@@ -72,7 +72,7 @@ def main():
 
     links_to_top_books = get_link_to_books(links_to_top_genres)
 
-    with open('links_to_books.csv', 'w', newline='') as csv_file:
+    with open('../project_data/links_to_books.csv', 'w', newline='') as csv_file:
         writer = csv.writer(csv_file)
 
         for genre, books in links_to_top_books.items():

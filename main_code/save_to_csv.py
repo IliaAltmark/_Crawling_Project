@@ -3,11 +3,10 @@ Authors: Ilia Altmark and Tovi Benoni
 First crawler
 """
 import csv
+
+from selenium.common.exceptions import TimeoutException
+
 from book_scraper import Book
-
-
-# DOMAIN = "https://www.goodreads.com"
-# URL = DOMAIN + "/choiceawards/best-books-2020"
 
 
 def main():
@@ -20,17 +19,24 @@ def main():
                  '2nd_voted_genre': [], '2nd_voted_votes': [],
                  '3rd_voted_genre': [], '3rd_voted_votes': []}
 
-    with open('links_to_books.csv', newline='') as csv_file:
+    with open('../project_data/links_to_books.csv', newline='') as csv_file:
         reader = csv.reader(csv_file)
 
         for i, row in enumerate(reader):
-            # done till 130
+            # done till 140
 
-            if 130 <= i < 160:
+            if 140 <= i < 150:
+
                 print(f"Scraping row number {i}...")
 
                 link = row[0]
-                book = Book.book_from_link(link)
+                try:
+                    book = Book.book_from_link(link)
+                except TimeoutException as ex:
+                    print(ex)
+                    print("Don't forget to check the last row in the csv!")
+                    break
+
                 book_dict['name'].append(
                     book.name)
                 book_dict['author'].append(
@@ -78,7 +84,7 @@ def main():
                     book_dict['3rd_voted_genre'].append('None')
                     book_dict['3rd_voted_votes'].append('None')
 
-    with open('books_full.csv', 'a', newline='',
+    with open('../project_data/books_full.csv', 'a', newline='',
               encoding='utf-8') as csv_file:
 
         writer = csv.writer(csv_file)
