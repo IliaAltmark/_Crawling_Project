@@ -25,9 +25,9 @@ def main():
         driver = quiet_selenium_chrome_driver()
         try:
             for i, row in enumerate(reader):
-                # done till 140
+                # done till 300
 
-                if 140 <= i < 150:
+                if 300 <= i:
 
                     print(f"Scraping row number {i}...")
 
