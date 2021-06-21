@@ -25,66 +25,66 @@ def main():
         driver = quiet_selenium_chrome_driver()
         try:
             for i, row in enumerate(reader):
-                # done till 140
+                # done till 300
+                if 300 <= i:
 
-                #if 140 <= i < 150:
+                    print(f"Scraping row number {i}...")
 
-                print(f"Scraping row number {i}...")
+                    link = row[0]
+                    try:
+                        book = Book.book_from_link(link, driver)
+                    except TimeoutException as ex:
+                        print(ex)
+                        print("Don't forget to check the last row in the csv!")
+                        break
 
-                link = row[0]
-                try:
-                    book = Book.book_from_link(link, driver)
-                except TimeoutException as ex:
-                    print(ex)
-                    print("Don't forget to check the last row in the csv!")
-                    break
+                    book_dict['name'].append(
+                        book.name)
+                    book_dict['author'].append(
+                        book.author)
+                    book_dict['description'].append(
+                        book.description)
+                    book_dict['average_rating'].append(
+                        book.rating.average_rating)
+                    book_dict['number_of_reviews'].append(
+                        book.rating.number_of_reviews)
+                    book_dict['top_of'].append(row[1])
+                    book_dict['rated_5'].append(
+                        book.rating.rating_histogram[5])
+                    book_dict['rated_4'].append(
+                        book.rating.rating_histogram[4])
+                    book_dict['rated_3'].append(
+                        book.rating.rating_histogram[3])
+                    book_dict['rated_2'].append(
+                        book.rating.rating_histogram[2])
+                    book_dict['rated_1'].append(
+                        book.rating.rating_histogram[1])
 
-                book_dict['name'].append(
-                    book.name)
-                book_dict['author'].append(
-                    book.author)
-                book_dict['description'].append(
-                    book.description)
-                book_dict['average_rating'].append(
-                    book.rating.average_rating)
-                book_dict['number_of_reviews'].append(
-                    book.rating.number_of_reviews)
-                book_dict['top_of'].append(row[1])
-                book_dict['rated_5'].append(
-                    book.rating.rating_histogram[5])
-                book_dict['rated_4'].append(
-                    book.rating.rating_histogram[4])
-                book_dict['rated_3'].append(
-                    book.rating.rating_histogram[3])
-                book_dict['rated_2'].append(
-                    book.rating.rating_histogram[2])
-                book_dict['rated_1'].append(
-                    book.rating.rating_histogram[1])
+                    genres = iter(book.genres)
 
-                genres = iter(book.genres)
+                    top_voted_key = next(genres)
+                    book_dict['top_voted_genre'].append(top_voted_key[0])
+                    book_dict['top_voted_votes'].append(
+                        book.genres[top_voted_key])
 
-                top_voted_key = next(genres)
-                book_dict['top_voted_genre'].append(top_voted_key[0])
-                book_dict['top_voted_votes'].append(
-                    book.genres[top_voted_key])
+                    try:
+                        second_voted_key = next(genres)
+                        book_dict['2nd_voted_genre'].append(second_voted_key[0])
+                        book_dict['2nd_voted_votes'].append(
+                            book.genres[second_voted_key])
+                    except StopIteration:
+                        book_dict['2nd_voted_genre'].append('None')
+                        book_dict['2nd_voted_votes'].append('None')
 
-                try:
-                    second_voted_key = next(genres)
-                    book_dict['2nd_voted_genre'].append(second_voted_key[0])
-                    book_dict['2nd_voted_votes'].append(
-                        book.genres[second_voted_key])
-                except StopIteration:
-                    book_dict['2nd_voted_genre'].append('None')
-                    book_dict['2nd_voted_votes'].append('None')
+                    try:
+                        third_voted_key = next(genres)
+                        book_dict['3rd_voted_genre'].append(third_voted_key[0])
+                        book_dict['3rd_voted_votes'].append(
+                            book.genres[third_voted_key])
+                    except StopIteration:
+                        book_dict['3rd_voted_genre'].append('None')
+                        book_dict['3rd_voted_votes'].append('None')
 
-                try:
-                    third_voted_key = next(genres)
-                    book_dict['3rd_voted_genre'].append(third_voted_key[0])
-                    book_dict['3rd_voted_votes'].append(
-                        book.genres[third_voted_key])
-                except StopIteration:
-                    book_dict['3rd_voted_genre'].append('None')
-                    book_dict['3rd_voted_votes'].append('None')
         finally:
             driver.close()
 
