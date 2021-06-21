@@ -134,20 +134,26 @@ class Book:
     def _rating_from_soup(self):
         """
         Initializes self.rating from self.soup
-
         """
         if self.soup is None:
             self.soup_from_link()
-        tag = self.soup.find("span", attrs={"itemprop": "ratingValue"})
-        rating = float(tag.text.strip())
-        tag2 = self.soup.find("meta", attrs={"itemprop": "ratingCount"})
-        num_ratings = int(tag2.attrs["content"])
+
+        # finds the rating_average value
+        rating_value_tag = self.soup.find("span", attrs={"itemprop": "ratingValue"})
+        rating = float(rating_value_tag.text.strip())
+
+        # finds the number of ratings value
+        rating_count_tag = self.soup.find("meta", attrs={"itemprop": "ratingCount"})
+        num_ratings = int(rating_count_tag.attrs["content"])
+
+        # finds the rating histogram
         rating_dist_tag = self.soup.find("table",
                                          attrs={"id": "rating_distribution"})
-        tags3 = rating_dist_tag.findAll("tr", limit=5)
+        rating_stars_tag = rating_dist_tag.findAll("tr", limit=5)
         rating_histogram = {}
-        for i, tag3 in enumerate(tags3):
-            rating_per_stars = tag3.findAll("td")[1].text.strip()
+        for i, star_tag in enumerate(rating_stars_tag):
+            # for each number of stars extracts the numbers of voters
+            rating_per_stars = star_tag.findAll("td")[1].text.strip()
             rating_histogram[5 - i] = int(rating_per_stars[
                                           rating_per_stars.find(
                                               "(") + 1: rating_per_stars.find(
@@ -169,6 +175,7 @@ class Book:
         # Find all genres' user ratings
         genres_user_ratings = self.soup.findAll("div", attrs={
             "class": "greyText bookPageGenreLink"})
+
         # For each rating finds the corresponding genre
         for rating in genres_user_ratings:
             genre_tags = rating.parent.parent.findAll('a', attrs={
