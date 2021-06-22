@@ -71,6 +71,13 @@ class Book:
             book.soup = None
         return book
 
+    def check_soup(self):
+        """
+        Checks if self.soup is None and if so derives self.soup_from_link
+        """
+        if self.soup is None:
+            self.soup_from_link()
+
     def soup_from_link(self, web_driver=None, timeout=30):
         """
         Initializes self.soup from self.link
@@ -106,8 +113,7 @@ class Book:
         """
         Initializes self.name from self.soup
         """
-        if self.soup is None:
-            self.soup_from_link()
+        self.check_soup()
         tag = self.soup.find("h1", attrs={"id": "bookTitle"})
         name = tag.text.strip()
         self.name = name
@@ -116,8 +122,7 @@ class Book:
         """
         Initializes self.author from self.soup
         """
-        if self.soup is None:
-            self.soup_from_link()
+        self.check_soup()
         tag = self.soup.find("a", attrs={"class": "authorName"})
         author = tag.text
         self.author = author
@@ -126,8 +131,7 @@ class Book:
         """
         Initializes self.description from self.soup
         """
-        if self.soup is None:
-            self.soup_from_link()
+        self.check_soup()
         tag = self.soup.find("div", attrs={"id": "description"})
 
         try:
@@ -142,8 +146,7 @@ class Book:
         """
         Initializes self.rating from self.soup
         """
-        if self.soup is None:
-            self.soup_from_link()
+        self.check_soup()
 
         # finds the rating_average value
         rating_value_tag = self.soup.find("span",
@@ -177,8 +180,7 @@ class Book:
         The genre attribute is a dictionary with genres as keys
         and users vote about what genre fits the book as values.
         """
-        if self.soup is None:
-            self.soup_from_link()
+        self.check_soup()
         genres_dict = {}
 
         # Find all genres' user ratings
