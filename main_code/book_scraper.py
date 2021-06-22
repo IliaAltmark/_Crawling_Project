@@ -1,3 +1,8 @@
+"""
+Authors: Ilia Altmark and Tovi Benoni
+Contains the Book class which is used for scraping the required data from a
+link containing book data
+"""
 from bs4 import BeautifulSoup
 
 from selenium.webdriver.common.keys import Keys
@@ -7,6 +12,8 @@ from selenium.webdriver.support.wait import WebDriverWait
 from selenium.common.exceptions import TimeoutException
 
 from utils import quiet_selenium_chrome_driver
+
+SCRAPED_LINK = "https://www.goodreads.com/book/show/52380340-the-extraordinaries?from_choice=true"
 
 
 class BookRating:
@@ -139,11 +146,13 @@ class Book:
             self.soup_from_link()
 
         # finds the rating_average value
-        rating_value_tag = self.soup.find("span", attrs={"itemprop": "ratingValue"})
+        rating_value_tag = self.soup.find("span",
+                                          attrs={"itemprop": "ratingValue"})
         rating = float(rating_value_tag.text.strip())
 
         # finds the number of ratings value
-        rating_count_tag = self.soup.find("meta", attrs={"itemprop": "ratingCount"})
+        rating_count_tag = self.soup.find("meta",
+                                          attrs={"itemprop": "ratingCount"})
         num_ratings = int(rating_count_tag.attrs["content"])
 
         # finds the rating histogram
@@ -200,8 +209,7 @@ def main():
     """
     Tests the books scraper
     """
-    link = " https://www.goodreads.com/book/show/52380340-the-extraordinaries?from_choice=true"
-    book = Book.book_from_link(link)
+    book = Book.book_from_link(SCRAPED_LINK)
     print(book)
 
 

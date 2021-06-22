@@ -43,18 +43,29 @@ described in the dependencies section.
 
 ### Executing program
 
-* How to run the program
-* Step-by-step bullets
-```
-code blocks for commands
-```
+* How to run the program:
+  
+  The uploaded directory contains a number of scripts which are used without
+  additional parameters. Contains the following scripts:
+  * book_scraper.py - Can be used for testing and scraping specific links.
+  * link_scraper.py - Scrapes links that contain book info. Currently, scrapes
+    only the top books per genre but can be easily changed but manipulation of 
+    the Beautiful Soup tags. For example:
+    
+    ``tag = soup("a", attrs={"class": "pollAnswer__bookLink"})``
+  * save_to_csv.py - Uses the class Book for scraping from a list that contains 
+    links to books. The scraped data is then saved to a csv
+* Step-by-step bullets:
+  * The first step is to use link_scraper.py which creates a csv that contains 
+    links to books.
+  * Next step is to use save_to_csv.py which will go over the specified csv
+    file (the file created in the previous step) and then scrapes and saves 
+    book data in a separate csv.
 
 ## Help
 
-Any advice for common problems or issues.
-```
-command to run if program contains helper info
-```
+Any advice for common problems or issues:
+* Make sure to not open the csv (where the data is written to) file when writing the scraped data.
 
 ## Authors
 

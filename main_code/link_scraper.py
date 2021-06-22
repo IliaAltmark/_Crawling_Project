@@ -1,6 +1,6 @@
 """
 Authors: Ilia Altmark and Tovi Benoni
-First crawler
+scrapes and saves links which contain book data for further scraping
 """
 import csv
 
@@ -10,9 +10,15 @@ import requests
 DOMAIN = "https://www.goodreads.com"
 URL = DOMAIN + "/choiceawards/best-books-2020"
 USER_AGENT = {'User-agent': 'Mozilla/5.0'}
+WRITING_TO = '../project_data/links_to_books_test.csv'
 
 
 def get_soup(link):
+    """
+    saves and parses the html and returns a BS object
+    :param link: received link
+    :return: BS object
+    """
     response = requests.get(link, headers=USER_AGENT)
     return BeautifulSoup(response.content, "html.parser")
 
@@ -23,7 +29,6 @@ def get_link_to_books(links):
     :param links: a list containing pages of top books per genre
     :return: dictionary where key is genre and value is a list of books
     """
-
     links_per_genre = {}
 
     for link in links:
@@ -72,7 +77,7 @@ def main():
 
     links_to_top_books = get_link_to_books(links_to_top_genres)
 
-    with open('../project_data/links_to_books.csv', 'w', newline='') as csv_file:
+    with open(WRITING_TO, 'w', newline='') as csv_file:
         writer = csv.writer(csv_file)
 
         for genre, books in links_to_top_books.items():
