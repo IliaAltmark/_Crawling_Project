@@ -49,7 +49,7 @@ described in the dependencies section.
   additional parameters. Contains the following scripts:
   * book_scraper.py - Can be used for testing and scraping specific links.
   * link_scraper.py - Scrapes links that contain book info. Currently, scrapes
-    only the top books per genre but can be easily changed bט manipulation of 
+    only the top books per genre but can be easily changed by manipulation of 
     the Beautiful Soup tags. For example:
     
     ``tag = soup("a", attrs={"class": "pollAnswer__bookLink"})``
