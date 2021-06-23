@@ -79,7 +79,3 @@ Currently redundent
 ## License
 
 Currently redundent
-
-## Acknowledgments
-
-TODO
