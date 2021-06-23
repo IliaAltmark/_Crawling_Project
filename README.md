@@ -5,9 +5,8 @@ The program extracts the information of the top 2020 books from the Goodreads we
 ## Description
 
 The Goodreads website gives various details on books, including a users based evaluation 
-and genre determination. This program extracts from Goodread information on the top 2020
-books according to the website user-based evaluation. 
-  TODO describe which books are scraped.
+and genre determination. This program extracts from Goodreads information on the top 2020
+books according to the website user-based evaluation.
 
 For each book, the system extracts the following details:
   - Title
