@@ -12,7 +12,7 @@ from book_scraper import Book
 
 FROM_ROW = 0
 TO_ROW = 400
-READING_FROM = '../project_data/links_to_books.csv'
+READING_FROM = '../project_data/links_to_books_test.csv'
 WRITING_TO = '../project_data/books_test.csv'
 
 
