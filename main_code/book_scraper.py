@@ -3,17 +3,16 @@ Authors: Ilia Altmark and Tovi Benoni
 Contains the Book class which is used for scraping the required data from a
 link containing book data
 """
-from bs4 import BeautifulSoup
+# imports from project files
+from utils import quiet_selenium_chrome_driver
 
+# imports from packages
+from bs4 import BeautifulSoup
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.common.by import By
 import selenium.webdriver.support.expected_conditions as ec
 from selenium.webdriver.support.wait import WebDriverWait
 from selenium.common.exceptions import TimeoutException
-
-from utils import quiet_selenium_chrome_driver
-
-SCRAPED_LINK = "https://www.goodreads.com/book/show/52380340-the-extraordinaries?from_choice=true"
 
 
 class BookRating:
@@ -205,15 +204,3 @@ class Book:
                         f"{self.description}\n" \
                         f"\nlink: {self.link}\nrating:{self.rating}\n" \
                         f"genre: {self.genres}"
-
-
-def main():
-    """
-    Tests the books scraper
-    """
-    book = Book.book_from_link(SCRAPED_LINK)
-    print(book)
-
-
-if __name__ == "__main__":
-    main()

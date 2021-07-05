@@ -2,15 +2,12 @@
 Authors: Ilia Altmark and Tovi Benoni
 scrapes and saves links which contain book data for further scraping
 """
-import csv
+# imports from project files
+import utils as u
 
+# imports from packages
 from bs4 import BeautifulSoup
 import requests
-
-DOMAIN = "https://www.goodreads.com"
-URL = DOMAIN + "/choiceawards/best-books-2020"
-USER_AGENT = {'User-agent': 'Mozilla/5.0'}
-WRITING_TO = '../project_data/links_to_books_test.csv'
 
 
 def get_soup(link):
@@ -19,7 +16,7 @@ def get_soup(link):
     :param link: received link
     :return: BS object
     """
-    response = requests.get(link, headers=USER_AGENT)
+    response = requests.get(link, headers=u.USER_AGENT)
     return BeautifulSoup(response.content, "html.parser")
 
 
@@ -42,7 +39,7 @@ def get_link_to_books(links):
 
         # extracts all the links from the tags
         links_to_books = [t['href'] for t in tag]
-        links_to_books = [DOMAIN + link for link in links_to_books]
+        links_to_books = [u.DOMAIN + link for link in links_to_books]
 
         links_per_genre[genre] = links_to_books
 
@@ -54,7 +51,7 @@ def get_links_to_top_genres():
     goes to the predefined URL and extracts the links to the top books
     :return: a list containing the top books per genre
     """
-    soup = get_soup(URL)
+    soup = get_soup(u.URL)
 
     # finds the div with id="categories"
     tag = soup.find("div", attrs={"id": "categories"})
@@ -67,26 +64,6 @@ def get_links_to_top_genres():
                                  links_to_pages))
 
     # turning into actual links and not dirs
-    links_to_pages = [DOMAIN + link for link in links_to_pages]
+    links_to_pages = [u.DOMAIN + link for link in links_to_pages]
 
     return links_to_pages
-
-
-def main():
-    links_to_top_genres = get_links_to_top_genres()
-
-    links_to_top_books = get_link_to_books(links_to_top_genres)
-
-    with open(WRITING_TO, 'w', newline='') as csv_file:
-        writer = csv.writer(csv_file)
-
-        for genre, books in links_to_top_books.items():
-            print(f"Links for {genre}:")
-
-            for book in books:
-                writer.writerow([book, genre])
-                print(book)
-
-
-if __name__ == "__main__":
-    main()
