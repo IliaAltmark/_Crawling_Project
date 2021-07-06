@@ -6,7 +6,8 @@ from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
 
 DOMAIN = "https://www.goodreads.com"
-URL = DOMAIN + "/choiceawards/best-books-2020"
+URL_TOP = DOMAIN + "/choiceawards/best-books-2020"
+URL_GENRE = DOMAIN + "/shelf/show/"
 USER_AGENT = {'User-agent': 'Mozilla/5.0'}
 
 FROM_ROW = 0
