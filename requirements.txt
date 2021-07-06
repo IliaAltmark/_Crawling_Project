@@ -7,3 +7,6 @@ requests==2.25.1
 soupsieve==2.2.1
 urllib3==1.26.5
 selenium==3.141.0
+
+pymysql~=0.10.1
+pandas~=1.2.4

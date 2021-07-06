@@ -7,7 +7,7 @@ import csv
 
 from selenium.common.exceptions import TimeoutException
 
-from utils import quiet_selenium_chrome_driver
+from utils.utils import quiet_selenium_chrome_driver
 from book_scraper import Book
 
 FROM_ROW = 0
