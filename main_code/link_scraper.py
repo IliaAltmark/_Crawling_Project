@@ -20,6 +20,22 @@ def get_soup(link):
     return BeautifulSoup(response.content, "html.parser")
 
 
+def extract_links(url, class_tag):
+    """
+    extracts the necessary links from given url and class tag
+    """
+    soup = get_soup(url)
+
+    # finds the "a" tag with class=class_tag
+    tag = soup("a", attrs={"class": class_tag})
+
+    # extracts all the links from the tags
+    links_to_books = [t['href'] for t in tag]
+    links_to_books = [u.DOMAIN + link for link in links_to_books]
+
+    return links_to_books
+
+
 def get_link_to_books(links):
     """
     extracts links to specific books from the given list of pages
@@ -32,40 +48,39 @@ def get_link_to_books(links):
         genre = link.split('/')[-1]
         print(f"Scraping {genre} page...")
 
-        soup = get_soup(link)
-
-        # finds the "a" tag with class="pollAnswer__bookLink"
-        tag = soup("a", attrs={"class": "pollAnswer__bookLink"})
-
-        # extracts all the links from the tags
-        links_to_books = [t['href'] for t in tag]
-        links_to_books = [u.DOMAIN + link for link in links_to_books]
-
+        links_to_books = extract_links(link, "pollAnswer__bookLink")
         links_per_genre[genre] = links_to_books
 
     return links_per_genre
 
 
-def get_links_to_books_genre(genre, page):
-    pass
-    # links_per_genre = {}
-    #
-    # for link in links:
-    #     genre = link.split('/')[-1]
-    #     print(f"Scraping {genre} page...")
-    #
-    #     soup = get_soup(link)
-    #
-    #     # finds the "a" tag with class="pollAnswer__bookLink"
-    #     tag = soup("a", attrs={"class": "pollAnswer__bookLink"})
-    #
-    #     # extracts all the links from the tags
-    #     links_to_books = [t['href'] for t in tag]
-    #     links_to_books = [u.DOMAIN + link for link in links_to_books]
-    #
-    #     links_per_genre[genre] = links_to_books
-    #
-    # return links_per_genre
+def get_links_to_books_genre(genre, page, to_page):
+    """
+    extracts links to specific books from a specific genre
+    :param genre: the requested genre
+    :param page: starting page
+    :param to_page: last page
+    """
+    target_url = u.URL_GENRE + genre
+    if page:
+        target_url += f"?page={page}"
+
+    page_range = 1
+    if to_page:
+        if (to_page - page) >= 1:
+            page_range += to_page - page
+        else:
+            print('to_page must be bigger than page! '
+                  'Now scraping only the first page.')
+
+    links = {None: []}
+    print(f"Scraping {genre} page...")
+
+    for p in range(page_range):
+        links_to_books = extract_links(target_url, "bookTitle")
+        links[None] += links_to_books
+
+    return links
 
 
 def get_links_to_top_genres():
