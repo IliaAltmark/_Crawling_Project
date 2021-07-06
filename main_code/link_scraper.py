@@ -61,12 +61,14 @@ def get_links_to_books_genre(genre, page, to_page):
     :param page: starting page
     :param to_page: last page
     """
-    target_url = u.URL_GENRE + genre
+    genre_url = u.URL_GENRE + genre
     if page:
-        target_url += f"?page={page}"
+        target_url = genre_url + f"?page={page}"
+    else:
+        target_url = genre_url
 
     page_range = 1
-    if to_page:
+    if page and to_page:
         if (to_page - page) >= 1:
             page_range += to_page - page
         else:
@@ -77,8 +79,13 @@ def get_links_to_books_genre(genre, page, to_page):
     print(f"Scraping {genre} page...")
 
     for p in range(page_range):
+        print(f"Scraping page {page}...")
         links_to_books = extract_links(target_url, "bookTitle")
         links[None] += links_to_books
+
+        if page:
+            page += 1
+            target_url = genre_url + f"?page={page}"
 
     return links
 
