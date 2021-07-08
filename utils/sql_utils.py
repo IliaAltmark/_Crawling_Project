@@ -31,3 +31,8 @@ def sql_run(connection, mysql_statement):
         cursor.execute(mysql_statement)
         connection.commit()
         return cursor.fetchall()
+
+
+def close_connection(connection):
+    connection.close()
+    return "The connection is closed"

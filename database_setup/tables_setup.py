@@ -31,9 +31,7 @@ def main():
     # remove the table description if it exists
     sql_run(connection, "DROP TABLE IF EXISTS description;")
     # create the description table
-    sql_run(connection,
-            "CREATE TABLE IF NOT EXISTS description (book_number INT PRIMARY KEY, description "
-            "TEXT(4095);")
+    sql_run(connection, "CREATE TABLE IF NOT EXISTS description (book_number INT PRIMARY KEY, description TEXT(4095));")
 
     # books_genre table
     # remove the table books_genre if it exists
@@ -53,11 +51,9 @@ def main():
     # remove the table rating_info if it exists
     sql_run(connection, "DROP TABLE IF EXISTS rating_info;")
     # create the rating_info table
-    sql_run(connection, "CREATE TABLE IF NOT EXISTS rating_info (book_number INT PRIMARY KEY rated_5 INT, "
-                        "rated_4 INT,rated_3 INT,rated_2 INT, "
-                        "rated_1 INT;")
+    sql_run(connection, "CREATE TABLE IF NOT EXISTS rating_info (book_number INT PRIMARY KEY, rated_5 INT, rated_4 INT,rated_3 INT,rated_2 INT, rated_1 INT);")
 
-connection.close()
+    connection.close()
 
 
 if __name__ == "__main__":
