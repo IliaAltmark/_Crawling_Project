@@ -17,7 +17,7 @@ def is_in_db(book, connection):
     """
     Checks if the book is in the db of the given connection
     """
-    command = f"SELECT COUNT(1) FROM books WHERE title={book.name} and author={book.author};"
+    command = f"SELECT COUNT(1) FROM books WHERE title='{book.name}' and author='{book.author}';"
     is_exists = sql_run(connection, command)
     # TODO check what type is returned and extract the number
     return is_exists == 1
@@ -30,15 +30,15 @@ def add_book_to_db(book, connection):
     if is_in_db(book, connection):
         return -1
     else:
+        #TODO: Fix top of
         command = f"INSERT INTO books (book_link, best_of ,title,author,average_rating, number_of_reviews) VALUES " \
-                  f"({book.link}, {book.top_of}, {book.name}, {book.author}, {book.rating.average_rating}, " \
+                  f"('{book.link}', 'None', '{book.name}', '{book.author}', {book.rating.average_rating}, " \
                   f"{book.rating.number_of_reviews}); "
         sql_run(connection, command)
 
         # return the book_number in db (the pk)
         command_get_book_number = "SELECT book_number FROM books ORDER BY book_number DESC LIMIT 1;"
-        book_num = sql_run(connection, command_get_book_number)
-        # TODO check what type is returned and extract the number
+        book_num = sql_run(connection, command_get_book_number)[0]['book_number']
     return book_num
 
 
@@ -49,16 +49,18 @@ def add_rating_info_to_db(book, connection, book_number):
     command = f"INSERT INTO rating_info (book_number, rated_5, rated_4 ,rated_3 ,rated_2, rated_1) VALUES ({book_number}"
     for i in range(5):
         command += f", {book.rating.rating_histogram[5 - i]}"
-    command += ";"
+    command += ")"
     sql_run(connection, command)
     return True
 
 
 def add_description_to_db(book, connection, book_number):
     """
+    
     add description information to description table using given connection
     """
-    command = f"INSERT INTO description (book_number, description) VALUES ({book_number}, {book.description}); "
+    description_sanitized = book.description.replace('"', "'")
+    command = f'INSERT INTO description (book_number, description) VALUES ({book_number}, "{description_sanitized}"); '
     sql_run(connection, command)
     return True
 
@@ -70,7 +72,8 @@ def add_books_genre_info(book, connection, book_number):
     genres_dict = book.genres
     # loop over the genres_dict and for each iteration add a row to the books_genres table
     for i, k in enumerate(genres_dict):
-        command = f"INSERT INTO books_genre (book_id, genre, top_voted, top_voted_num) VALUES ({book_number},{k},{i + 1},{genres_dict[k]});"
+        genre_str = ','.join(k)
+        command = f"INSERT INTO books_genre (book_id, genre, top_voted, top_voted_num) VALUES ({book_number},'{genre_str}',{i + 1},{genres_dict[k]})"
         sql_run(connection, command)
     return True
 
