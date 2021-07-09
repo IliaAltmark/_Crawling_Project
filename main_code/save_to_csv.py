@@ -9,7 +9,12 @@ import utils as u
 # imports from packages
 import csv
 from selenium.common.exceptions import TimeoutException
+<<<<<<< HEAD
 from utils import quiet_selenium_chrome_driver
+=======
+
+from utils.utils import quiet_selenium_chrome_driver
+>>>>>>> origin/database_impl
 from book_scraper import Book
 
 

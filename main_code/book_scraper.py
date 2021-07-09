@@ -14,6 +14,13 @@ import selenium.webdriver.support.expected_conditions as ec
 from selenium.webdriver.support.wait import WebDriverWait
 from selenium.common.exceptions import TimeoutException
 
+<<<<<<< HEAD
+=======
+from utils.utils import quiet_selenium_chrome_driver
+
+SCRAPED_LINK = "https://www.goodreads.com/book/show/52380340-the-extraordinaries?from_choice=true"
+
+>>>>>>> origin/database_impl
 
 class BookRating:
     """
@@ -38,9 +45,10 @@ class Book:
     """
     A class for storing and manipulating a book's data
     """
+    GENRE_NUM = 3
 
     def __init__(self, name, author, rating, genres, description, link,
-                 soup=None):
+                 top_of=None, soup=None):
         self.name = name
         self.author = author
         self.rating = rating
@@ -48,18 +56,20 @@ class Book:
         self.description = description
         self.link = link
         self.soup = soup
+        self.top_of = top_of
 
     @classmethod
-    def book_from_link(cls, link, web_driver=None, to_save_soup=True):
+    def book_from_link(cls, link, top_of=None, web_driver=None, to_save_soup=True):
         """
         Creates a book object from link
         :param web_driver: a web driver to get the link's source code with.
         :param to_save_soup: defaults to True
         :param link: link to the book's page
         :return: a Book object
+        :TODO change callings to include top_of
         """
         book = Book(name=None, author=None, rating=None, genres=None,
-                    description=None, link=link, soup=None)
+                    description=None, link=link, top_of=top_of, soup=None)
         book.soup_from_link(web_driver=web_driver)
         book._name_from_soup()
         book._genres_from_soup()
