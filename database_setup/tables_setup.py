@@ -20,13 +20,15 @@ def main():
     # create the books table
     print('Creating books table...', end='')
     sql_run(connection, """CREATE TABLE IF NOT EXISTS 
-                           books (book_number INT AUTO_INCREMENT PRIMARY KEY, 
+                           books (
+                           book_number INT AUTO_INCREMENT PRIMARY KEY, 
                            book_link VARCHAR(255), 
                            best_of VARCHAR(255), 
                            title VARCHAR(255), 
                            author VARCHAR(255), 
                            average_rating FLOAT, 
-                           number_of_reviews INT);""")
+                           number_of_reviews INT
+                           );""")
     print('Done.')
 
     # description table
