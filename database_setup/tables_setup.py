@@ -30,7 +30,7 @@ def main():
     # remove the table books_genre if it exists
     sql_run(connection, "DROP TABLE IF EXISTS books_genre;")
     # create the books_genre table
-    sql_run(connection, "CREATE TABLE IF NOT EXISTS books_genre (book_id INT, genre_id INT, top_voted INT, "
+    sql_run(connection, "CREATE TABLE IF NOT EXISTS books_genre (book_id INT, genre VARCHAR(255), top_voted INT, "
                         "top_voted_num INT);")
 
     # genre table

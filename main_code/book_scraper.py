@@ -179,28 +179,25 @@ class Book:
 
     def _genres_from_soup(self):
         """
-        :TODO change description
         Initializes self.genres from self.soup.
         The genre attribute is a dictionary with genres as keys
         and users vote about what genre fits the book as values.
-
-        Saves only the top GENRE_NUM genres
         """
         self.check_soup()
-        genres_list = []
+        genres_dict = {}
 
         # Find all genres' user ratings
         genres_user_ratings = self.soup.findAll("div", attrs={
             "class": "greyText bookPageGenreLink"})
 
         # For each rating finds the corresponding genre
-        for rating in genres_user_ratings[:self.GENRE_NUM]:
+        for rating in genres_user_ratings:
             genre_tags = rating.parent.parent.findAll('a', attrs={
                 'class': 'actionLinkLite bookPageGenreLink'})
             genre = tuple(map(lambda x: x.text, genre_tags))
-            genres_list.append([genre, int(
-                rating.text.strip().split(" ")[0].replace(",", ""))])
-        self.genres = genres_list
+            genres_dict[genre] = int(
+                rating.text.strip().split(" ")[0].replace(",", ""))
+        self.genres = genres_dict
 
     def __str__(self):
         return f"-------------------------------------------------------" \
