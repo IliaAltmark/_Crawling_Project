@@ -19,7 +19,7 @@ def is_in_db(book, connection):
     """
     command = f"SELECT COUNT(1) FROM books WHERE title={book.name} and author={book.author};"
     is_exists = sql_run(connection, command)
-    # TODO should be dataframe or something..
+    # TODO check what type is returned and extract the number
     return is_exists == 1
 
 
@@ -38,6 +38,7 @@ def add_book_to_db(book, connection):
         # return the book_number in db (the pk)
         command_get_book_number = "SELECT book_number FROM books ORDER BY book_number DESC LIMIT 1;"
         book_num = sql_run(connection, command_get_book_number)
+        # TODO check what type is returned and extract the number
     return book_num
 
 
