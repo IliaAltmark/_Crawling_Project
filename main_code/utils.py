@@ -8,7 +8,8 @@ from selenium.webdriver.chrome.options import Options
 DOMAIN = "https://www.goodreads.com"
 URL_TOP = DOMAIN + "/choiceawards/best-books-2020"
 URL_GENRE = DOMAIN + "/shelf/show/"
-USER_AGENT = {'User-agent': 'Mozilla/5.0'}
+USER_AGENT = {'User-agent': 'Mozilla/5.0',
+              'Accept-Language': 'en-US, en;q=0.5'}
 
 FROM_ROW = 0
 TO_ROW = 400

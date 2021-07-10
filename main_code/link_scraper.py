@@ -6,7 +6,7 @@ scrapes and saves links which contain book data for further scraping
 from utils import USER_AGENT, DOMAIN, URL_GENRE, URL_TOP
 
 # imports from packages
-from bs4 import BeautifulSoup
+from bs4 import BeautifulSoup as bs
 import requests
 
 
@@ -17,7 +17,7 @@ def get_soup(link):
     :return: BS object
     """
     response = requests.get(link, headers=USER_AGENT)
-    return BeautifulSoup(response.content, "html.parser")
+    return bs(response.content, "lxml")
 
 
 def extract_links(url, class_tag):

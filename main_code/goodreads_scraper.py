@@ -31,20 +31,14 @@ def main():
                         type=int)
     args = parser.parse_args()
 
-    links_to_books_genre = None
-    links_to_top_books = None
-
     if args.genre:
         links_to_books_genre = ls.get_links_to_books_genre(args.genre,
                                                            args.page_num,
                                                            args.to_page)
+        save_info_in_db(links_to_books_genre)
     else:
         links_to_top_genres = ls.get_links_to_top_genres()
         links_to_top_books = ls.get_link_to_books(links_to_top_genres)
-
-    if args.genre:
-        save_info_in_db(links_to_books_genre)
-    else:
         save_info_in_db(links_to_top_books)
 
 
