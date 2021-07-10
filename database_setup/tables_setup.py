@@ -36,8 +36,11 @@ def main():
     sql_run(connection, "DROP TABLE IF EXISTS description;")
     # create the description table
     print('Creating description table...', end='')
-    sql_run(connection,
-            "CREATE TABLE IF NOT EXISTS description (book_number INT PRIMARY KEY, description TEXT(4095));")
+    sql_run(connection, """CREATE TABLE IF NOT EXISTS 
+                           description (
+                           book_number INT PRIMARY KEY, 
+                           description TEXT(4095)
+                           );""")
     print('Done.')
 
     # books_genre table
@@ -45,9 +48,13 @@ def main():
     sql_run(connection, "DROP TABLE IF EXISTS books_genre;")
     # create the books_genre table
     print('Creating books_genre table...', end='')
-    sql_run(connection,
-            "CREATE TABLE IF NOT EXISTS books_genre (book_id INT, genre VARCHAR(255), top_voted INT, "
-            "top_voted_num INT);")
+    sql_run(connection, """CREATE TABLE IF NOT EXISTS 
+                           books_genre (
+                           book_id INT, 
+                           genre VARCHAR(255), 
+                           top_voted INT, 
+                           top_voted_num INT
+                           );""")
     print('Done.')
 
     # genre table
