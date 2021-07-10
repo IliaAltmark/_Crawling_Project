@@ -4,7 +4,7 @@ Contains the Book class which is used for scraping the required data from a
 link containing book data
 """
 # imports from project files
-from utils.utils import quiet_selenium_chrome_driver
+from utils import quiet_selenium_chrome_driver
 
 # imports from packages
 from bs4 import BeautifulSoup
@@ -29,9 +29,9 @@ class BookRating:
         self.rating_histogram = rating_histogram
 
     def __str__(self):
-        return f"Rating information:\nAverage rating= {self.average_rating}\n" \
-               f"Number of reviews: {self.number_of_reviews}\n" \
-               f"Rating histogram:{self.rating_histogram}"
+        return f"""Rating information:\nAverage rating= {self.average_rating}\n
+               Number of reviews: {self.number_of_reviews}\n
+               Rating histogram:{self.rating_histogram}"""
 
 
 class Book:
@@ -41,7 +41,7 @@ class Book:
     GENRE_NUM = 3
 
     def __init__(self, name, author, rating, genres, description, link,
-                 top_of=None, soup=None):
+                 soup=None):
         self.name = name
         self.author = author
         self.rating = rating
@@ -49,10 +49,9 @@ class Book:
         self.description = description
         self.link = link
         self.soup = soup
-        self.top_of = top_of
 
     @classmethod
-    def book_from_link(cls, link, top_of=None, web_driver=None,
+    def book_from_link(cls, link, web_driver=None,
                        to_save_soup=True):
         """
         Creates a book object from link
@@ -63,7 +62,7 @@ class Book:
         :TODO change callings to include top_of
         """
         book = Book(name=None, author=None, rating=None, genres=None,
-                    description=None, link=link, top_of=top_of, soup=None)
+                    description=None, link=link, soup=None)
         book.soup_from_link(web_driver=web_driver)
         book._name_from_soup()
         book._genres_from_soup()

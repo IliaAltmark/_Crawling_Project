@@ -3,7 +3,7 @@ Authors: Ilia Altmark and Tovi Benoni
 scrapes and saves links which contain book data for further scraping
 """
 # imports from project files
-import utils as u
+from utils import USER_AGENT, DOMAIN, URL_GENRE, URL_TOP
 
 # imports from packages
 from bs4 import BeautifulSoup
@@ -16,7 +16,7 @@ def get_soup(link):
     :param link: received link
     :return: BS object
     """
-    response = requests.get(link, headers=u.USER_AGENT)
+    response = requests.get(link, headers=USER_AGENT)
     return BeautifulSoup(response.content, "html.parser")
 
 
@@ -31,7 +31,7 @@ def extract_links(url, class_tag):
 
     # extracts all the links from the tags
     links_to_books = [t['href'] for t in tag]
-    links_to_books = [u.DOMAIN + link for link in links_to_books]
+    links_to_books = [DOMAIN + link for link in links_to_books]
 
     return links_to_books
 
@@ -61,7 +61,7 @@ def get_links_to_books_genre(genre, page, to_page):
     :param page: starting page
     :param to_page: last page
     """
-    genre_url = u.URL_GENRE + genre
+    genre_url = URL_GENRE + genre
     if page:
         target_url = genre_url + f"?page={page}"
     else:
@@ -95,7 +95,7 @@ def get_links_to_top_genres():
     goes to the predefined URL and extracts the links to the top books
     :return: a list containing the top books per genre
     """
-    soup = get_soup(u.URL_TOP)
+    soup = get_soup(URL_TOP)
 
     # finds the div with id="categories"
     tag = soup.find("div", attrs={"id": "categories"})
@@ -108,6 +108,6 @@ def get_links_to_top_genres():
                                  links_to_pages))
 
     # turning into actual links and not dirs
-    links_to_pages = [u.DOMAIN + link for link in links_to_pages]
+    links_to_pages = [DOMAIN + link for link in links_to_pages]
 
     return links_to_pages

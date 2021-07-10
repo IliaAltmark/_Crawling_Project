@@ -1,7 +1,7 @@
-from utils.sql_utils import establish_connection, sql_run
+from main_code.sql_utils import establish_connection, sql_run
 
 
-# TODO:get user and password from command line
+# TODO:get user and password from command line: done
 
 
 def main():
@@ -36,8 +36,7 @@ def main():
     print('Creating Description table...', end='')
     sql_run(connection, """CREATE TABLE 
                            Description (
-                               id INT AUTO_INCREMENT PRIMARY KEY,
-                               book_id INT, 
+                               book_id INT PRIMARY KEY, 
                                description TEXT(4095),
                                FOREIGN KEY (book_id) 
                                REFERENCES Books(book_id)

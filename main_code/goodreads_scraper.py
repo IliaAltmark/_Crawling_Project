@@ -5,7 +5,7 @@ scrapes the necessary links and saves book info
 """
 # imports from project files
 import link_scraper as ls
-from save_to_csv import create_dict, create_csv
+from save_to_db import save_info_in_db
 
 # imports from packages
 import argparse
@@ -42,22 +42,10 @@ def main():
         links_to_top_genres = ls.get_links_to_top_genres()
         links_to_top_books = ls.get_link_to_books(links_to_top_genres)
 
-    # declaring a dictionary which will contain lists of scraped data.
-    # each list contains data scraped from the same place in the HTML
-    # book_dict = {'name': [], 'author': [], 'description': [],
-    #              'average_rating': [], 'number_of_reviews': [],
-    #              'top_of': [],
-    #              'rated_5': [], 'rated_4': [], 'rated_3': [], 'rated_2': [],
-    #              'rated_1': [],
-    #              'top_voted_genre': [], 'top_voted_votes': [],
-    #              '2nd_voted_genre': [], '2nd_voted_votes': [],
-    #              '3rd_voted_genre': [], '3rd_voted_votes': []}
-
     if args.genre:
-        create_dict(book_dict, links_to_books_genre)
+        save_info_in_db(links_to_books_genre)
     else:
-        create_dict(book_dict, links_to_top_books)
-    create_csv(book_dict)
+        save_info_in_db(links_to_top_books)
 
 
 if __name__ == "__main__":
