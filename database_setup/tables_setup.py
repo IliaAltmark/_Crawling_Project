@@ -48,9 +48,9 @@ def main():
     # create the genre table
     print('Creating Genre table...', end='')
     sql_run(connection, """CREATE TABLE 
-                               Genre ( 
-                                    genre VARCHAR(255) PRIMARY KEY
-                               );""")
+                           Genre ( 
+                                genre VARCHAR(255) PRIMARY KEY
+                           );""")
     print('Done.')
 
     # books_genre table
@@ -75,8 +75,7 @@ def main():
     print('Creating Rating_Info table...', end='')
     sql_run(connection, """CREATE TABLE
                            Rating_Info (
-                               id INT AUTO_INCREMENT PRIMARY KEY,
-                               book_id INT, 
+                               book_id INT PRIMARY KEY, 
                                rated_5 INT, 
                                rated_4 INT, 
                                rated_3 INT, 

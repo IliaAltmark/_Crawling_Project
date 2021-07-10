@@ -44,14 +44,14 @@ def main():
 
     # declaring a dictionary which will contain lists of scraped data.
     # each list contains data scraped from the same place in the HTML
-    book_dict = {'name': [], 'author': [], 'description': [],
-                 'average_rating': [], 'number_of_reviews': [],
-                 'top_of': [],
-                 'rated_5': [], 'rated_4': [], 'rated_3': [], 'rated_2': [],
-                 'rated_1': [],
-                 'top_voted_genre': [], 'top_voted_votes': [],
-                 '2nd_voted_genre': [], '2nd_voted_votes': [],
-                 '3rd_voted_genre': [], '3rd_voted_votes': []}
+    # book_dict = {'name': [], 'author': [], 'description': [],
+    #              'average_rating': [], 'number_of_reviews': [],
+    #              'top_of': [],
+    #              'rated_5': [], 'rated_4': [], 'rated_3': [], 'rated_2': [],
+    #              'rated_1': [],
+    #              'top_voted_genre': [], 'top_voted_votes': [],
+    #              '2nd_voted_genre': [], '2nd_voted_votes': [],
+    #              '3rd_voted_genre': [], '3rd_voted_votes': []}
 
     if args.genre:
         create_dict(book_dict, links_to_books_genre)

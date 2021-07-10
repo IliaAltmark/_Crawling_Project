@@ -4,7 +4,7 @@ Contains the Book class which is used for scraping the required data from a
 link containing book data
 """
 # imports from project files
-from utils import quiet_selenium_chrome_driver
+from utils.utils import quiet_selenium_chrome_driver
 
 # imports from packages
 from bs4 import BeautifulSoup
@@ -14,13 +14,6 @@ import selenium.webdriver.support.expected_conditions as ec
 from selenium.webdriver.support.wait import WebDriverWait
 from selenium.common.exceptions import TimeoutException
 
-<<<<<<< HEAD
-=======
-from utils.utils import quiet_selenium_chrome_driver
-
-SCRAPED_LINK = "https://www.goodreads.com/book/show/52380340-the-extraordinaries?from_choice=true"
-
->>>>>>> origin/database_impl
 
 class BookRating:
     """
@@ -59,7 +52,8 @@ class Book:
         self.top_of = top_of
 
     @classmethod
-    def book_from_link(cls, link, top_of=None, web_driver=None, to_save_soup=True):
+    def book_from_link(cls, link, top_of=None, web_driver=None,
+                       to_save_soup=True):
         """
         Creates a book object from link
         :param web_driver: a web driver to get the link's source code with.
