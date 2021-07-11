@@ -7,7 +7,10 @@ from sql_utils import sql_run, establish_connection
 
 def is_in_db(book, connection):
     """
-    Checks if the book is in the db of the given connection
+    Checks if the book is in the db of the given connection.
+    :param book: a book object
+    :param connection: a connection object to an sql server.
+    :return True if the book is in the connection's DB, else False.
     """
     command = """SELECT EXISTS (
                       SELECT * 
@@ -16,18 +19,20 @@ def is_in_db(book, connection):
                   );"""
     is_exists = sql_run(connection, command, (book.name, book.author))
     is_exists = list(is_exists[0].values())[0]
-    # TODO check what type is returned and extract the number: done
     return is_exists == 1
 
 
 def add_book_to_db(book, connection, genre):
     """
-    add book to books table using given connection
+    Add book to books table using given connection.
+    :param book: a book object
+    :param connection: a connection object to an sql server.
+    :param genre: the genre the book corresponds to.
+    :return the id of the book in the database
     """
     if is_in_db(book, connection):
         return -1
     else:
-        # TODO: Fix best of: fixed
         command = """INSERT INTO 
                       Books (
                           best_of, title, author, average_rating, 
@@ -52,7 +57,10 @@ def add_book_to_db(book, connection, genre):
 
 def add_description_to_db(book, connection, book_number):
     """
-    add description information to description table using given connection
+    Add description information to description table using the given connection.
+    :param book: a book object
+    :param connection: a connection object to an sql server.
+    :param book_number: the id number of the book in the database.
     """
     command = """INSERT INTO 
                   Description (
@@ -66,7 +74,9 @@ def add_description_to_db(book, connection, book_number):
 
 def add_genre_info(book, connection):
     """
-    add genres to genre table
+    Add the given book genres to genre table, in the given connection's database.
+    :param book: a book object
+    :param connection: a connection object to an sql server.
     """
     for genre in book.genres:
         genre_str = ','.join(genre)
@@ -90,8 +100,11 @@ def add_genre_info(book, connection):
 
 def add_books_genre_info(book, connection, book_number):
     """
-    add information about the book genres to book_genres table
-    using given connection
+    Add information about the book genres to book_genres table
+    using given connection.
+    :param book: a book object
+    :param connection: a connection object to an sql server.
+    :param book_number: the id number of the book in the database.
     """
     genres_dict = book.genres
     # loop over the genres_dict and for each iteration add a row to the
@@ -111,7 +124,10 @@ def add_books_genre_info(book, connection, book_number):
 
 def add_rating_info_to_db(book, connection, book_number):
     """
-    add rating information to rating_info table using given connection
+    Add rating information to rating_info table using given connection.
+    :param book: a book object
+    :param connection: a connection object to an sql server.
+    :param book_number: the id number of the book in the database.
     """
     command = f"""INSERT INTO 
                   Rating_Info (
@@ -128,17 +144,52 @@ def add_rating_info_to_db(book, connection, book_number):
 
 def enter_db(connection):
     """
-    connect to good_reads_data database
+    Connect the given connection to good_reads_data database.
+    :param connection: a connection object to an sql server.
     """
     sql_run(connection, "USE Good_Reads_Data")
     print("entered to db")
 
 
+def add_book_object_to_db(book, connection, genre, i):
+    """
+    Adds book information to database (tables: books, description, genre, books_genre, rating_info)
+    :param book: a book object
+    :param connection: a connection object to an sql server.
+    :param genre: the genre the book corresponds to.
+    :param: i: used for progress prints.
+    """
+    # adding book to books table and save his id number
+    print(f"adding book number {i} to Books table")
+    book_id = add_book_to_db(book, connection, genre)
+
+    if book_id == -1:
+        print('The book is already in DB')
+        return None
+
+    # adding book description to description table
+    print(f"adding book number {i} to Description table")
+    add_description_to_db(book, connection, book_id)
+
+    # adding book genre to genre table
+    print(f"adding book number {i} to Genre table")
+    add_genre_info(book, connection)
+
+    # adding book genre to books_genre table
+    print(f"adding book number {i} to Books_Genre table")
+    add_books_genre_info(book, connection, book_id)
+
+    # adding book rating to rating_info table
+    print(f"adding book number {i} to Rating table")
+    add_rating_info_to_db(book, connection, book_id)
+
+    return True
+
+
 def save_info_in_db(l_to_books_dict):
     """
-    save the books information in good_reads_data database
+    Saves the books' information in good_reads_data database
     """
-    # TODO: split into smaller functions: pending
     driver = quiet_selenium_chrome_driver()
 
     # establish connection and use the good_reads_data database
@@ -155,37 +206,13 @@ def save_info_in_db(l_to_books_dict):
                     print(f"Scraping row number {i}...")
 
                     try:
-                        # creating an object Book and scraping the provided
-                        # link
+                        # creating an object Book and scraping the provided link
                         book = Book.book_from_link(link, driver)
                     except TimeoutException as ex:
                         print(ex)
                         continue
-
-                    # adding book to books table and save his id number
-                    print(f"adding book number {i} to Books table")
-                    book_id = add_book_to_db(book, connection, genre)
-
-                    if book_id == -1:
-                        print('The book is already in DB')
-                        continue
-
-                    # adding book description to description table
-                    print(f"adding book number {i} to Description table")
-                    add_description_to_db(book, connection, book_id)
-
-                    # adding book genre to genre table
-                    print(f"adding book number {i} to Genre table")
-                    add_genre_info(book, connection)
-
-                    # adding book genre to books_genre table
-                    print(f"adding book number {i} to Books_Genre table")
-                    add_books_genre_info(book, connection, book_id)
-
-                    # adding book rating to rating_info table
-                    print(f"adding book number {i} to Rating table")
-                    add_rating_info_to_db(book, connection, book_id)
-
+                    # adding book to database (tables: books, description, genre, books_genre, rating_info)
+                    add_book_object_to_db(book, connection, genre, i)
     finally:
         driver.close()
         connection.close()

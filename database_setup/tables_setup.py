@@ -1,9 +1,6 @@
 from main_code.sql_utils import establish_connection, sql_run
 
 
-# TODO:get user and password from command line: done
-
-
 def main():
     # establish connection to SQL
     connection = establish_connection()
@@ -19,7 +16,6 @@ def main():
     # books table
     # create the books table
     print('Creating Books table...', end='')
-    # TODO remove books_link: done
     sql_run(connection, """CREATE TABLE
                            Books (
                                book_id INT AUTO_INCREMENT PRIMARY KEY, 

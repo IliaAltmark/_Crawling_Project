@@ -12,9 +12,9 @@ import requests
 
 def get_soup(link):
     """
-    saves and parses the html and returns a BS object
-    :param link: received link
-    :return: BS object
+    Saves and parses the html and returns a BS object.
+    :param link: link string.
+    :return: BeautifulSoup object.
     """
     response = requests.get(link, headers=USER_AGENT)
     return bs(response.content, "lxml")
@@ -22,7 +22,7 @@ def get_soup(link):
 
 def extract_links(url, class_tag):
     """
-    extracts the necessary links from given url and class tag
+    Extracts the necessary links from given url and class tag.
     """
     soup = get_soup(url)
 
@@ -38,9 +38,9 @@ def extract_links(url, class_tag):
 
 def get_link_to_books(links):
     """
-    extracts links to specific books from the given list of pages
-    :param links: a list containing pages of top books per genre
-    :return: dictionary where key is genre and value is a list of books
+    Extracts links to specific books from the given list of pages.
+    :param links: a list containing pages of top books per genre.
+    :return: dictionary where key is genre and value is a list of books.
     """
     links_per_genre = {}
 
@@ -56,10 +56,10 @@ def get_link_to_books(links):
 
 def get_links_to_books_genre(genre, page, to_page):
     """
-    extracts links to specific books from a specific genre
-    :param genre: the requested genre
-    :param page: starting page
-    :param to_page: last page
+    Extracts links to specific books from a specific genre.
+    :param genre: the requested genre.
+    :param page: starting page.
+    :param to_page: last page.
     """
     genre_url = URL_GENRE + genre
     if page:
@@ -92,7 +92,7 @@ def get_links_to_books_genre(genre, page, to_page):
 
 def get_links_to_top_genres():
     """
-    goes to the predefined URL and extracts the links to the top books
+    Goes to the predefined URL and extracts the links to the top books
     :return: a list containing the top books per genre
     """
     soup = get_soup(URL_TOP)
