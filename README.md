@@ -15,7 +15,7 @@ For each book, the system extracts the following details:
   - Genre (A dictionary of top voted generes with their number of votes)
   - Rating histogram (Number of voters per number of stars)
 
-The program saves all the information in a csv file.
+The program saves all the information in a local MySQL DataBase.
 
 ## Getting Started
 
@@ -32,39 +32,49 @@ the interpreter running the program:
   - soupsieve version 2.2.1
   - urllib3 version 1.26.5
   - selenium version 3.141.0 (with Chrome web driver)
+  - pymysql version 0.10.1
+  - pandas version 1.2.4
 
 ### Installing
 
-- The program can be run using any python interpreter satisfying the requirements 
+- The program can be run using a terminal or cmd in a python environment satisfying the requirements 
 described in the dependencies section. 
 - A Chrome web driver executable must be placed in your path in order for selenium to work 
   (See https://selenium-python.readthedocs.io/installation.html#drivers for more details).
+- A MySQL server must be installed on the local machine.
 
 ### Executing program
 
 * How to run the program:
   
-  The uploaded directory contains a number of scripts which are used without
-  additional parameters. Contains the following scripts:
-  * book_scraper.py - Can be used for testing and scraping specific links.
-  * link_scraper.py - Scrapes links that contain book info. Currently, scrapes
-    only the top books per genre but can be easily changed by manipulation of 
-    the Beautiful Soup tags. For example:
-    
-    ``tag = soup("a", attrs={"class": "pollAnswer__bookLink"})``
-  * save_to_csv.py - Uses the class Book for scraping from a list that contains 
-    links to books. The scraped data is then saved to a csv
-* Step-by-step bullets:
-  * The first step is to use link_scraper.py which creates a csv that contains 
-    links to books.
-  * Next step is to use save_to_csv.py which will go over the specified csv
-    file (the file created in the previous step) and then scrapes and saves 
-    book data in a separate csv.
+  The program contains a number of scripts. The scripts relevant to the 
+  operation of the program are:
+  * `database_setup/tables_setup.py` - Execute this script once in order to 
+    create the DataBase with all the necessary tables.
+  * `main_code/goodreads_scraper.py` - This script is the actual program that 
+    performs the scraping and saving that data in a local mysql server. 
+    The script can except optional parameters that allow the user to choose 
+    genre to scrape, page in the genre section and to which page to scrape 
+    (more info provided in the Help section).
 
 ## Help
 
-Any advice for common problems or issues:
-* Make sure to not open the csv (where the data is written to) file when writing the scraped data.
+`main_code/goodreads_scraper.py` operation:
+```
+usage: goodreads_scraper.py [-h] [-g GENRE] [-p PAGE_NUM] [-t TO_PAGE]
+
+Has several optional arguments for scraping specific genres. By default if no arguments are provided will scrape the "best books of 2020" page.
+
+optional arguments:
+  -h, --help            show this help message and exit
+  -g GENRE, --genre GENRE
+                        genre -- Must be a string representing the desired genre/shelf from Goodreads (goodreads.com/shelf)
+  -p PAGE_NUM, --page_num PAGE_NUM
+                        page_num -- The page number to be scraped (E.g. goodreads.com/shelf/show/(genre)?page=1)
+  -t TO_PAGE, --to_page TO_PAGE
+                        to_page -- To which page to scrape
+```
+
 
 ## Authors
 
