@@ -43,7 +43,7 @@ described in the dependencies section.
   (See https://selenium-python.readthedocs.io/installation.html#drivers for more details).
 - A MySQL server must be installed on the local machine.
 
-### Executing program
+### Executing the program
 
 * How to run the program:
   
@@ -56,6 +56,60 @@ described in the dependencies section.
     The script can except optional parameters that allow the user to choose 
     genre to scrape, page in the genre section and to which page to scrape 
     (more info provided in the Help section).
+
+## Database
+The programme create and uses a MySQL relational database. The following 
+diagram describes the structure of this database:
+
+![alt text](erd_for_readme.png "Erd of good_reads_data")
+
+### Tables
+#### books
+The main table containing information on the books stored in the database. 
+
+Columms:
+- book_id (INT): the primary key (PK) of the table.
+- best_of (VARCHAR(255)): if the book was obtained from a 'best of ****' page, 
+  the name of the corresponding genre will be stored here, otherwise null.
+- title (VARCHAR(255)): the title of the book.
+- author (VARCHAR(255)): The author of the book.
+- average_rating (FLOAT): the average user rating of the book.
+- number_of_reviews (INT): the total number of user reviews the book has.
+
+#### description
+For each book id the table stores the corresponding book's description.
+
+Columns:
+- book_id (INT): the primary key (PK) of the table.
+- description (TEXT): the description of the book with the corresponding id.
+
+#### rating_info
+For each book id the table stores the corresponding book's rating histogram.
+
+Columns:
+- book_id (INT): the primary key (PK) of the table.
+- rated_5 (INT): the number of people who gave a five stars rating to the book.
+- rated_4 (INT): the number of people who gave a four stars rating to the book.
+- rated_3 (INT): the number of people who gave a three stars rating to the book.
+- rated_2 (INT): the number of people who gave a two stars rating to the book.
+- rated_1 (INT): the number of people who gave a one-star rating to the book.
+
+#### genre
+Stores all the genre from all the books in the database.
+
+Columns:
+- genre (VARCHAR(255)): the primary key (PK) of the table.
+
+#### books_genre
+A connecting table for the books and genre table based on users' genre ratings.
+
+Columns:
+- id (INT): the primary key (PK) of the table.
+- book_id (INT): the id of the book corresponding to this raw.
+- genre (VARCHAR(255)): a genre was chosen by many users as the genre of the book.
+- top_voted (INT): the rank of this genre among all top-voted genres for this 
+book.
+- top_voted_num (INT): the number of users who voted for this genre.
 
 ## Help
 
