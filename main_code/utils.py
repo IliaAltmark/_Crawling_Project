@@ -8,6 +8,9 @@ from selenium.webdriver.chrome.options import Options
 DOMAIN = "https://www.goodreads.com"
 URL_TOP = DOMAIN + "/choiceawards/best-books-2020"
 URL_GENRE = DOMAIN + "/shelf/show/"
+LOGIN_PAGE = DOMAIN + "/user/sign_in"
+EMAIL = "yovow90213@eyeremind.com"
+PASS = "123456789"
 USER_AGENT = {'User-agent': 'Mozilla/5.0',
               'Accept-Language': 'en-US, en;q=0.5'}
 

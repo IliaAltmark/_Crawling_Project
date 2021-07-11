@@ -3,7 +3,8 @@ Authors: Ilia Altmark and Tovi Benoni
 scrapes and saves links which contain book data for further scraping
 """
 # imports from project files
-from utils import USER_AGENT, DOMAIN, URL_GENRE, URL_TOP
+from utils import USER_AGENT, DOMAIN, URL_GENRE, URL_TOP, \
+    quiet_selenium_chrome_driver, LOGIN_PAGE, EMAIL, PASS
 
 # imports from packages
 from bs4 import BeautifulSoup as bs
@@ -20,11 +21,15 @@ def get_soup(link):
     return bs(response.content, "lxml")
 
 
-def extract_links(url, class_tag):
+def extract_links(url, class_tag, driver=None):
     """
     Extracts the necessary links from given url and class tag.
     """
-    soup = get_soup(url)
+    if driver:
+        driver.get(url)
+        soup = bs(driver.page_source, features="lxml")
+    else:
+        soup = get_soup(url)
 
     # finds the "a" tag with class=class_tag
     tag = soup("a", attrs={"class": class_tag})
@@ -54,40 +59,71 @@ def get_link_to_books(links):
     return links_per_genre
 
 
-def get_links_to_books_genre(genre, page, to_page):
+def site_login(driver):
     """
-    Extracts links to specific books from a specific genre.
-    :param genre: the requested genre.
-    :param page: starting page.
-    :param to_page: last page.
+    logins to the website
     """
-    genre_url = URL_GENRE + genre
-    if page:
-        target_url = genre_url + f"?page={page}"
-    else:
-        target_url = genre_url
+    driver.get(LOGIN_PAGE)
+    driver.find_element_by_id("user_email").send_keys(EMAIL)
+    driver.find_element_by_id("user_password").send_keys(PASS)
+    driver.find_element_by_name("next").click()
 
-    page_range = 1
-    if page and to_page:
-        if (to_page - page) >= 1:
-            page_range += to_page - page
-        else:
-            print('to_page must be bigger than page! '
-                  'Now scraping only the first page.')
 
-    links = {None: []}
+def fills_links(driver, links, page_range, page, target_url, genre_url, genre):
+    """
+    fills links dict with links to books per page
+    :param driver: received selenium driver
+    :param links: link dictionary
+    :param page_range: number of pages to scrape
+    :param page: first page to scrape
+    :param target_url: url to scrape
+    :param genre_url: url of the genre
+    :param genre: genre to scrape
+    :return:
+    """
     print(f"Scraping {genre} page...")
 
     for p in range(page_range):
         print(f"Scraping page {page}...")
-        links_to_books = extract_links(target_url, "bookTitle")
+        links_to_books = extract_links(target_url, "bookTitle", driver)
         links[None] += links_to_books
 
         if page:
             page += 1
             target_url = genre_url + f"?page={page}"
 
-    return links
+
+def get_links_to_books_genre(genre, page, to_page):
+    """
+    extracts links to specific books from a specific genre
+    :param genre: the requested genre
+    :param page: starting page
+    :param to_page: last page
+    """
+    driver = quiet_selenium_chrome_driver()
+    try:
+        site_login(driver)
+        genre_url = URL_GENRE + genre
+        if page:
+            target_url = genre_url + f"?page={page}"
+        else:
+            target_url = genre_url
+
+        page_range = 1
+        if page and to_page:
+            if (to_page - page) >= 1:
+                page_range += to_page - page
+            else:
+                print('to_page must be bigger than page! '
+                      'Now scraping only the first page.')
+
+        links = {None: []}
+        fills_links(driver, links, page_range, page, target_url, genre_url,
+                    genre)
+        return links
+
+    finally:
+        driver.close()
 
 
 def get_links_to_top_genres():
