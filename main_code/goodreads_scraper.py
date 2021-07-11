@@ -12,6 +12,7 @@ import argparse
 
 
 def main():
+    # Setting up terminal interface using argparse.
     parser = argparse.ArgumentParser(
         description='Has several optional arguments for scraping specific '
                     'genres. By default if no arguments are provided will '
@@ -31,6 +32,7 @@ def main():
                         type=int)
     args = parser.parse_args()
 
+    # Does a genre specific scrape or a full scrape.
     if args.genre:
         links_to_books_genre = ls.get_links_to_books_genre(args.genre,
                                                            args.page_num,
