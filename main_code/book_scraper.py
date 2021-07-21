@@ -4,7 +4,7 @@ Contains the Book class which is used for scraping the required data from a
 link containing book data
 """
 # imports from project files
-from main_code.API_key import API_KEY
+from API_key import API_KEY
 from utils import quiet_selenium_chrome_driver, USER_AGENT
 
 # imports from packages
@@ -216,8 +216,14 @@ class Book:
         first_book = response_d['items'][0]['volumeInfo']
         title = first_book['title'].lower()
         if search_title in title:
-            published_date = first_book['publishedDate']
-            page_count = first_book['pageCount']
+            try:
+                published_date = first_book['publishedDate']
+            except KeyError:
+                published_date = None
+            try:
+                page_count = first_book['pageCount']
+            except KeyError:
+                page_count = None
         else:
             published_date = None
             page_count = None
