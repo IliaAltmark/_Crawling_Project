@@ -4,7 +4,8 @@ Contains the Book class which is used for scraping the required data from a
 link containing book data
 """
 # imports from project files
-from utils import quiet_selenium_chrome_driver
+from main_code.API_key import API_KEY
+from utils import quiet_selenium_chrome_driver, USER_AGENT
 
 # imports from packages
 from bs4 import BeautifulSoup
@@ -13,6 +14,8 @@ from selenium.webdriver.common.by import By
 import selenium.webdriver.support.expected_conditions as ec
 from selenium.webdriver.support.wait import WebDriverWait
 from selenium.common.exceptions import TimeoutException
+import json
+import requests
 
 
 class BookRating:
@@ -41,7 +44,7 @@ class Book:
     GENRE_NUM = 3
 
     def __init__(self, name, author, rating, genres, description, link,
-                 soup=None):
+                 published_date, page_count, soup=None):
         self.name = name
         self.author = author
         self.rating = rating
@@ -49,6 +52,8 @@ class Book:
         self.description = description
         self.link = link
         self.soup = soup
+        self.published_date = published_date
+        self.page_count = page_count
 
     @classmethod
     def book_from_link(cls, link, web_driver=None,
@@ -62,13 +67,15 @@ class Book:
         :TODO change callings to include top_of
         """
         book = Book(name=None, author=None, rating=None, genres=None,
-                    description=None, link=link, soup=None)
+                    description=None, link=link, published_date=None,
+                    page_count=None, soup=None)
         book.soup_from_link(web_driver=web_driver)
         book._name_from_soup()
         book._genres_from_soup()
         book._author_from_soup()
         book._rating_from_soup()
         book._description_from_soup()
+        book._from_api()
         if not to_save_soup:
             book.soup = None
         return book
@@ -197,6 +204,26 @@ class Book:
             genres_dict[genre] = int(
                 rating.text.strip().split(" ")[0].replace(",", ""))
         self.genres = genres_dict
+
+    def _from_api(self):
+        search_title = self.name.lower()
+        response = requests.get(
+            f'''https://www.googleapis.com/books/v1/volumes?q=
+                    {search_title}&key={API_KEY}''', headers=USER_AGENT)
+
+        response_j = response.content.decode("utf-8")
+        response_d = json.loads(response_j)
+        first_book = response_d['items'][0]['volumeInfo']
+        title = first_book['title'].lower()
+        if search_title in title:
+            published_date = first_book['publishedDate']
+            page_count = first_book['pageCount']
+        else:
+            published_date = None
+            page_count = None
+
+        self.published_date = published_date
+        self.page_count = page_count
 
     def __str__(self):
         return f"-------------------------------------------------------" \

@@ -36,13 +36,15 @@ def add_book_to_db(book, connection, genre):
         command = """INSERT INTO 
                       Books (
                           best_of, title, author, average_rating, 
-                          number_of_reviews
+                          number_of_reviews, published_date, page_count
                       ) VALUES (
-                          %s, %s, %s, %s, %s
+                          %s, %s, %s, %s, %s, %s, %s
                       );"""
         sql_run(connection, command, (genre, book.name, book.author,
                                       book.rating.average_rating,
-                                      book.rating.number_of_reviews))
+                                      book.rating.number_of_reviews,
+                                      book.published_date,
+                                      book.page_count))
 
         # return the book_number in db (the pk)
         command_get_book_number = """SELECT book_id 

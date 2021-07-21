@@ -23,7 +23,9 @@ def main():
                                title VARCHAR(255), 
                                author VARCHAR(255), 
                                average_rating FLOAT, 
-                               number_of_reviews INT
+                               number_of_reviews INT,
+                               published_date VARCHAR(255),
+                               page_count INT
                            );""")
     print('Done.')
 
