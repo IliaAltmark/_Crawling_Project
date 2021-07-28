@@ -100,6 +100,19 @@ def _set_up_books_genres_table(connection):
                                );""")
     print('Done.')
 
+def _set_up_books_authors_table(connection):
+    print('Creating Books_Authors table...', end='')
+    sql_run(connection, """CREATE TABLE 
+                               Books_Authors (
+                                   id INT AUTO_INCREMENT PRIMARY KEY,
+                                   book_id INT, 
+                                   author_id INT, 
+                                   FOREIGN KEY (book_id) 
+                                   REFERENCES Books(book_id),
+                                   FOREIGN KEY (author_id) 
+                                   REFERENCES Authors(author_id)
+                               );""")
+    print('Done.')
 
 def _set_up_rating_info_table(connection):
     print('Creating Rating_Info table...', end='')
