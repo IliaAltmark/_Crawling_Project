@@ -74,6 +74,16 @@ def _set_up_genres_table(connection):
     print('Done.')
 
 
+def _set_up_authors_table(connection):
+    print('Creating Authors table...', end='')
+    sql_run(connection, """CREATE TABLE 
+                           Authors ( 
+                                author_id INT AUTO_INCREMENT PRIMARY KEY,
+                                author VARCHAR(255)
+                           );""")
+    print('Done.')
+
+
 def _set_up_books_genres_table(connection):
     print('Creating Books_Genre table...', end='')
     sql_run(connection, """CREATE TABLE 
