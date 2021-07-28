@@ -134,8 +134,10 @@ class Book:
         """
         self.check_soup()
         tag = self.soup.find("a", attrs={"class": "authorName"})
-        author = tag.text
-        self.author = author
+        authors = []
+        for tag1 in tag.findAll("span", attrs={"itemprop": "name"}):
+            authors.append(tag1.text)
+        self.authors = authors
 
     def _description_from_soup(self):
         """
@@ -217,13 +219,13 @@ class Book:
         first_book = response_d['items'][0]['volumeInfo']
         title = first_book['title'].lower()
         if search_title in title:
-            try:
+            if 'publishedDate' in first_book.keys():
                 published_date = first_book['publishedDate']
-            except KeyError:
+            else:
                 published_date = None
-            try:
+            if 'pageCount' in first_book.keys():
                 page_count = first_book['pageCount']
-            except KeyError:
+            else:
                 page_count = None
         else:
             published_date = None

@@ -51,3 +51,37 @@ def close_connection(connection):
     """
     connection.close()
     return "The connection is closed"
+
+
+def autoinc_uniques_insertion(connection, table_name, pk_name, data_column_name, data):
+    """
+        Add the given data to table named table_name, in the given connection's database.
+        :param data: 
+        :param data_column_name: 
+        :param pk_name: 
+        :param table_name:
+        :param connection: a connection object to an sql server.
+        """
+    print(table_name, pk_name, data_column_name, data)
+    items_ids = []
+    for it in data:
+        command = f"""SELECT {pk_name} 
+                            FROM {table_name}
+                            WHERE {data_column_name}='{it}'
+                          ;"""
+        item_ids = sql_run(connection, command)
+
+        if len(item_ids) == 0:
+            command_insert = f"""INSERT INTO 
+                                      {table_name} (
+                                          {data_column_name}
+                                      ) VALUES (
+                                          '{it}'
+                                      );"""
+            id_value_query = "SELECT LAST_INSERT_ID();"
+            sql_run(connection, command_insert)
+            item_id = sql_run(connection, id_value_query)[0]['LAST_INSERT_ID()']
+        else:
+            item_id = item_ids[0][pk_name]
+        items_ids.append(item_id)
+    return items_ids

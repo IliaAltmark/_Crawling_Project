@@ -20,6 +20,12 @@ def set_up_tables():
     # Create the books_genre table
     _set_up_books_genres_table(connection)
 
+    # Create the author table
+    _set_up_authors_table(connection)
+
+    # Create the books_authors table
+    _set_up_books_authors_table(connection)
+
     # Create the rating_info table
     _set_up_rating_info_table(connection)
 
@@ -100,6 +106,7 @@ def _set_up_books_genres_table(connection):
                                );""")
     print('Done.')
 
+
 def _set_up_books_authors_table(connection):
     print('Creating Books_Authors table...', end='')
     sql_run(connection, """CREATE TABLE 
@@ -113,6 +120,7 @@ def _set_up_books_authors_table(connection):
                                    REFERENCES Authors(author_id)
                                );""")
     print('Done.')
+
 
 def _set_up_rating_info_table(connection):
     print('Creating Rating_Info table...', end='')

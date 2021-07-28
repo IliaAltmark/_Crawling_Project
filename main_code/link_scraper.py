@@ -122,7 +122,8 @@ def get_links_to_books_genre(genre, page, to_page):
         fills_links(driver, links, page_range, page, target_url, genre_url,
                     genre)
         return links
-
+    except OSError:
+        return []
     finally:
         driver.close()
 
