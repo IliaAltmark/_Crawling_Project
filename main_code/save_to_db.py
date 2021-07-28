@@ -1,8 +1,9 @@
 from selenium.common.exceptions import TimeoutException
 
-from utils import quiet_selenium_chrome_driver, FROM_ROW, TO_ROW
-from book_scraper import Book
-from sql_utils import sql_run, establish_connection
+from main_code.utils.utils import quiet_selenium_chrome_driver
+from main_code.config.config import FROM_ROW, TO_ROW
+from main_code.book_scraper import Book
+from main_code.utils.sql_utils import sql_run, establish_connection
 
 
 def is_in_db(book, connection):
@@ -80,30 +81,36 @@ def add_genre_info(book, connection):
     :param book: a book object
     :param connection: a connection object to an sql server.
     """
+    genres_ids = []
     for genre in book.genres:
         genre_str = ','.join(genre)
-        command = """SELECT EXISTS (
-                          SELECT * 
-                          FROM Genre
-                          WHERE genre=%s
-                      );"""
-        is_exists = sql_run(connection, command, genre_str)
-        is_exists = list(is_exists[0].values())[0]
+        command = """SELECT genre_id 
+                        FROM Genre
+                        WHERE genre=%s
+                      ;"""
+        genre_ids = sql_run(connection, command, genre_str)
 
-        if not is_exists:
+        if len(genre_ids) == 0:
             command_insert = """INSERT INTO 
                                   Genre (
                                       genre
                                   ) VALUES (
                                       %s
                                   );"""
+            id_value_query = "SELECT LAST_INSERT_ID();"
             sql_run(connection, command_insert, genre_str)
+            genre_id = sql_run(connection, id_value_query)[0]['LAST_INSERT_ID()']
+        else:
+            genre_id = genre_ids[0]['genre_id']
+        genres_ids.append(genre_id)
+    return genres_ids
 
 
-def add_books_genre_info(book, connection, book_number):
+def add_books_genre_info(book, connection, book_number, genres_ids):
     """
     Add information about the book genres to book_genres table
     using given connection.
+    :param genres_ids:
     :param book: a book object
     :param connection: a connection object to an sql server.
     :param book_number: the id number of the book in the database.
@@ -112,14 +119,15 @@ def add_books_genre_info(book, connection, book_number):
     # loop over the genres_dict and for each iteration add a row to the
     # books_genres table
     for i, k in enumerate(genres_dict):
-        genre_str = ','.join(k)
+        genre_id = genres_ids[i]
+        print(genre_id)
         command = """INSERT INTO 
                       Books_Genre (
-                          book_id, genre, top_voted, top_voted_num
+                          book_id, genre_id, top_voted, top_voted_num
                       ) VALUES (
                           %s, %s, %s, %s
                       );"""
-        sql_run(connection, command, (book_number, genre_str,
+        sql_run(connection, command, (book_number, genre_id,
                                       i + 1, genres_dict[k]))
     return True
 
@@ -175,11 +183,11 @@ def add_book_object_to_db(book, connection, genre, i):
 
     # adding book genre to genre table
     print(f"adding book number {i} to Genre table")
-    add_genre_info(book, connection)
+    genres_ids = add_genre_info(book, connection)
 
     # adding book genre to books_genre table
     print(f"adding book number {i} to Books_Genre table")
-    add_books_genre_info(book, connection, book_id)
+    add_books_genre_info(book, connection, book_id, genres_ids)
 
     # adding book rating to rating_info table
     print(f"adding book number {i} to Rating table")

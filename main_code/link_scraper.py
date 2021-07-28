@@ -3,8 +3,9 @@ Authors: Ilia Altmark and Tovi Benoni
 scrapes and saves links which contain book data for further scraping
 """
 # imports from project files
-from utils import USER_AGENT, DOMAIN, URL_GENRE, URL_TOP, \
-    quiet_selenium_chrome_driver, LOGIN_PAGE, EMAIL, PASS
+from main_code.utils.utils import quiet_selenium_chrome_driver
+from main_code.config.config import USER_AGENT, DOMAIN, URL_GENRE, URL_TOP, \
+    LOGIN_PAGE, EMAIL, PASS
 
 # imports from packages
 from bs4 import BeautifulSoup as bs

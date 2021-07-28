@@ -6,7 +6,7 @@
 # Reference: https://intellij-support.jetbrains.com/hc/en-us/articles/206544839
 
 # User-specific stuff
-main_code/API_key.py
+main_code/config/API_key.py
 main_code/testing_api.py
 main_code/__pycache__/API_key.cpython-38.pyc
 .idea/**/workspace.xml

@@ -4,8 +4,9 @@ Contains the Book class which is used for scraping the required data from a
 link containing book data
 """
 # imports from project files
-from API_key import API_KEY
-from utils import quiet_selenium_chrome_driver, USER_AGENT
+from main_code.config.API_key import API_KEY
+from main_code.utils.utils import quiet_selenium_chrome_driver
+from main_code.config.config import USER_AGENT
 
 # imports from packages
 from bs4 import BeautifulSoup
