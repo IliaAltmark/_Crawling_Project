@@ -116,7 +116,7 @@ def add_author_info(book, connection):
     :param book: a book object
     :param connection: a connection object to an sql server.
     """
-    return autoinc_uniques_insertion(connection, 'Author', 'author_id', 'author', book.authors)
+    return autoinc_uniques_insertion(connection, 'Authors', 'author_id', 'author', book.authors)
 
 
 def add_books_authors_info(book, connection, book_number, authors_ids):
@@ -134,7 +134,7 @@ def add_books_authors_info(book, connection, book_number, authors_ids):
         author_id = authors_ids[i]
         command = f"""INSERT INTO 
                       Books_Authors (
-                          book_id, genre_id
+                          book_id, author_id
                       ) VALUES (
                           {book_number}, {author_id}
                       );"""
@@ -204,7 +204,7 @@ def add_book_object_to_db(book, connection, genre, i):
     authors_ids = add_author_info(book, connection)
 
     # adding book genre to books_genre table
-    print(f"adding book number {i} to Books_Genre table")
+    print(f"adding book number {i} to Books_Authors table")
     add_books_authors_info(book, connection, book_id, authors_ids)
 
     # adding book rating to rating_info table

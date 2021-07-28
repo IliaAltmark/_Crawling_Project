@@ -62,7 +62,6 @@ def autoinc_uniques_insertion(connection, table_name, pk_name, data_column_name,
         :param table_name:
         :param connection: a connection object to an sql server.
         """
-    print(table_name, pk_name, data_column_name, data)
     items_ids = []
     for it in data:
         command = f"""SELECT {pk_name} 
