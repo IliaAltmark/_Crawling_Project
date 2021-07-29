@@ -14,6 +14,7 @@ For each book, the system extracts the following details:
   - Description
   - Genre (A dictionary of top voted generes with their number of votes)
   - Rating histogram (Number of voters per number of stars)
+  - Page count and publication date.
 
 The program saves all the information in a local MySQL DataBase.
 
@@ -42,23 +43,30 @@ described in the dependencies section.
 - A Chrome web driver executable must be placed in your path in order for selenium to work 
   (See https://selenium-python.readthedocs.io/installation.html#drivers for more details).
 - A MySQL server must be installed on the local machine.
+- The program also extracts page count and year of publishing through an API 
+  so an API key is required. Please check the following links in order to setup
+  your own API key: https://console.developers.google.com/?authuser=1,
+  https://developers.google.com/books/docs/v1/using?authuser=1.
+  Please save the key as `main_code/config/API_key.py` and inside the file 
+  create the variable `API_KEY = {your API key}`
 
 ### Executing the program
 
 * How to run the program:
   
-  The program contains a number of scripts. The scripts relevant to the 
-  operation of the program are:
-  * `database_setup/tables_setup.py` - Execute this script once in order to 
-    create the DataBase with all the necessary tables.
-  * `main_code/goodreads_scraper.py` - This script is the actual program that 
-    performs the scraping and saving that data in a local mysql server. 
-    The script can except optional parameters that allow the user to choose 
-    genre to scrape, page in the genre section and to which page to scrape 
+  In order to run the program execute the file `main.py`. There are two main 
+  functionalities to the program:
+  * Initializing the database  - Provide the optional argument `-r` in order to 
+    create the DataBase with all the necessary tables (if the database exists
+    this will overwrite).
+  * Actual scraping - This part of the program performs the scraping and saves 
+    the data in a local mysql server. 
+    There are also optional arguments for this part that allow the user to choose 
+    a genre to scrape, page in the genre section and to which page to scrape 
     (more info provided in the Help section).
 
 ## Database
-The programme create and uses a MySQL relational database. The following 
+The program creates and uses a MySQL relational database. The following 
 diagram describes the structure of this database:
 
 ![alt text](good_reads_erd.png "Erd of good_reads_data")
@@ -67,14 +75,28 @@ diagram describes the structure of this database:
 #### books
 The main table containing information on the books stored in the database. 
 
-Columms:
+Columns:
 - book_id (INT): the primary key (PK) of the table.
 - best_of (VARCHAR(255)): if the book was obtained from a 'best of ****' page, 
   the name of the corresponding genre will be stored here, otherwise null.
 - title (VARCHAR(255)): the title of the book.
-- author (VARCHAR(255)): The author of the book.
 - average_rating (FLOAT): the average user rating of the book.
 - number_of_reviews (INT): the total number of user reviews the book has.
+
+#### authors
+Contains the name of the authors.
+
+Columns:
+- author_id (INT): primary key (PK) of the table.
+- author (VARCHAR(255)): The name of the author.
+
+#### books_authors
+Connects between the table books and authors.
+
+Columns:
+- id (INT): the primary key (PK) of the table.
+- book_id (INT): foreign key (FK) references PK of the table books.
+- author_id (INT): foreign key (FK) references PK of the table authors.
 
 #### description
 For each book id the table stores the corresponding book's description.
@@ -98,15 +120,16 @@ Columns:
 Stores all the genre from all the books in the database.
 
 Columns:
-- genre (VARCHAR(255)): the primary key (PK) of the table.
+- genre_id (INT): the primary key (PK) of the table.
+- genre (VARCHAR(255)): contains genre names.
 
 #### books_genre
 A connecting table for the books and genre table based on users' genre ratings.
 
 Columns:
 - id (INT): the primary key (PK) of the table.
-- book_id (INT): the id of the book corresponding to this raw.
-- genre (VARCHAR(255)): a genre was chosen by many users as the genre of the book.
+- book_id (INT): foreign key (FK) references PK of the table books.
+- genre_id (INT): foreign key (FK) references PK of the table genre.
 - top_voted (INT): the rank of this genre among all top-voted genres for this 
 book.
 - top_voted_num (INT): the number of users who voted for this genre.
@@ -127,6 +150,7 @@ optional arguments:
                         page_num -- The page number to be scraped (E.g. goodreads.com/shelf/show/(genre)?page=1)
   -t TO_PAGE, --to_page TO_PAGE
                         to_page -- To which page to scrape
+  -r, --reload-tables   reset-tables -- reloads the sql tables
 ```
 
 

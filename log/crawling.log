@@ -75,3 +75,4 @@
 2021-07-29 18:54:32,419-INFO-FILE:book_scraper.py-FUNC:book_from_link-LINE:86-Scrapped a book from https://www.goodreads.com/book/show/48855.The_Diary_of_a_Young_Girl
 2021-07-29 18:54:34,696-INFO-FILE:book_scraper.py-FUNC:book_from_link-LINE:86-Scrapped a book from https://www.goodreads.com/book/show/929.Memoirs_of_a_Geisha
 2021-07-29 18:54:37,156-INFO-FILE:book_scraper.py-FUNC:book_from_link-LINE:86-Scrapped a book from https://www.goodreads.com/book/show/4667024-the-help
+2021-07-29 20:28:42,163-INFO-FILE:goodreads_scraper.py-FUNC:main-LINE:22-Program has started.
