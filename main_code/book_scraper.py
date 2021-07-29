@@ -154,7 +154,7 @@ class Book:
         authors = []
         for tag1 in tag.findAll("span", attrs={"itemprop": "name"}):
             authors.append(tag1.text)
-        self.authors = authors
+        self.author = authors
 
         logger.debug(f'{self.name} : Got author from soup')
 

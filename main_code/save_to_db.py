@@ -18,9 +18,9 @@ def is_in_db(book, connection):
     command = """SELECT EXISTS (
                       SELECT * 
                       FROM Books 
-                      WHERE title=%s and author=%s
+                      WHERE title=%s 
                   );"""
-    is_exists = sql_run(connection, command, (book.name, book.author))
+    is_exists = sql_run(connection, command, (book.name))
     is_exists = list(is_exists[0].values())[0]
     return is_exists == 1
 
@@ -40,12 +40,12 @@ def add_book_to_db(book, connection, genre):
     else:
         command = """INSERT INTO 
                       Books (
-                          best_of, title, author, average_rating, 
+                          best_of, title, average_rating, 
                           number_of_reviews, published_date, page_count
                       ) VALUES (
-                          %s, %s, %s, %s, %s, %s, %s
+                          %s, %s, %s, %s, %s, %s
                       );"""
-        sql_run(connection, command, (genre, book.name, book.author,
+        sql_run(connection, command, (genre, book.name,
                                       book.rating.average_rating,
                                       book.rating.number_of_reviews,
                                       book.published_date,
@@ -136,7 +136,7 @@ def add_author_info(book, connection):
     """
     logger.debug(f"{book.name} : adding authors")
 
-    res = autoinc_uniques_insertion(connection, 'Authors', 'author_id', 'author', book.authors)
+    res = autoinc_uniques_insertion(connection, 'Authors', 'author_id', 'author', book.author)
 
     logger.debug(f"{book.name} : added authors info")
     return res
@@ -155,7 +155,7 @@ def add_books_authors_info(book, connection, book_number, authors_ids):
     # books_genres table
     logger.debug(f"{book.name} : adding books-authors info")
 
-    for i in range(len(book.authors)):
+    for i in range(len(book.author)):
         author_id = authors_ids[i]
         command = f"""INSERT INTO 
                       Books_Authors (
