@@ -10,12 +10,16 @@ from main_code.save_to_db import save_info_in_db
 from main_code.config.config import SHELL_DESCRIPTION, \
     SHELL_GENRE_HELP, SHELL_PAGE_NUM_HELP, SHELL_TO_PAGE_HELP, \
     SHELL_RELOAD_TABLES_HELP
+from main_code.utils.utils import get_logger
 
 # imports from packages
 import argparse
 
+logger = get_logger(__name__)
+
 
 def main():
+    logger.debug('Program is starting')
     # Setting up terminal interface using argparse.
     parser = argparse.ArgumentParser(
         description=SHELL_DESCRIPTION)
@@ -46,6 +50,8 @@ def main():
         links_to_top_genres = ls.get_links_to_top_genres()
         links_to_top_books = ls.get_link_to_books(links_to_top_genres)
         save_info_in_db(links_to_top_books)
+
+    logger.debug('Program finished successfully')
 
 
 if __name__ == "__main__":

@@ -1,4 +1,5 @@
 # Domains
+import logging
 
 DOMAIN = "https://www.goodreads.com"
 URL_TOP = DOMAIN + "/choiceawards/best-books-2020"
@@ -29,3 +30,13 @@ SHELL_PAGE_NUM_HELP = 'page_num -- The page number to be scraped ' \
                       '(E.g. goodreads.com/shelf/show/(genre)?page=1)'
 SHELL_TO_PAGE_HELP = 'to_page -- To which page to scrape '
 SHELL_RELOAD_TABLES_HELP = 'reset-tables -- reloads the sql tables'
+
+# Logging
+DEFAULT_LOG_LEVEL = logging.DEBUG
+LOGGING_FILE_NAME = 'log\\crawling.log'
+LOGGING_FORMAT = '%(asctime)s-%(levelname)s-FILE:%(filename)s-FUNC' \
+                 ':%(funcName)s-LINE:%(lineno)d-%(message)s'
+
+# SQL
+LOCAL_PASSWORD = None
+LOCAL_USER = None

@@ -1,8 +1,12 @@
 import pymysql
 
-LOCAL_PASSWORD = None
-LOCAL_USER = None
+from main_code.utils.utils import get_logger
+from main_code.config.config import LOCAL_USER as LU, LOCAL_PASSWORD as LP
 
+
+logger = get_logger(__name__)
+LOCAL_USER = LU
+LOCAL_PASSWORD = LP
 
 def establish_connection():
     """
@@ -33,6 +37,7 @@ def sql_run(connection, mysql_statement, fields=None):
     :param fields: fields for the execution of the statement.
     :return: the result of the sql request.
     """
+    logger.info(f'Querying SQL server: \n statement: {mysql_statement} \n fields: {fields}')
     with connection.cursor() as cursor:
         # Read a single record
         if not fields:

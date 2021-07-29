@@ -1,0 +1,1543 @@
+2021-07-29 03:27:27,528-DEBUG-FILE:goodreads_scraper.py-FUNC:main-LINE:22-Program is starting
+2021-07-29 03:27:27,530-DEBUG-FILE:tables_setup.py-FUNC:set_up_tables-LINE:8-Started set_up_tables
+2021-07-29 03:27:38,692-DEBUG-FILE:tables_setup.py-FUNC:set_up_tables-LINE:17-Established connection to the SQL server
+2021-07-29 03:27:38,692-DEBUG-FILE:tables_setup.py-FUNC:_set_up_database-LINE:55-Dropping old database if exists
+2021-07-29 03:27:38,692-INFO-FILE:sql_utils.py-FUNC:sql_run-LINE:40-Querying SQL server: 
+ statement: DROP database IF EXISTS Good_Reads_Data; 
+ fields: None
+2021-07-29 03:27:38,812-DEBUG-FILE:tables_setup.py-FUNC:_set_up_database-LINE:59-Creating database
+2021-07-29 03:27:38,812-INFO-FILE:sql_utils.py-FUNC:sql_run-LINE:40-Querying SQL server: 
+ statement: CREATE DATABASE Good_Reads_Data 
+ fields: None
+2021-07-29 03:27:38,819-DEBUG-FILE:tables_setup.py-FUNC:_set_up_database-LINE:65-Created database
+2021-07-29 03:27:38,819-DEBUG-FILE:tables_setup.py-FUNC:_set_up_books_tables-LINE:70-Creating books table
+2021-07-29 03:27:38,819-INFO-FILE:sql_utils.py-FUNC:sql_run-LINE:40-Querying SQL server: 
+ statement: CREATE TABLE
+                               Books (
+                                   book_id INT AUTO_INCREMENT PRIMARY KEY, 
+                                   best_of VARCHAR(255), 
+                                   title VARCHAR(255), 
+                                   author VARCHAR(255), 
+                                   average_rating FLOAT, 
+                                   number_of_reviews INT,
+                                   published_date VARCHAR(255),
+                                   page_count INT
+                               ); 
+ fields: None
+2021-07-29 03:27:38,842-DEBUG-FILE:tables_setup.py-FUNC:_set_up_books_tables-LINE:85-Created books table
+2021-07-29 03:27:38,842-DEBUG-FILE:tables_setup.py-FUNC:set_up_tables-LINE:24-Created books table
+2021-07-29 03:27:38,842-DEBUG-FILE:tables_setup.py-FUNC:_set_up_descriptions_table-LINE:90-Creating descriptions table
+2021-07-29 03:27:38,842-INFO-FILE:sql_utils.py-FUNC:sql_run-LINE:40-Querying SQL server: 
+ statement: CREATE TABLE 
+                           Description (
+                               book_id INT PRIMARY KEY, 
+                               description TEXT(4095),
+                               FOREIGN KEY (book_id) 
+                               REFERENCES Books(book_id)
+                           ); 
+ fields: None
+2021-07-29 03:27:38,870-DEBUG-FILE:tables_setup.py-FUNC:_set_up_descriptions_table-LINE:101-Created descriptions table
+2021-07-29 03:27:38,870-DEBUG-FILE:tables_setup.py-FUNC:set_up_tables-LINE:28-Created descriptions table
+2021-07-29 03:27:38,870-DEBUG-FILE:tables_setup.py-FUNC:_set_up_genres_table-LINE:106-Creating genre table
+2021-07-29 03:27:38,870-INFO-FILE:sql_utils.py-FUNC:sql_run-LINE:40-Querying SQL server: 
+ statement: CREATE TABLE 
+                           Genre ( 
+                                genre_id INT AUTO_INCREMENT PRIMARY KEY,
+                                genre VARCHAR(255)
+                           ); 
+ fields: None
+2021-07-29 03:27:38,903-DEBUG-FILE:tables_setup.py-FUNC:_set_up_genres_table-LINE:115-Created genre table
+2021-07-29 03:27:38,904-DEBUG-FILE:tables_setup.py-FUNC:set_up_tables-LINE:32-Created genres table
+2021-07-29 03:27:38,904-DEBUG-FILE:tables_setup.py-FUNC:_set_up_books_genres_table-LINE:134-Creating books_genres table
+2021-07-29 03:27:38,904-INFO-FILE:sql_utils.py-FUNC:sql_run-LINE:40-Querying SQL server: 
+ statement: CREATE TABLE 
+                               Books_Genre (
+                                   id INT AUTO_INCREMENT PRIMARY KEY,
+                                   book_id INT, 
+                                   genre_id INT, 
+                                   top_voted INT, 
+                                   top_voted_num INT,
+                                   FOREIGN KEY (book_id) 
+                                   REFERENCES Books(book_id),
+                                   FOREIGN KEY (genre_id) 
+                                   REFERENCES Genre(genre_id)
+                               ); 
+ fields: None
+2021-07-29 03:27:38,951-DEBUG-FILE:tables_setup.py-FUNC:_set_up_books_genres_table-LINE:150-Created books_genres table
+2021-07-29 03:27:38,952-DEBUG-FILE:tables_setup.py-FUNC:set_up_tables-LINE:36-Created books_genres table
+2021-07-29 03:27:38,952-DEBUG-FILE:tables_setup.py-FUNC:_set_up_authors_table-LINE:120-Creating authors table
+2021-07-29 03:27:38,952-INFO-FILE:sql_utils.py-FUNC:sql_run-LINE:40-Querying SQL server: 
+ statement: CREATE TABLE 
+                           Authors ( 
+                                author_id INT AUTO_INCREMENT PRIMARY KEY,
+                                author VARCHAR(255)
+                           ); 
+ fields: None
+2021-07-29 03:27:38,975-DEBUG-FILE:tables_setup.py-FUNC:_set_up_authors_table-LINE:129-Created authors table
+2021-07-29 03:27:38,976-DEBUG-FILE:tables_setup.py-FUNC:set_up_tables-LINE:40-Created authors table
+2021-07-29 03:27:38,976-DEBUG-FILE:tables_setup.py-FUNC:_set_up_books_authors_table-LINE:155-Creating books_authors table
+2021-07-29 03:27:38,976-INFO-FILE:sql_utils.py-FUNC:sql_run-LINE:40-Querying SQL server: 
+ statement: CREATE TABLE 
+                               Books_Authors (
+                                   id INT AUTO_INCREMENT PRIMARY KEY,
+                                   book_id INT, 
+                                   author_id INT, 
+                                   FOREIGN KEY (book_id) 
+                                   REFERENCES Books(book_id),
+                                   FOREIGN KEY (author_id) 
+                                   REFERENCES Authors(author_id)
+                               ); 
+ fields: None
+2021-07-29 03:27:39,008-DEBUG-FILE:tables_setup.py-FUNC:_set_up_books_authors_table-LINE:169-Created books_authors table
+2021-07-29 03:27:39,009-DEBUG-FILE:tables_setup.py-FUNC:set_up_tables-LINE:44-Created books_authors table
+2021-07-29 03:27:39,009-DEBUG-FILE:tables_setup.py-FUNC:_set_up_rating_info_table-LINE:174-Creating rating_info table
+2021-07-29 03:27:39,009-INFO-FILE:sql_utils.py-FUNC:sql_run-LINE:40-Querying SQL server: 
+ statement: CREATE TABLE
+                           Rating_Info (
+                               book_id INT PRIMARY KEY, 
+                               rated_5 INT, 
+                               rated_4 INT, 
+                               rated_3 INT, 
+                               rated_2 INT, 
+                               rated_1 INT,
+                               FOREIGN KEY (book_id) 
+                               REFERENCES Books(book_id)
+                           ); 
+ fields: None
+2021-07-29 03:27:39,031-DEBUG-FILE:tables_setup.py-FUNC:_set_up_rating_info_table-LINE:189-Created rating_info table
+2021-07-29 03:27:39,032-DEBUG-FILE:tables_setup.py-FUNC:set_up_tables-LINE:48-Created rating_info table
+2021-07-29 03:27:39,032-DEBUG-FILE:tables_setup.py-FUNC:set_up_tables-LINE:51-Successfully set up database. Connection closed.
+2021-07-29 03:27:40,529-DEBUG-FILE:link_scraper.py-FUNC:site_login-LINE:85-Logging in to the site
+2021-07-29 03:27:47,336-DEBUG-FILE:link_scraper.py-FUNC:site_login-LINE:92-Logged in to the site
+2021-07-29 03:27:47,336-DEBUG-FILE:link_scraper.py-FUNC:fills_links-LINE:107-Scraping Fiction pages
+2021-07-29 03:27:47,337-DEBUG-FILE:link_scraper.py-FUNC:fills_links-LINE:111-Scraping page None
+2021-07-29 03:27:47,337-DEBUG-FILE:link_scraper.py-FUNC:extract_links-LINE:40-Extracting links to books from https://www.goodreads.com/shelf/show/Fiction
+2021-07-29 03:27:50,162-DEBUG-FILE:link_scraper.py-FUNC:extract_links-LINE:59-Extracted links to books from https://www.goodreads.com/shelf/show/Fiction
+2021-07-29 03:27:50,162-DEBUG-FILE:link_scraper.py-FUNC:fills_links-LINE:119-Scrapped Fiction pages
+2021-07-29 03:27:51,668-INFO-FILE:sql_utils.py-FUNC:sql_run-LINE:40-Querying SQL server: 
+ statement: USE Good_Reads_Data 
+ fields: None
+2021-07-29 03:27:51,670-DEBUG-FILE:book_scraper.py-FUNC:book_from_link-LINE:73-Scraping a book from https://www.goodreads.com/book/show/2657.To_Kill_a_Mockingbird
+2021-07-29 03:27:51,670-DEBUG-FILE:book_scraper.py-FUNC:soup_from_link-LINE:102-Getting soup for https://www.goodreads.com/book/show/2657.To_Kill_a_Mockingbird
+2021-07-29 03:28:05,656-DEBUG-FILE:book_scraper.py-FUNC:soup_from_link-LINE:130-Got soup for https://www.goodreads.com/book/show/2657.To_Kill_a_Mockingbird
+2021-07-29 03:28:05,656-DEBUG-FILE:book_scraper.py-FUNC:_name_from_soup-LINE:136-Getting name from soup
+2021-07-29 03:28:05,658-DEBUG-FILE:book_scraper.py-FUNC:_name_from_soup-LINE:143-To Kill a Mockingbird : Got name from soup
+2021-07-29 03:28:05,658-DEBUG-FILE:book_scraper.py-FUNC:_genres_from_soup-LINE:222-To Kill a Mockingbird : Getting genres from soup
+2021-07-29 03:28:05,671-DEBUG-FILE:book_scraper.py-FUNC:_genres_from_soup-LINE:240-To Kill a Mockingbird : Got genres from soup
+2021-07-29 03:28:05,672-DEBUG-FILE:book_scraper.py-FUNC:_author_from_soup-LINE:151-To Kill a Mockingbird : Getting author from soup
+2021-07-29 03:28:05,673-DEBUG-FILE:book_scraper.py-FUNC:_author_from_soup-LINE:159-To Kill a Mockingbird : Got author from soup
+2021-07-29 03:28:05,673-DEBUG-FILE:book_scraper.py-FUNC:_rating_from_soup-LINE:186-To Kill a Mockingbird : Getting rating from soup
+2021-07-29 03:28:05,682-DEBUG-FILE:book_scraper.py-FUNC:_rating_from_soup-LINE:214-To Kill a Mockingbird : Got rating from soup
+2021-07-29 03:28:05,682-DEBUG-FILE:book_scraper.py-FUNC:_description_from_soup-LINE:165-Getting description from soup: To Kill a Mockingbird
+2021-07-29 03:28:05,684-DEBUG-FILE:book_scraper.py-FUNC:_description_from_soup-LINE:178-Got description from soup: To Kill a Mockingbird
+2021-07-29 03:28:05,684-DEBUG-FILE:book_scraper.py-FUNC:_from_api-LINE:243-To Kill a Mockingbird : Getting extra info from api
+2021-07-29 03:28:06,558-DEBUG-FILE:book_scraper.py-FUNC:_from_api-LINE:272-To Kill a Mockingbird : Got extra info from api
+2021-07-29 03:28:06,558-DEBUG-FILE:book_scraper.py-FUNC:book_from_link-LINE:86-Scrapped a book from https://www.goodreads.com/book/show/2657.To_Kill_a_Mockingbird
+2021-07-29 03:28:06,558-DEBUG-FILE:save_to_db.py-FUNC:add_book_object_to_db-LINE:213-To Kill a Mockingbird : Starting to add information to the database
+2021-07-29 03:28:06,558-DEBUG-FILE:save_to_db.py-FUNC:add_book_to_db-LINE:36-Adding To Kill a Mockingbird's data to the database
+2021-07-29 03:28:06,558-INFO-FILE:sql_utils.py-FUNC:sql_run-LINE:40-Querying SQL server: 
+ statement: SELECT EXISTS (
+                      SELECT * 
+                      FROM Books 
+                      WHERE title=%s and author=%s
+                  ); 
+ fields: ('To Kill a Mockingbird', None)
+2021-07-29 03:28:06,562-INFO-FILE:sql_utils.py-FUNC:sql_run-LINE:40-Querying SQL server: 
+ statement: INSERT INTO 
+                      Books (
+                          best_of, title, author, average_rating, 
+                          number_of_reviews, published_date, page_count
+                      ) VALUES (
+                          %s, %s, %s, %s, %s, %s, %s
+                      ); 
+ fields: (None, 'To Kill a Mockingbird', None, 4.28, 4884039, '2014-07-08', 336)
+2021-07-29 03:28:06,572-INFO-FILE:sql_utils.py-FUNC:sql_run-LINE:40-Querying SQL server: 
+ statement: SELECT book_id 
+                                     FROM Books 
+                                     ORDER BY book_id
+                                     DESC LIMIT 1
+                                     ; 
+ fields: None
+2021-07-29 03:28:06,573-DEBUG-FILE:save_to_db.py-FUNC:add_book_to_db-LINE:62-Added To Kill a Mockingbird's data to the database
+2021-07-29 03:28:06,573-DEBUG-FILE:save_to_db.py-FUNC:add_description_to_db-LINE:73-To Kill a Mockingbird : adding description
+2021-07-29 03:28:06,573-INFO-FILE:sql_utils.py-FUNC:sql_run-LINE:40-Querying SQL server: 
+ statement: INSERT INTO 
+                  Description (
+                      book_id, description
+                  ) VALUES (
+                      %s, %s
+                  ); 
+ fields: (1, 'The unforgettable novel of a childhood in a sleepy Southern town and the crisis of conscience that rocked it. "To Kill A Mockingbird" became both an instant bestseller and a critical success when it was first published in 1960. It went on to win the Pulitzer Prize in 1961 and was later made into an Academy Award-winning film, also a classic.Compassionate, dramatic, and deeply moving, "To Kill A Mockingbird" takes readers to the roots of human behavior - to innocence and experience, kindness and cruelty, love and hatred, humor and pathos. Now with over 18 million copies in print and translated into forty languages, this regional story by a young Alabama woman claims universal appeal. Harper Lee always considered her book to be a simple love story. Today it is regarded as a masterpiece of American literature.')
+2021-07-29 03:28:06,578-DEBUG-FILE:save_to_db.py-FUNC:add_description_to_db-LINE:83-To Kill a Mockingbird : added description
+2021-07-29 03:28:06,578-DEBUG-FILE:save_to_db.py-FUNC:add_genre_info-LINE:93-To Kill a Mockingbird : adding genre info
+2021-07-29 03:28:06,578-INFO-FILE:sql_utils.py-FUNC:sql_run-LINE:40-Querying SQL server: 
+ statement: SELECT genre_id 
+                            FROM Genre
+                            WHERE genre='Classics'
+                          ; 
+ fields: None
+2021-07-29 03:28:06,580-INFO-FILE:sql_utils.py-FUNC:sql_run-LINE:40-Querying SQL server: 
+ statement: INSERT INTO 
+                                      Genre (
+                                          genre
+                                      ) VALUES (
+                                          'Classics'
+                                      ); 
+ fields: None
+2021-07-29 03:28:06,584-INFO-FILE:sql_utils.py-FUNC:sql_run-LINE:40-Querying SQL server: 
+ statement: SELECT LAST_INSERT_ID(); 
+ fields: None
+2021-07-29 03:28:06,584-INFO-FILE:sql_utils.py-FUNC:sql_run-LINE:40-Querying SQL server: 
+ statement: SELECT genre_id 
+                            FROM Genre
+                            WHERE genre='Fiction'
+                          ; 
+ fields: None
+2021-07-29 03:28:06,585-INFO-FILE:sql_utils.py-FUNC:sql_run-LINE:40-Querying SQL server: 
+ statement: INSERT INTO 
+                                      Genre (
+                                          genre
+                                      ) VALUES (
+                                          'Fiction'
+                                      ); 
+ fields: None
+2021-07-29 03:28:06,588-INFO-FILE:sql_utils.py-FUNC:sql_run-LINE:40-Querying SQL server: 
+ statement: SELECT LAST_INSERT_ID(); 
+ fields: None
+2021-07-29 03:28:06,589-INFO-FILE:sql_utils.py-FUNC:sql_run-LINE:40-Querying SQL server: 
+ statement: SELECT genre_id 
+                            FROM Genre
+                            WHERE genre='Historical,Historical Fiction'
+                          ; 
+ fields: None
+2021-07-29 03:28:06,589-INFO-FILE:sql_utils.py-FUNC:sql_run-LINE:40-Querying SQL server: 
+ statement: INSERT INTO 
+                                      Genre (
+                                          genre
+                                      ) VALUES (
+                                          'Historical,Historical Fiction'
+                                      ); 
+ fields: None
+2021-07-29 03:28:06,592-INFO-FILE:sql_utils.py-FUNC:sql_run-LINE:40-Querying SQL server: 
+ statement: SELECT LAST_INSERT_ID(); 
+ fields: None
+2021-07-29 03:28:06,592-INFO-FILE:sql_utils.py-FUNC:sql_run-LINE:40-Querying SQL server: 
+ statement: SELECT genre_id 
+                            FROM Genre
+                            WHERE genre='Academic,School'
+                          ; 
+ fields: None
+2021-07-29 03:28:06,593-INFO-FILE:sql_utils.py-FUNC:sql_run-LINE:40-Querying SQL server: 
+ statement: INSERT INTO 
+                                      Genre (
+                                          genre
+                                      ) VALUES (
+                                          'Academic,School'
+                                      ); 
+ fields: None
+2021-07-29 03:28:06,596-INFO-FILE:sql_utils.py-FUNC:sql_run-LINE:40-Querying SQL server: 
+ statement: SELECT LAST_INSERT_ID(); 
+ fields: None
+2021-07-29 03:28:06,596-INFO-FILE:sql_utils.py-FUNC:sql_run-LINE:40-Querying SQL server: 
+ statement: SELECT genre_id 
+                            FROM Genre
+                            WHERE genre='Literature'
+                          ; 
+ fields: None
+2021-07-29 03:28:06,596-INFO-FILE:sql_utils.py-FUNC:sql_run-LINE:40-Querying SQL server: 
+ statement: INSERT INTO 
+                                      Genre (
+                                          genre
+                                      ) VALUES (
+                                          'Literature'
+                                      ); 
+ fields: None
+2021-07-29 03:28:06,598-INFO-FILE:sql_utils.py-FUNC:sql_run-LINE:40-Querying SQL server: 
+ statement: SELECT LAST_INSERT_ID(); 
+ fields: None
+2021-07-29 03:28:06,599-INFO-FILE:sql_utils.py-FUNC:sql_run-LINE:40-Querying SQL server: 
+ statement: SELECT genre_id 
+                            FROM Genre
+                            WHERE genre='Young Adult'
+                          ; 
+ fields: None
+2021-07-29 03:28:06,599-INFO-FILE:sql_utils.py-FUNC:sql_run-LINE:40-Querying SQL server: 
+ statement: INSERT INTO 
+                                      Genre (
+                                          genre
+                                      ) VALUES (
+                                          'Young Adult'
+                                      ); 
+ fields: None
+2021-07-29 03:28:06,602-INFO-FILE:sql_utils.py-FUNC:sql_run-LINE:40-Querying SQL server: 
+ statement: SELECT LAST_INSERT_ID(); 
+ fields: None
+2021-07-29 03:28:06,602-INFO-FILE:sql_utils.py-FUNC:sql_run-LINE:40-Querying SQL server: 
+ statement: SELECT genre_id 
+                            FROM Genre
+                            WHERE genre='Historical'
+                          ; 
+ fields: None
+2021-07-29 03:28:06,602-INFO-FILE:sql_utils.py-FUNC:sql_run-LINE:40-Querying SQL server: 
+ statement: INSERT INTO 
+                                      Genre (
+                                          genre
+                                      ) VALUES (
+                                          'Historical'
+                                      ); 
+ fields: None
+2021-07-29 03:28:06,605-INFO-FILE:sql_utils.py-FUNC:sql_run-LINE:40-Querying SQL server: 
+ statement: SELECT LAST_INSERT_ID(); 
+ fields: None
+2021-07-29 03:28:06,605-INFO-FILE:sql_utils.py-FUNC:sql_run-LINE:40-Querying SQL server: 
+ statement: SELECT genre_id 
+                            FROM Genre
+                            WHERE genre='Novels'
+                          ; 
+ fields: None
+2021-07-29 03:28:06,605-INFO-FILE:sql_utils.py-FUNC:sql_run-LINE:40-Querying SQL server: 
+ statement: INSERT INTO 
+                                      Genre (
+                                          genre
+                                      ) VALUES (
+                                          'Novels'
+                                      ); 
+ fields: None
+2021-07-29 03:28:06,608-INFO-FILE:sql_utils.py-FUNC:sql_run-LINE:40-Querying SQL server: 
+ statement: SELECT LAST_INSERT_ID(); 
+ fields: None
+2021-07-29 03:28:06,608-INFO-FILE:sql_utils.py-FUNC:sql_run-LINE:40-Querying SQL server: 
+ statement: SELECT genre_id 
+                            FROM Genre
+                            WHERE genre='Academic,Read For School'
+                          ; 
+ fields: None
+2021-07-29 03:28:06,609-INFO-FILE:sql_utils.py-FUNC:sql_run-LINE:40-Querying SQL server: 
+ statement: INSERT INTO 
+                                      Genre (
+                                          genre
+                                      ) VALUES (
+                                          'Academic,Read For School'
+                                      ); 
+ fields: None
+2021-07-29 03:28:06,611-INFO-FILE:sql_utils.py-FUNC:sql_run-LINE:40-Querying SQL server: 
+ statement: SELECT LAST_INSERT_ID(); 
+ fields: None
+2021-07-29 03:28:06,611-INFO-FILE:sql_utils.py-FUNC:sql_run-LINE:40-Querying SQL server: 
+ statement: SELECT genre_id 
+                            FROM Genre
+                            WHERE genre='Young Adult,High School'
+                          ; 
+ fields: None
+2021-07-29 03:28:06,611-INFO-FILE:sql_utils.py-FUNC:sql_run-LINE:40-Querying SQL server: 
+ statement: INSERT INTO 
+                                      Genre (
+                                          genre
+                                      ) VALUES (
+                                          'Young Adult,High School'
+                                      ); 
+ fields: None
+2021-07-29 03:28:06,614-INFO-FILE:sql_utils.py-FUNC:sql_run-LINE:40-Querying SQL server: 
+ statement: SELECT LAST_INSERT_ID(); 
+ fields: None
+2021-07-29 03:28:06,614-DEBUG-FILE:save_to_db.py-FUNC:add_genre_info-LINE:98-To Kill a Mockingbird : added genre info
+2021-07-29 03:28:06,614-DEBUG-FILE:save_to_db.py-FUNC:add_books_genre_info-LINE:111-To Kill a Mockingbird : adding books-genres info
+2021-07-29 03:28:06,614-INFO-FILE:sql_utils.py-FUNC:sql_run-LINE:40-Querying SQL server: 
+ statement: INSERT INTO 
+                      Books_Genre (
+                          book_id, genre_id, top_voted, top_voted_num
+                      ) VALUES (
+                          %s, %s, %s, %s
+                      ); 
+ fields: (1, 1, 1, 47570)
+2021-07-29 03:28:06,620-INFO-FILE:sql_utils.py-FUNC:sql_run-LINE:40-Querying SQL server: 
+ statement: INSERT INTO 
+                      Books_Genre (
+                          book_id, genre_id, top_voted, top_voted_num
+                      ) VALUES (
+                          %s, %s, %s, %s
+                      ); 
+ fields: (1, 2, 2, 24014)
+2021-07-29 03:28:06,623-INFO-FILE:sql_utils.py-FUNC:sql_run-LINE:40-Querying SQL server: 
+ statement: INSERT INTO 
+                      Books_Genre (
+                          book_id, genre_id, top_voted, top_voted_num
+                      ) VALUES (
+                          %s, %s, %s, %s
+                      ); 
+ fields: (1, 3, 3, 7286)
+2021-07-29 03:28:06,626-INFO-FILE:sql_utils.py-FUNC:sql_run-LINE:40-Querying SQL server: 
+ statement: INSERT INTO 
+                      Books_Genre (
+                          book_id, genre_id, top_voted, top_voted_num
+                      ) VALUES (
+                          %s, %s, %s, %s
+                      ); 
+ fields: (1, 4, 4, 4113)
+2021-07-29 03:28:06,629-INFO-FILE:sql_utils.py-FUNC:sql_run-LINE:40-Querying SQL server: 
+ statement: INSERT INTO 
+                      Books_Genre (
+                          book_id, genre_id, top_voted, top_voted_num
+                      ) VALUES (
+                          %s, %s, %s, %s
+                      ); 
+ fields: (1, 5, 5, 3117)
+2021-07-29 03:28:06,633-INFO-FILE:sql_utils.py-FUNC:sql_run-LINE:40-Querying SQL server: 
+ statement: INSERT INTO 
+                      Books_Genre (
+                          book_id, genre_id, top_voted, top_voted_num
+                      ) VALUES (
+                          %s, %s, %s, %s
+                      ); 
+ fields: (1, 6, 6, 2968)
+2021-07-29 03:28:06,637-INFO-FILE:sql_utils.py-FUNC:sql_run-LINE:40-Querying SQL server: 
+ statement: INSERT INTO 
+                      Books_Genre (
+                          book_id, genre_id, top_voted, top_voted_num
+                      ) VALUES (
+                          %s, %s, %s, %s
+                      ); 
+ fields: (1, 7, 7, 1904)
+2021-07-29 03:28:06,639-INFO-FILE:sql_utils.py-FUNC:sql_run-LINE:40-Querying SQL server: 
+ statement: INSERT INTO 
+                      Books_Genre (
+                          book_id, genre_id, top_voted, top_voted_num
+                      ) VALUES (
+                          %s, %s, %s, %s
+                      ); 
+ fields: (1, 8, 8, 1891)
+2021-07-29 03:28:06,643-INFO-FILE:sql_utils.py-FUNC:sql_run-LINE:40-Querying SQL server: 
+ statement: INSERT INTO 
+                      Books_Genre (
+                          book_id, genre_id, top_voted, top_voted_num
+                      ) VALUES (
+                          %s, %s, %s, %s
+                      ); 
+ fields: (1, 9, 9, 1869)
+2021-07-29 03:28:06,646-INFO-FILE:sql_utils.py-FUNC:sql_run-LINE:40-Querying SQL server: 
+ statement: INSERT INTO 
+                      Books_Genre (
+                          book_id, genre_id, top_voted, top_voted_num
+                      ) VALUES (
+                          %s, %s, %s, %s
+                      ); 
+ fields: (1, 10, 10, 1361)
+2021-07-29 03:28:06,650-DEBUG-FILE:save_to_db.py-FUNC:add_books_genre_info-LINE:127-To Kill a Mockingbird : added books-genres info
+2021-07-29 03:28:06,650-DEBUG-FILE:save_to_db.py-FUNC:add_author_info-LINE:137-To Kill a Mockingbird : adding authors
+2021-07-29 03:28:06,650-INFO-FILE:sql_utils.py-FUNC:sql_run-LINE:40-Querying SQL server: 
+ statement: SELECT author_id 
+                            FROM Authors
+                            WHERE author='Harper Lee'
+                          ; 
+ fields: None
+2021-07-29 03:28:06,652-INFO-FILE:sql_utils.py-FUNC:sql_run-LINE:40-Querying SQL server: 
+ statement: INSERT INTO 
+                                      Authors (
+                                          author
+                                      ) VALUES (
+                                          'Harper Lee'
+                                      ); 
+ fields: None
+2021-07-29 03:28:06,655-INFO-FILE:sql_utils.py-FUNC:sql_run-LINE:40-Querying SQL server: 
+ statement: SELECT LAST_INSERT_ID(); 
+ fields: None
+2021-07-29 03:28:06,655-DEBUG-FILE:save_to_db.py-FUNC:add_author_info-LINE:141-To Kill a Mockingbird : added authors info
+2021-07-29 03:28:06,655-DEBUG-FILE:save_to_db.py-FUNC:add_books_authors_info-LINE:156-To Kill a Mockingbird : adding books-authors info
+2021-07-29 03:28:06,655-INFO-FILE:sql_utils.py-FUNC:sql_run-LINE:40-Querying SQL server: 
+ statement: INSERT INTO 
+                      Books_Authors (
+                          book_id, author_id
+                      ) VALUES (
+                          1, 1
+                      ); 
+ fields: None
+2021-07-29 03:28:06,659-DEBUG-FILE:save_to_db.py-FUNC:add_books_authors_info-LINE:168-To Kill a Mockingbird : added books-authors info
+2021-07-29 03:28:06,659-DEBUG-FILE:save_to_db.py-FUNC:add_rating_info_to_db-LINE:179-To Kill a Mockingbird : adding rating info
+2021-07-29 03:28:06,659-INFO-FILE:sql_utils.py-FUNC:sql_run-LINE:40-Querying SQL server: 
+ statement: INSERT INTO 
+                  Rating_Info (
+                      book_id, rated_5, rated_4 ,rated_3 ,rated_2, rated_1
+                  ) VALUES (
+                      1
+                  , 2563027, 1445944, 622835, 163280, 88953); 
+ fields: None
+2021-07-29 03:28:06,664-DEBUG-FILE:save_to_db.py-FUNC:add_rating_info_to_db-LINE:192-To Kill a Mockingbird : added rating info
+2021-07-29 03:28:06,664-DEBUG-FILE:save_to_db.py-FUNC:add_book_object_to_db-LINE:240-To Kill a Mockingbird : Successfully added information to the database
+2021-07-29 03:28:06,665-DEBUG-FILE:book_scraper.py-FUNC:book_from_link-LINE:73-Scraping a book from https://www.goodreads.com/book/show/40961427-1984
+2021-07-29 03:28:06,665-DEBUG-FILE:book_scraper.py-FUNC:soup_from_link-LINE:102-Getting soup for https://www.goodreads.com/book/show/40961427-1984
+2021-07-29 03:28:29,767-DEBUG-FILE:book_scraper.py-FUNC:soup_from_link-LINE:130-Got soup for https://www.goodreads.com/book/show/40961427-1984
+2021-07-29 03:28:29,767-DEBUG-FILE:book_scraper.py-FUNC:_name_from_soup-LINE:136-Getting name from soup
+2021-07-29 03:28:29,768-DEBUG-FILE:book_scraper.py-FUNC:_name_from_soup-LINE:143-1984 : Got name from soup
+2021-07-29 03:28:29,768-DEBUG-FILE:book_scraper.py-FUNC:_genres_from_soup-LINE:222-1984 : Getting genres from soup
+2021-07-29 03:28:29,781-DEBUG-FILE:book_scraper.py-FUNC:_genres_from_soup-LINE:240-1984 : Got genres from soup
+2021-07-29 03:28:29,781-DEBUG-FILE:book_scraper.py-FUNC:_author_from_soup-LINE:151-1984 : Getting author from soup
+2021-07-29 03:28:29,783-DEBUG-FILE:book_scraper.py-FUNC:_author_from_soup-LINE:159-1984 : Got author from soup
+2021-07-29 03:28:29,783-DEBUG-FILE:book_scraper.py-FUNC:_rating_from_soup-LINE:186-1984 : Getting rating from soup
+2021-07-29 03:28:29,792-DEBUG-FILE:book_scraper.py-FUNC:_rating_from_soup-LINE:214-1984 : Got rating from soup
+2021-07-29 03:28:29,792-DEBUG-FILE:book_scraper.py-FUNC:_description_from_soup-LINE:165-Getting description from soup: 1984
+2021-07-29 03:28:29,793-DEBUG-FILE:book_scraper.py-FUNC:_description_from_soup-LINE:178-Got description from soup: 1984
+2021-07-29 03:28:29,793-DEBUG-FILE:book_scraper.py-FUNC:_from_api-LINE:243-1984 : Getting extra info from api
+2021-07-29 03:28:30,521-DEBUG-FILE:book_scraper.py-FUNC:_from_api-LINE:272-1984 : Got extra info from api
+2021-07-29 03:28:30,521-DEBUG-FILE:book_scraper.py-FUNC:book_from_link-LINE:86-Scrapped a book from https://www.goodreads.com/book/show/40961427-1984
+2021-07-29 03:28:30,521-DEBUG-FILE:save_to_db.py-FUNC:add_book_object_to_db-LINE:213-1984 : Starting to add information to the database
+2021-07-29 03:28:30,521-DEBUG-FILE:save_to_db.py-FUNC:add_book_to_db-LINE:36-Adding 1984's data to the database
+2021-07-29 03:28:30,521-INFO-FILE:sql_utils.py-FUNC:sql_run-LINE:40-Querying SQL server: 
+ statement: SELECT EXISTS (
+                      SELECT * 
+                      FROM Books 
+                      WHERE title=%s and author=%s
+                  ); 
+ fields: ('1984', None)
+2021-07-29 03:28:30,521-INFO-FILE:sql_utils.py-FUNC:sql_run-LINE:40-Querying SQL server: 
+ statement: INSERT INTO 
+                      Books (
+                          best_of, title, author, average_rating, 
+                          number_of_reviews, published_date, page_count
+                      ) VALUES (
+                          %s, %s, %s, %s, %s, %s, %s
+                      ); 
+ fields: (None, '1984', None, 4.19, 3477762, None, None)
+2021-07-29 03:28:30,538-INFO-FILE:sql_utils.py-FUNC:sql_run-LINE:40-Querying SQL server: 
+ statement: SELECT book_id 
+                                     FROM Books 
+                                     ORDER BY book_id
+                                     DESC LIMIT 1
+                                     ; 
+ fields: None
+2021-07-29 03:28:30,538-DEBUG-FILE:save_to_db.py-FUNC:add_book_to_db-LINE:62-Added 1984's data to the database
+2021-07-29 03:28:30,538-DEBUG-FILE:save_to_db.py-FUNC:add_description_to_db-LINE:73-1984 : adding description
+2021-07-29 03:28:30,538-INFO-FILE:sql_utils.py-FUNC:sql_run-LINE:40-Querying SQL server: 
+ statement: INSERT INTO 
+                  Description (
+                      book_id, description
+                  ) VALUES (
+                      %s, %s
+                  ); 
+ fields: (2, "Among the seminal texts of the 20th century, Nineteen Eighty-Four is a rare work that grows more haunting as its futuristic purgatory becomes more real. Published in 1949, the book offers political satirist George Orwell's nightmarish vision of a totalitarian, bureaucratic world and one poor stiff's attempt to find individuality. The brilliance of the novel is Orwell's prescience of modern life—the ubiquity of television, the distortion of the language—and his ability to construct such a thorough version of hell. Required reading for students since it was published, it ranks among the most terrifying novels ever written.")
+2021-07-29 03:28:30,538-DEBUG-FILE:save_to_db.py-FUNC:add_description_to_db-LINE:83-1984 : added description
+2021-07-29 03:28:30,538-DEBUG-FILE:save_to_db.py-FUNC:add_genre_info-LINE:93-1984 : adding genre info
+2021-07-29 03:28:30,538-INFO-FILE:sql_utils.py-FUNC:sql_run-LINE:40-Querying SQL server: 
+ statement: SELECT genre_id 
+                            FROM Genre
+                            WHERE genre='Classics'
+                          ; 
+ fields: None
+2021-07-29 03:28:30,538-INFO-FILE:sql_utils.py-FUNC:sql_run-LINE:40-Querying SQL server: 
+ statement: SELECT genre_id 
+                            FROM Genre
+                            WHERE genre='Fiction'
+                          ; 
+ fields: None
+2021-07-29 03:28:30,538-INFO-FILE:sql_utils.py-FUNC:sql_run-LINE:40-Querying SQL server: 
+ statement: SELECT genre_id 
+                            FROM Genre
+                            WHERE genre='Science Fiction'
+                          ; 
+ fields: None
+2021-07-29 03:28:30,538-INFO-FILE:sql_utils.py-FUNC:sql_run-LINE:40-Querying SQL server: 
+ statement: INSERT INTO 
+                                      Genre (
+                                          genre
+                                      ) VALUES (
+                                          'Science Fiction'
+                                      ); 
+ fields: None
+2021-07-29 03:28:30,538-INFO-FILE:sql_utils.py-FUNC:sql_run-LINE:40-Querying SQL server: 
+ statement: SELECT LAST_INSERT_ID(); 
+ fields: None
+2021-07-29 03:28:30,538-INFO-FILE:sql_utils.py-FUNC:sql_run-LINE:40-Querying SQL server: 
+ statement: SELECT genre_id 
+                            FROM Genre
+                            WHERE genre='Science Fiction,Dystopia'
+                          ; 
+ fields: None
+2021-07-29 03:28:30,538-INFO-FILE:sql_utils.py-FUNC:sql_run-LINE:40-Querying SQL server: 
+ statement: INSERT INTO 
+                                      Genre (
+                                          genre
+                                      ) VALUES (
+                                          'Science Fiction,Dystopia'
+                                      ); 
+ fields: None
+2021-07-29 03:28:30,538-INFO-FILE:sql_utils.py-FUNC:sql_run-LINE:40-Querying SQL server: 
+ statement: SELECT LAST_INSERT_ID(); 
+ fields: None
+2021-07-29 03:28:30,538-INFO-FILE:sql_utils.py-FUNC:sql_run-LINE:40-Querying SQL server: 
+ statement: SELECT genre_id 
+                            FROM Genre
+                            WHERE genre='Literature'
+                          ; 
+ fields: None
+2021-07-29 03:28:30,538-INFO-FILE:sql_utils.py-FUNC:sql_run-LINE:40-Querying SQL server: 
+ statement: SELECT genre_id 
+                            FROM Genre
+                            WHERE genre='Novels'
+                          ; 
+ fields: None
+2021-07-29 03:28:30,553-INFO-FILE:sql_utils.py-FUNC:sql_run-LINE:40-Querying SQL server: 
+ statement: SELECT genre_id 
+                            FROM Genre
+                            WHERE genre='Politics'
+                          ; 
+ fields: None
+2021-07-29 03:28:30,553-INFO-FILE:sql_utils.py-FUNC:sql_run-LINE:40-Querying SQL server: 
+ statement: INSERT INTO 
+                                      Genre (
+                                          genre
+                                      ) VALUES (
+                                          'Politics'
+                                      ); 
+ fields: None
+2021-07-29 03:28:30,554-INFO-FILE:sql_utils.py-FUNC:sql_run-LINE:40-Querying SQL server: 
+ statement: SELECT LAST_INSERT_ID(); 
+ fields: None
+2021-07-29 03:28:30,554-INFO-FILE:sql_utils.py-FUNC:sql_run-LINE:40-Querying SQL server: 
+ statement: SELECT genre_id 
+                            FROM Genre
+                            WHERE genre='Academic,School'
+                          ; 
+ fields: None
+2021-07-29 03:28:30,554-INFO-FILE:sql_utils.py-FUNC:sql_run-LINE:40-Querying SQL server: 
+ statement: SELECT genre_id 
+                            FROM Genre
+                            WHERE genre='Fantasy'
+                          ; 
+ fields: None
+2021-07-29 03:28:30,554-INFO-FILE:sql_utils.py-FUNC:sql_run-LINE:40-Querying SQL server: 
+ statement: INSERT INTO 
+                                      Genre (
+                                          genre
+                                      ) VALUES (
+                                          'Fantasy'
+                                      ); 
+ fields: None
+2021-07-29 03:28:30,554-INFO-FILE:sql_utils.py-FUNC:sql_run-LINE:40-Querying SQL server: 
+ statement: SELECT LAST_INSERT_ID(); 
+ fields: None
+2021-07-29 03:28:30,554-INFO-FILE:sql_utils.py-FUNC:sql_run-LINE:40-Querying SQL server: 
+ statement: SELECT genre_id 
+                            FROM Genre
+                            WHERE genre='Adult'
+                          ; 
+ fields: None
+2021-07-29 03:28:30,554-INFO-FILE:sql_utils.py-FUNC:sql_run-LINE:40-Querying SQL server: 
+ statement: INSERT INTO 
+                                      Genre (
+                                          genre
+                                      ) VALUES (
+                                          'Adult'
+                                      ); 
+ fields: None
+2021-07-29 03:28:30,554-INFO-FILE:sql_utils.py-FUNC:sql_run-LINE:40-Querying SQL server: 
+ statement: SELECT LAST_INSERT_ID(); 
+ fields: None
+2021-07-29 03:28:30,554-DEBUG-FILE:save_to_db.py-FUNC:add_genre_info-LINE:98-1984 : added genre info
+2021-07-29 03:28:30,554-DEBUG-FILE:save_to_db.py-FUNC:add_books_genre_info-LINE:111-1984 : adding books-genres info
+2021-07-29 03:28:30,554-INFO-FILE:sql_utils.py-FUNC:sql_run-LINE:40-Querying SQL server: 
+ statement: INSERT INTO 
+                      Books_Genre (
+                          book_id, genre_id, top_voted, top_voted_num
+                      ) VALUES (
+                          %s, %s, %s, %s
+                      ); 
+ fields: (2, 1, 1, 38711)
+2021-07-29 03:28:30,554-INFO-FILE:sql_utils.py-FUNC:sql_run-LINE:40-Querying SQL server: 
+ statement: INSERT INTO 
+                      Books_Genre (
+                          book_id, genre_id, top_voted, top_voted_num
+                      ) VALUES (
+                          %s, %s, %s, %s
+                      ); 
+ fields: (2, 2, 2, 23745)
+2021-07-29 03:28:30,571-INFO-FILE:sql_utils.py-FUNC:sql_run-LINE:40-Querying SQL server: 
+ statement: INSERT INTO 
+                      Books_Genre (
+                          book_id, genre_id, top_voted, top_voted_num
+                      ) VALUES (
+                          %s, %s, %s, %s
+                      ); 
+ fields: (2, 11, 3, 10899)
+2021-07-29 03:28:30,573-INFO-FILE:sql_utils.py-FUNC:sql_run-LINE:40-Querying SQL server: 
+ statement: INSERT INTO 
+                      Books_Genre (
+                          book_id, genre_id, top_voted, top_voted_num
+                      ) VALUES (
+                          %s, %s, %s, %s
+                      ); 
+ fields: (2, 12, 4, 9053)
+2021-07-29 03:28:30,576-INFO-FILE:sql_utils.py-FUNC:sql_run-LINE:40-Querying SQL server: 
+ statement: INSERT INTO 
+                      Books_Genre (
+                          book_id, genre_id, top_voted, top_voted_num
+                      ) VALUES (
+                          %s, %s, %s, %s
+                      ); 
+ fields: (2, 5, 5, 3095)
+2021-07-29 03:28:30,579-INFO-FILE:sql_utils.py-FUNC:sql_run-LINE:40-Querying SQL server: 
+ statement: INSERT INTO 
+                      Books_Genre (
+                          book_id, genre_id, top_voted, top_voted_num
+                      ) VALUES (
+                          %s, %s, %s, %s
+                      ); 
+ fields: (2, 8, 6, 2305)
+2021-07-29 03:28:30,581-INFO-FILE:sql_utils.py-FUNC:sql_run-LINE:40-Querying SQL server: 
+ statement: INSERT INTO 
+                      Books_Genre (
+                          book_id, genre_id, top_voted, top_voted_num
+                      ) VALUES (
+                          %s, %s, %s, %s
+                      ); 
+ fields: (2, 13, 7, 2180)
+2021-07-29 03:28:30,584-INFO-FILE:sql_utils.py-FUNC:sql_run-LINE:40-Querying SQL server: 
+ statement: INSERT INTO 
+                      Books_Genre (
+                          book_id, genre_id, top_voted, top_voted_num
+                      ) VALUES (
+                          %s, %s, %s, %s
+                      ); 
+ fields: (2, 4, 8, 1919)
+2021-07-29 03:28:30,587-INFO-FILE:sql_utils.py-FUNC:sql_run-LINE:40-Querying SQL server: 
+ statement: INSERT INTO 
+                      Books_Genre (
+                          book_id, genre_id, top_voted, top_voted_num
+                      ) VALUES (
+                          %s, %s, %s, %s
+                      ); 
+ fields: (2, 14, 9, 1179)
+2021-07-29 03:28:30,590-INFO-FILE:sql_utils.py-FUNC:sql_run-LINE:40-Querying SQL server: 
+ statement: INSERT INTO 
+                      Books_Genre (
+                          book_id, genre_id, top_voted, top_voted_num
+                      ) VALUES (
+                          %s, %s, %s, %s
+                      ); 
+ fields: (2, 15, 10, 1165)
+2021-07-29 03:28:30,593-DEBUG-FILE:save_to_db.py-FUNC:add_books_genre_info-LINE:127-1984 : added books-genres info
+2021-07-29 03:28:30,593-DEBUG-FILE:save_to_db.py-FUNC:add_author_info-LINE:137-1984 : adding authors
+2021-07-29 03:28:30,593-INFO-FILE:sql_utils.py-FUNC:sql_run-LINE:40-Querying SQL server: 
+ statement: SELECT author_id 
+                            FROM Authors
+                            WHERE author='George Orwell'
+                          ; 
+ fields: None
+2021-07-29 03:28:30,594-INFO-FILE:sql_utils.py-FUNC:sql_run-LINE:40-Querying SQL server: 
+ statement: INSERT INTO 
+                                      Authors (
+                                          author
+                                      ) VALUES (
+                                          'George Orwell'
+                                      ); 
+ fields: None
+2021-07-29 03:28:30,597-INFO-FILE:sql_utils.py-FUNC:sql_run-LINE:40-Querying SQL server: 
+ statement: SELECT LAST_INSERT_ID(); 
+ fields: None
+2021-07-29 03:28:30,597-DEBUG-FILE:save_to_db.py-FUNC:add_author_info-LINE:141-1984 : added authors info
+2021-07-29 03:28:30,597-DEBUG-FILE:save_to_db.py-FUNC:add_books_authors_info-LINE:156-1984 : adding books-authors info
+2021-07-29 03:28:30,597-INFO-FILE:sql_utils.py-FUNC:sql_run-LINE:40-Querying SQL server: 
+ statement: INSERT INTO 
+                      Books_Authors (
+                          book_id, author_id
+                      ) VALUES (
+                          2, 2
+                      ); 
+ fields: None
+2021-07-29 03:28:30,600-DEBUG-FILE:save_to_db.py-FUNC:add_books_authors_info-LINE:168-1984 : added books-authors info
+2021-07-29 03:28:30,600-DEBUG-FILE:save_to_db.py-FUNC:add_rating_info_to_db-LINE:179-1984 : adding rating info
+2021-07-29 03:28:30,600-INFO-FILE:sql_utils.py-FUNC:sql_run-LINE:40-Querying SQL server: 
+ statement: INSERT INTO 
+                  Rating_Info (
+                      book_id, rated_5, rated_4 ,rated_3 ,rated_2, rated_1
+                  ) VALUES (
+                      2
+                  , 1642405, 1132242, 497306, 134140, 71669); 
+ fields: None
+2021-07-29 03:28:30,604-DEBUG-FILE:save_to_db.py-FUNC:add_rating_info_to_db-LINE:192-1984 : added rating info
+2021-07-29 03:28:30,604-DEBUG-FILE:save_to_db.py-FUNC:add_book_object_to_db-LINE:240-1984 : Successfully added information to the database
+2021-07-29 03:28:30,604-DEBUG-FILE:book_scraper.py-FUNC:book_from_link-LINE:73-Scraping a book from https://www.goodreads.com/book/show/4671.The_Great_Gatsby
+2021-07-29 03:28:30,604-DEBUG-FILE:book_scraper.py-FUNC:soup_from_link-LINE:102-Getting soup for https://www.goodreads.com/book/show/4671.The_Great_Gatsby
+2021-07-29 03:29:21,332-DEBUG-FILE:book_scraper.py-FUNC:soup_from_link-LINE:130-Got soup for https://www.goodreads.com/book/show/4671.The_Great_Gatsby
+2021-07-29 03:29:21,333-DEBUG-FILE:book_scraper.py-FUNC:_name_from_soup-LINE:136-Getting name from soup
+2021-07-29 03:29:21,334-DEBUG-FILE:book_scraper.py-FUNC:_name_from_soup-LINE:143-The Great Gatsby : Got name from soup
+2021-07-29 03:29:21,334-DEBUG-FILE:book_scraper.py-FUNC:_genres_from_soup-LINE:222-The Great Gatsby : Getting genres from soup
+2021-07-29 03:29:21,348-DEBUG-FILE:book_scraper.py-FUNC:_genres_from_soup-LINE:240-The Great Gatsby : Got genres from soup
+2021-07-29 03:29:21,348-DEBUG-FILE:book_scraper.py-FUNC:_author_from_soup-LINE:151-The Great Gatsby : Getting author from soup
+2021-07-29 03:29:21,350-DEBUG-FILE:book_scraper.py-FUNC:_author_from_soup-LINE:159-The Great Gatsby : Got author from soup
+2021-07-29 03:29:21,350-DEBUG-FILE:book_scraper.py-FUNC:_rating_from_soup-LINE:186-The Great Gatsby : Getting rating from soup
+2021-07-29 03:29:21,361-DEBUG-FILE:book_scraper.py-FUNC:_rating_from_soup-LINE:214-The Great Gatsby : Got rating from soup
+2021-07-29 03:29:21,361-DEBUG-FILE:book_scraper.py-FUNC:_description_from_soup-LINE:165-Getting description from soup: The Great Gatsby
+2021-07-29 03:29:21,362-DEBUG-FILE:book_scraper.py-FUNC:_description_from_soup-LINE:178-Got description from soup: The Great Gatsby
+2021-07-29 03:29:21,362-DEBUG-FILE:book_scraper.py-FUNC:_from_api-LINE:243-The Great Gatsby : Getting extra info from api
+2021-07-29 03:29:22,252-DEBUG-FILE:book_scraper.py-FUNC:_from_api-LINE:272-The Great Gatsby : Got extra info from api
+2021-07-29 03:29:22,253-DEBUG-FILE:book_scraper.py-FUNC:book_from_link-LINE:86-Scrapped a book from https://www.goodreads.com/book/show/4671.The_Great_Gatsby
+2021-07-29 03:29:22,253-DEBUG-FILE:save_to_db.py-FUNC:add_book_object_to_db-LINE:213-The Great Gatsby : Starting to add information to the database
+2021-07-29 03:29:22,253-DEBUG-FILE:save_to_db.py-FUNC:add_book_to_db-LINE:36-Adding The Great Gatsby's data to the database
+2021-07-29 03:29:22,253-INFO-FILE:sql_utils.py-FUNC:sql_run-LINE:40-Querying SQL server: 
+ statement: SELECT EXISTS (
+                      SELECT * 
+                      FROM Books 
+                      WHERE title=%s and author=%s
+                  ); 
+ fields: ('The Great Gatsby', None)
+2021-07-29 03:29:22,259-INFO-FILE:sql_utils.py-FUNC:sql_run-LINE:40-Querying SQL server: 
+ statement: INSERT INTO 
+                      Books (
+                          best_of, title, author, average_rating, 
+                          number_of_reviews, published_date, page_count
+                      ) VALUES (
+                          %s, %s, %s, %s, %s, %s, %s
+                      ); 
+ fields: (None, 'The Great Gatsby', None, 3.93, 4093550, None, None)
+2021-07-29 03:29:22,264-INFO-FILE:sql_utils.py-FUNC:sql_run-LINE:40-Querying SQL server: 
+ statement: SELECT book_id 
+                                     FROM Books 
+                                     ORDER BY book_id
+                                     DESC LIMIT 1
+                                     ; 
+ fields: None
+2021-07-29 03:29:22,264-DEBUG-FILE:save_to_db.py-FUNC:add_book_to_db-LINE:62-Added The Great Gatsby's data to the database
+2021-07-29 03:29:22,264-DEBUG-FILE:save_to_db.py-FUNC:add_description_to_db-LINE:73-The Great Gatsby : adding description
+2021-07-29 03:29:22,264-INFO-FILE:sql_utils.py-FUNC:sql_run-LINE:40-Querying SQL server: 
+ statement: INSERT INTO 
+                  Description (
+                      book_id, description
+                  ) VALUES (
+                      %s, %s
+                  ); 
+ fields: (3, 'Alternate Cover Edition ISBN: 0743273567 (ISBN13: 9780743273565)The Great Gatsby, F. Scott Fitzgerald\'s third book, stands as the supreme achievement of his career. This exemplary novel of the Jazz Age has been acclaimed by generations of readers. The story is of the fabulously wealthy Jay Gatsby and his new love for the beautiful Daisy Buchanan, of lavish parties on Long Island at a time when The New York Times noted "gin was the national drink and sex the national obsession," it is an exquisitely crafted tale of America in the 1920s.The Great Gatsby is one of the great classics of twentieth-century literature.(back cover)')
+2021-07-29 03:29:22,269-DEBUG-FILE:save_to_db.py-FUNC:add_description_to_db-LINE:83-The Great Gatsby : added description
+2021-07-29 03:29:22,269-DEBUG-FILE:save_to_db.py-FUNC:add_genre_info-LINE:93-The Great Gatsby : adding genre info
+2021-07-29 03:29:22,269-INFO-FILE:sql_utils.py-FUNC:sql_run-LINE:40-Querying SQL server: 
+ statement: SELECT genre_id 
+                            FROM Genre
+                            WHERE genre='Classics'
+                          ; 
+ fields: None
+2021-07-29 03:29:22,270-INFO-FILE:sql_utils.py-FUNC:sql_run-LINE:40-Querying SQL server: 
+ statement: SELECT genre_id 
+                            FROM Genre
+                            WHERE genre='Fiction'
+                          ; 
+ fields: None
+2021-07-29 03:29:22,271-INFO-FILE:sql_utils.py-FUNC:sql_run-LINE:40-Querying SQL server: 
+ statement: SELECT genre_id 
+                            FROM Genre
+                            WHERE genre='Academic,School'
+                          ; 
+ fields: None
+2021-07-29 03:29:22,271-INFO-FILE:sql_utils.py-FUNC:sql_run-LINE:40-Querying SQL server: 
+ statement: SELECT genre_id 
+                            FROM Genre
+                            WHERE genre='Historical,Historical Fiction'
+                          ; 
+ fields: None
+2021-07-29 03:29:22,272-INFO-FILE:sql_utils.py-FUNC:sql_run-LINE:40-Querying SQL server: 
+ statement: SELECT genre_id 
+                            FROM Genre
+                            WHERE genre='Literature'
+                          ; 
+ fields: None
+2021-07-29 03:29:22,273-INFO-FILE:sql_utils.py-FUNC:sql_run-LINE:40-Querying SQL server: 
+ statement: SELECT genre_id 
+                            FROM Genre
+                            WHERE genre='Romance'
+                          ; 
+ fields: None
+2021-07-29 03:29:22,274-INFO-FILE:sql_utils.py-FUNC:sql_run-LINE:40-Querying SQL server: 
+ statement: INSERT INTO 
+                                      Genre (
+                                          genre
+                                      ) VALUES (
+                                          'Romance'
+                                      ); 
+ fields: None
+2021-07-29 03:29:22,277-INFO-FILE:sql_utils.py-FUNC:sql_run-LINE:40-Querying SQL server: 
+ statement: SELECT LAST_INSERT_ID(); 
+ fields: None
+2021-07-29 03:29:22,278-INFO-FILE:sql_utils.py-FUNC:sql_run-LINE:40-Querying SQL server: 
+ statement: SELECT genre_id 
+                            FROM Genre
+                            WHERE genre='Novels'
+                          ; 
+ fields: None
+2021-07-29 03:29:22,279-INFO-FILE:sql_utils.py-FUNC:sql_run-LINE:40-Querying SQL server: 
+ statement: SELECT genre_id 
+                            FROM Genre
+                            WHERE genre='Academic,Read For School'
+                          ; 
+ fields: None
+2021-07-29 03:29:22,279-INFO-FILE:sql_utils.py-FUNC:sql_run-LINE:40-Querying SQL server: 
+ statement: SELECT genre_id 
+                            FROM Genre
+                            WHERE genre='Young Adult,High School'
+                          ; 
+ fields: None
+2021-07-29 03:29:22,279-INFO-FILE:sql_utils.py-FUNC:sql_run-LINE:40-Querying SQL server: 
+ statement: SELECT genre_id 
+                            FROM Genre
+                            WHERE genre='Literature,American'
+                          ; 
+ fields: None
+2021-07-29 03:29:22,280-INFO-FILE:sql_utils.py-FUNC:sql_run-LINE:40-Querying SQL server: 
+ statement: INSERT INTO 
+                                      Genre (
+                                          genre
+                                      ) VALUES (
+                                          'Literature,American'
+                                      ); 
+ fields: None
+2021-07-29 03:29:22,283-INFO-FILE:sql_utils.py-FUNC:sql_run-LINE:40-Querying SQL server: 
+ statement: SELECT LAST_INSERT_ID(); 
+ fields: None
+2021-07-29 03:29:22,283-DEBUG-FILE:save_to_db.py-FUNC:add_genre_info-LINE:98-The Great Gatsby : added genre info
+2021-07-29 03:29:22,283-DEBUG-FILE:save_to_db.py-FUNC:add_books_genre_info-LINE:111-The Great Gatsby : adding books-genres info
+2021-07-29 03:29:22,283-INFO-FILE:sql_utils.py-FUNC:sql_run-LINE:40-Querying SQL server: 
+ statement: INSERT INTO 
+                      Books_Genre (
+                          book_id, genre_id, top_voted, top_voted_num
+                      ) VALUES (
+                          %s, %s, %s, %s
+                      ); 
+ fields: (3, 1, 1, 48275)
+2021-07-29 03:29:22,289-INFO-FILE:sql_utils.py-FUNC:sql_run-LINE:40-Querying SQL server: 
+ statement: INSERT INTO 
+                      Books_Genre (
+                          book_id, genre_id, top_voted, top_voted_num
+                      ) VALUES (
+                          %s, %s, %s, %s
+                      ); 
+ fields: (3, 2, 2, 21792)
+2021-07-29 03:29:22,293-INFO-FILE:sql_utils.py-FUNC:sql_run-LINE:40-Querying SQL server: 
+ statement: INSERT INTO 
+                      Books_Genre (
+                          book_id, genre_id, top_voted, top_voted_num
+                      ) VALUES (
+                          %s, %s, %s, %s
+                      ); 
+ fields: (3, 4, 3, 3719)
+2021-07-29 03:29:22,296-INFO-FILE:sql_utils.py-FUNC:sql_run-LINE:40-Querying SQL server: 
+ statement: INSERT INTO 
+                      Books_Genre (
+                          book_id, genre_id, top_voted, top_voted_num
+                      ) VALUES (
+                          %s, %s, %s, %s
+                      ); 
+ fields: (3, 3, 4, 3561)
+2021-07-29 03:29:22,300-INFO-FILE:sql_utils.py-FUNC:sql_run-LINE:40-Querying SQL server: 
+ statement: INSERT INTO 
+                      Books_Genre (
+                          book_id, genre_id, top_voted, top_voted_num
+                      ) VALUES (
+                          %s, %s, %s, %s
+                      ); 
+ fields: (3, 5, 5, 3376)
+2021-07-29 03:29:22,303-INFO-FILE:sql_utils.py-FUNC:sql_run-LINE:40-Querying SQL server: 
+ statement: INSERT INTO 
+                      Books_Genre (
+                          book_id, genre_id, top_voted, top_voted_num
+                      ) VALUES (
+                          %s, %s, %s, %s
+                      ); 
+ fields: (3, 16, 6, 2932)
+2021-07-29 03:29:22,306-INFO-FILE:sql_utils.py-FUNC:sql_run-LINE:40-Querying SQL server: 
+ statement: INSERT INTO 
+                      Books_Genre (
+                          book_id, genre_id, top_voted, top_voted_num
+                      ) VALUES (
+                          %s, %s, %s, %s
+                      ); 
+ fields: (3, 8, 7, 1917)
+2021-07-29 03:29:22,309-INFO-FILE:sql_utils.py-FUNC:sql_run-LINE:40-Querying SQL server: 
+ statement: INSERT INTO 
+                      Books_Genre (
+                          book_id, genre_id, top_voted, top_voted_num
+                      ) VALUES (
+                          %s, %s, %s, %s
+                      ); 
+ fields: (3, 9, 8, 1641)
+2021-07-29 03:29:22,311-INFO-FILE:sql_utils.py-FUNC:sql_run-LINE:40-Querying SQL server: 
+ statement: INSERT INTO 
+                      Books_Genre (
+                          book_id, genre_id, top_voted, top_voted_num
+                      ) VALUES (
+                          %s, %s, %s, %s
+                      ); 
+ fields: (3, 10, 9, 1535)
+2021-07-29 03:29:22,314-INFO-FILE:sql_utils.py-FUNC:sql_run-LINE:40-Querying SQL server: 
+ statement: INSERT INTO 
+                      Books_Genre (
+                          book_id, genre_id, top_voted, top_voted_num
+                      ) VALUES (
+                          %s, %s, %s, %s
+                      ); 
+ fields: (3, 17, 10, 1375)
+2021-07-29 03:29:22,317-DEBUG-FILE:save_to_db.py-FUNC:add_books_genre_info-LINE:127-The Great Gatsby : added books-genres info
+2021-07-29 03:29:22,317-DEBUG-FILE:save_to_db.py-FUNC:add_author_info-LINE:137-The Great Gatsby : adding authors
+2021-07-29 03:29:22,317-INFO-FILE:sql_utils.py-FUNC:sql_run-LINE:40-Querying SQL server: 
+ statement: SELECT author_id 
+                            FROM Authors
+                            WHERE author='F. Scott Fitzgerald'
+                          ; 
+ fields: None
+2021-07-29 03:29:22,318-INFO-FILE:sql_utils.py-FUNC:sql_run-LINE:40-Querying SQL server: 
+ statement: INSERT INTO 
+                                      Authors (
+                                          author
+                                      ) VALUES (
+                                          'F. Scott Fitzgerald'
+                                      ); 
+ fields: None
+2021-07-29 03:29:22,321-INFO-FILE:sql_utils.py-FUNC:sql_run-LINE:40-Querying SQL server: 
+ statement: SELECT LAST_INSERT_ID(); 
+ fields: None
+2021-07-29 03:29:22,321-DEBUG-FILE:save_to_db.py-FUNC:add_author_info-LINE:141-The Great Gatsby : added authors info
+2021-07-29 03:29:22,321-DEBUG-FILE:save_to_db.py-FUNC:add_books_authors_info-LINE:156-The Great Gatsby : adding books-authors info
+2021-07-29 03:29:22,321-INFO-FILE:sql_utils.py-FUNC:sql_run-LINE:40-Querying SQL server: 
+ statement: INSERT INTO 
+                      Books_Authors (
+                          book_id, author_id
+                      ) VALUES (
+                          3, 3
+                      ); 
+ fields: None
+2021-07-29 03:29:22,326-DEBUG-FILE:save_to_db.py-FUNC:add_books_authors_info-LINE:168-The Great Gatsby : added books-authors info
+2021-07-29 03:29:22,326-DEBUG-FILE:save_to_db.py-FUNC:add_rating_info_to_db-LINE:179-The Great Gatsby : adding rating info
+2021-07-29 03:29:22,326-INFO-FILE:sql_utils.py-FUNC:sql_run-LINE:40-Querying SQL server: 
+ statement: INSERT INTO 
+                  Rating_Info (
+                      book_id, rated_5, rated_4 ,rated_3 ,rated_2, rated_1
+                  ) VALUES (
+                      3
+                  , 1466121, 1373267, 863786, 270147, 120229); 
+ fields: None
+2021-07-29 03:29:22,329-DEBUG-FILE:save_to_db.py-FUNC:add_rating_info_to_db-LINE:192-The Great Gatsby : added rating info
+2021-07-29 03:29:22,329-DEBUG-FILE:save_to_db.py-FUNC:add_book_object_to_db-LINE:240-The Great Gatsby : Successfully added information to the database
+2021-07-29 03:29:22,329-DEBUG-FILE:book_scraper.py-FUNC:book_from_link-LINE:73-Scraping a book from https://www.goodreads.com/book/show/170448.Animal_Farm
+2021-07-29 03:29:22,329-DEBUG-FILE:book_scraper.py-FUNC:soup_from_link-LINE:102-Getting soup for https://www.goodreads.com/book/show/170448.Animal_Farm
+2021-07-29 03:29:33,333-DEBUG-FILE:book_scraper.py-FUNC:soup_from_link-LINE:130-Got soup for https://www.goodreads.com/book/show/170448.Animal_Farm
+2021-07-29 03:29:33,333-DEBUG-FILE:book_scraper.py-FUNC:_name_from_soup-LINE:136-Getting name from soup
+2021-07-29 03:29:33,334-DEBUG-FILE:book_scraper.py-FUNC:_name_from_soup-LINE:143-Animal Farm : Got name from soup
+2021-07-29 03:29:33,334-DEBUG-FILE:book_scraper.py-FUNC:_genres_from_soup-LINE:222-Animal Farm : Getting genres from soup
+2021-07-29 03:29:33,346-DEBUG-FILE:book_scraper.py-FUNC:_genres_from_soup-LINE:240-Animal Farm : Got genres from soup
+2021-07-29 03:29:33,347-DEBUG-FILE:book_scraper.py-FUNC:_author_from_soup-LINE:151-Animal Farm : Getting author from soup
+2021-07-29 03:29:33,348-DEBUG-FILE:book_scraper.py-FUNC:_author_from_soup-LINE:159-Animal Farm : Got author from soup
+2021-07-29 03:29:33,348-DEBUG-FILE:book_scraper.py-FUNC:_rating_from_soup-LINE:186-Animal Farm : Getting rating from soup
+2021-07-29 03:29:33,358-DEBUG-FILE:book_scraper.py-FUNC:_rating_from_soup-LINE:214-Animal Farm : Got rating from soup
+2021-07-29 03:29:33,358-DEBUG-FILE:book_scraper.py-FUNC:_description_from_soup-LINE:165-Getting description from soup: Animal Farm
+2021-07-29 03:29:33,359-DEBUG-FILE:book_scraper.py-FUNC:_description_from_soup-LINE:178-Got description from soup: Animal Farm
+2021-07-29 03:29:33,359-DEBUG-FILE:book_scraper.py-FUNC:_from_api-LINE:243-Animal Farm : Getting extra info from api
+2021-07-29 03:29:34,210-DEBUG-FILE:book_scraper.py-FUNC:_from_api-LINE:272-Animal Farm : Got extra info from api
+2021-07-29 03:29:34,212-DEBUG-FILE:book_scraper.py-FUNC:book_from_link-LINE:86-Scrapped a book from https://www.goodreads.com/book/show/170448.Animal_Farm
+2021-07-29 03:29:34,212-DEBUG-FILE:save_to_db.py-FUNC:add_book_object_to_db-LINE:213-Animal Farm : Starting to add information to the database
+2021-07-29 03:29:34,212-DEBUG-FILE:save_to_db.py-FUNC:add_book_to_db-LINE:36-Adding Animal Farm's data to the database
+2021-07-29 03:29:34,212-INFO-FILE:sql_utils.py-FUNC:sql_run-LINE:40-Querying SQL server: 
+ statement: SELECT EXISTS (
+                      SELECT * 
+                      FROM Books 
+                      WHERE title=%s and author=%s
+                  ); 
+ fields: ('Animal Farm', None)
+2021-07-29 03:29:34,214-INFO-FILE:sql_utils.py-FUNC:sql_run-LINE:40-Querying SQL server: 
+ statement: INSERT INTO 
+                      Books (
+                          best_of, title, author, average_rating, 
+                          number_of_reviews, published_date, page_count
+                      ) VALUES (
+                          %s, %s, %s, %s, %s, %s, %s
+                      ); 
+ fields: (None, 'Animal Farm', None, 3.96, 3002849, '2009-07-01', 144)
+2021-07-29 03:29:34,229-INFO-FILE:sql_utils.py-FUNC:sql_run-LINE:40-Querying SQL server: 
+ statement: SELECT book_id 
+                                     FROM Books 
+                                     ORDER BY book_id
+                                     DESC LIMIT 1
+                                     ; 
+ fields: None
+2021-07-29 03:29:34,231-DEBUG-FILE:save_to_db.py-FUNC:add_book_to_db-LINE:62-Added Animal Farm's data to the database
+2021-07-29 03:29:34,231-DEBUG-FILE:save_to_db.py-FUNC:add_description_to_db-LINE:73-Animal Farm : adding description
+2021-07-29 03:29:34,231-INFO-FILE:sql_utils.py-FUNC:sql_run-LINE:40-Querying SQL server: 
+ statement: INSERT INTO 
+                  Description (
+                      book_id, description
+                  ) VALUES (
+                      %s, %s
+                  ); 
+ fields: (4, "Librarian's note: There is an Alternate Cover Edition for this edition of this book here.A farm is taken over by its overworked, mistreated animals. With flaming idealism and stirring slogans, they set out to create a paradise of progress, justice, and equality. Thus the stage is set for one of the most telling satiric fables ever penned –a razor-edged fairy tale for grown-ups that records the evolution from revolution against tyranny to a totalitarianism just as terrible. When Animal Farm was first published, Stalinist Russia was seen as its target. Today it is devastatingly clear that wherever and whenever freedom is attacked, under whatever banner, the cutting clarity and savage comedy of George Orwell’s masterpiece have a meaning and message still ferociously fresh.")
+2021-07-29 03:29:34,236-DEBUG-FILE:save_to_db.py-FUNC:add_description_to_db-LINE:83-Animal Farm : added description
+2021-07-29 03:29:34,236-DEBUG-FILE:save_to_db.py-FUNC:add_genre_info-LINE:93-Animal Farm : adding genre info
+2021-07-29 03:29:34,237-INFO-FILE:sql_utils.py-FUNC:sql_run-LINE:40-Querying SQL server: 
+ statement: SELECT genre_id 
+                            FROM Genre
+                            WHERE genre='Classics'
+                          ; 
+ fields: None
+2021-07-29 03:29:34,238-INFO-FILE:sql_utils.py-FUNC:sql_run-LINE:40-Querying SQL server: 
+ statement: SELECT genre_id 
+                            FROM Genre
+                            WHERE genre='Fiction'
+                          ; 
+ fields: None
+2021-07-29 03:29:34,239-INFO-FILE:sql_utils.py-FUNC:sql_run-LINE:40-Querying SQL server: 
+ statement: SELECT genre_id 
+                            FROM Genre
+                            WHERE genre='Science Fiction,Dystopia'
+                          ; 
+ fields: None
+2021-07-29 03:29:34,240-INFO-FILE:sql_utils.py-FUNC:sql_run-LINE:40-Querying SQL server: 
+ statement: SELECT genre_id 
+                            FROM Genre
+                            WHERE genre='Fantasy'
+                          ; 
+ fields: None
+2021-07-29 03:29:34,241-INFO-FILE:sql_utils.py-FUNC:sql_run-LINE:40-Querying SQL server: 
+ statement: SELECT genre_id 
+                            FROM Genre
+                            WHERE genre='Literature'
+                          ; 
+ fields: None
+2021-07-29 03:29:34,242-INFO-FILE:sql_utils.py-FUNC:sql_run-LINE:40-Querying SQL server: 
+ statement: SELECT genre_id 
+                            FROM Genre
+                            WHERE genre='Politics'
+                          ; 
+ fields: None
+2021-07-29 03:29:34,243-INFO-FILE:sql_utils.py-FUNC:sql_run-LINE:40-Querying SQL server: 
+ statement: SELECT genre_id 
+                            FROM Genre
+                            WHERE genre='Academic,School'
+                          ; 
+ fields: None
+2021-07-29 03:29:34,244-INFO-FILE:sql_utils.py-FUNC:sql_run-LINE:40-Querying SQL server: 
+ statement: SELECT genre_id 
+                            FROM Genre
+                            WHERE genre='Science Fiction'
+                          ; 
+ fields: None
+2021-07-29 03:29:34,245-INFO-FILE:sql_utils.py-FUNC:sql_run-LINE:40-Querying SQL server: 
+ statement: SELECT genre_id 
+                            FROM Genre
+                            WHERE genre='Novels'
+                          ; 
+ fields: None
+2021-07-29 03:29:34,246-INFO-FILE:sql_utils.py-FUNC:sql_run-LINE:40-Querying SQL server: 
+ statement: SELECT genre_id 
+                            FROM Genre
+                            WHERE genre='Academic,Read For School'
+                          ; 
+ fields: None
+2021-07-29 03:29:34,247-DEBUG-FILE:save_to_db.py-FUNC:add_genre_info-LINE:98-Animal Farm : added genre info
+2021-07-29 03:29:34,247-DEBUG-FILE:save_to_db.py-FUNC:add_books_genre_info-LINE:111-Animal Farm : adding books-genres info
+2021-07-29 03:29:34,247-INFO-FILE:sql_utils.py-FUNC:sql_run-LINE:40-Querying SQL server: 
+ statement: INSERT INTO 
+                      Books_Genre (
+                          book_id, genre_id, top_voted, top_voted_num
+                      ) VALUES (
+                          %s, %s, %s, %s
+                      ); 
+ fields: (4, 1, 1, 35206)
+2021-07-29 03:29:34,252-INFO-FILE:sql_utils.py-FUNC:sql_run-LINE:40-Querying SQL server: 
+ statement: INSERT INTO 
+                      Books_Genre (
+                          book_id, genre_id, top_voted, top_voted_num
+                      ) VALUES (
+                          %s, %s, %s, %s
+                      ); 
+ fields: (4, 2, 2, 19963)
+2021-07-29 03:29:34,257-INFO-FILE:sql_utils.py-FUNC:sql_run-LINE:40-Querying SQL server: 
+ statement: INSERT INTO 
+                      Books_Genre (
+                          book_id, genre_id, top_voted, top_voted_num
+                      ) VALUES (
+                          %s, %s, %s, %s
+                      ); 
+ fields: (4, 12, 3, 3981)
+2021-07-29 03:29:34,261-INFO-FILE:sql_utils.py-FUNC:sql_run-LINE:40-Querying SQL server: 
+ statement: INSERT INTO 
+                      Books_Genre (
+                          book_id, genre_id, top_voted, top_voted_num
+                      ) VALUES (
+                          %s, %s, %s, %s
+                      ); 
+ fields: (4, 14, 4, 3269)
+2021-07-29 03:29:34,263-INFO-FILE:sql_utils.py-FUNC:sql_run-LINE:40-Querying SQL server: 
+ statement: INSERT INTO 
+                      Books_Genre (
+                          book_id, genre_id, top_voted, top_voted_num
+                      ) VALUES (
+                          %s, %s, %s, %s
+                      ); 
+ fields: (4, 5, 5, 2857)
+2021-07-29 03:29:34,267-INFO-FILE:sql_utils.py-FUNC:sql_run-LINE:40-Querying SQL server: 
+ statement: INSERT INTO 
+                      Books_Genre (
+                          book_id, genre_id, top_voted, top_voted_num
+                      ) VALUES (
+                          %s, %s, %s, %s
+                      ); 
+ fields: (4, 13, 6, 2729)
+2021-07-29 03:29:34,271-INFO-FILE:sql_utils.py-FUNC:sql_run-LINE:40-Querying SQL server: 
+ statement: INSERT INTO 
+                      Books_Genre (
+                          book_id, genre_id, top_voted, top_voted_num
+                      ) VALUES (
+                          %s, %s, %s, %s
+                      ); 
+ fields: (4, 4, 7, 2520)
+2021-07-29 03:29:34,274-INFO-FILE:sql_utils.py-FUNC:sql_run-LINE:40-Querying SQL server: 
+ statement: INSERT INTO 
+                      Books_Genre (
+                          book_id, genre_id, top_voted, top_voted_num
+                      ) VALUES (
+                          %s, %s, %s, %s
+                      ); 
+ fields: (4, 11, 8, 2069)
+2021-07-29 03:29:34,278-INFO-FILE:sql_utils.py-FUNC:sql_run-LINE:40-Querying SQL server: 
+ statement: INSERT INTO 
+                      Books_Genre (
+                          book_id, genre_id, top_voted, top_voted_num
+                      ) VALUES (
+                          %s, %s, %s, %s
+                      ); 
+ fields: (4, 8, 9, 1787)
+2021-07-29 03:29:34,281-INFO-FILE:sql_utils.py-FUNC:sql_run-LINE:40-Querying SQL server: 
+ statement: INSERT INTO 
+                      Books_Genre (
+                          book_id, genre_id, top_voted, top_voted_num
+                      ) VALUES (
+                          %s, %s, %s, %s
+                      ); 
+ fields: (4, 9, 10, 1082)
+2021-07-29 03:29:34,284-DEBUG-FILE:save_to_db.py-FUNC:add_books_genre_info-LINE:127-Animal Farm : added books-genres info
+2021-07-29 03:29:34,284-DEBUG-FILE:save_to_db.py-FUNC:add_author_info-LINE:137-Animal Farm : adding authors
+2021-07-29 03:29:34,284-INFO-FILE:sql_utils.py-FUNC:sql_run-LINE:40-Querying SQL server: 
+ statement: SELECT author_id 
+                            FROM Authors
+                            WHERE author='George Orwell'
+                          ; 
+ fields: None
+2021-07-29 03:29:34,285-DEBUG-FILE:save_to_db.py-FUNC:add_author_info-LINE:141-Animal Farm : added authors info
+2021-07-29 03:29:34,285-DEBUG-FILE:save_to_db.py-FUNC:add_books_authors_info-LINE:156-Animal Farm : adding books-authors info
+2021-07-29 03:29:34,285-INFO-FILE:sql_utils.py-FUNC:sql_run-LINE:40-Querying SQL server: 
+ statement: INSERT INTO 
+                      Books_Authors (
+                          book_id, author_id
+                      ) VALUES (
+                          4, 2
+                      ); 
+ fields: None
+2021-07-29 03:29:34,287-DEBUG-FILE:save_to_db.py-FUNC:add_books_authors_info-LINE:168-Animal Farm : added books-authors info
+2021-07-29 03:29:34,287-DEBUG-FILE:save_to_db.py-FUNC:add_rating_info_to_db-LINE:179-Animal Farm : adding rating info
+2021-07-29 03:29:34,287-INFO-FILE:sql_utils.py-FUNC:sql_run-LINE:40-Querying SQL server: 
+ statement: INSERT INTO 
+                  Rating_Info (
+                      book_id, rated_5, rated_4 ,rated_3 ,rated_2, rated_1
+                  ) VALUES (
+                      4
+                  , 1100184, 1047762, 586960, 176649, 91294); 
+ fields: None
+2021-07-29 03:29:34,291-DEBUG-FILE:save_to_db.py-FUNC:add_rating_info_to_db-LINE:192-Animal Farm : added rating info
+2021-07-29 03:29:34,291-DEBUG-FILE:save_to_db.py-FUNC:add_book_object_to_db-LINE:240-Animal Farm : Successfully added information to the database
+2021-07-29 03:29:34,291-DEBUG-FILE:book_scraper.py-FUNC:book_from_link-LINE:73-Scraping a book from https://www.goodreads.com/book/show/3.Harry_Potter_and_the_Sorcerer_s_Stone
+2021-07-29 03:29:34,291-DEBUG-FILE:book_scraper.py-FUNC:soup_from_link-LINE:102-Getting soup for https://www.goodreads.com/book/show/3.Harry_Potter_and_the_Sorcerer_s_Stone
+2021-07-29 03:29:41,968-DEBUG-FILE:book_scraper.py-FUNC:soup_from_link-LINE:130-Got soup for https://www.goodreads.com/book/show/3.Harry_Potter_and_the_Sorcerer_s_Stone
+2021-07-29 03:29:41,969-DEBUG-FILE:book_scraper.py-FUNC:_name_from_soup-LINE:136-Getting name from soup
+2021-07-29 03:29:41,970-DEBUG-FILE:book_scraper.py-FUNC:_name_from_soup-LINE:143-Harry Potter and the Sorcerer's Stone : Got name from soup
+2021-07-29 03:29:41,970-DEBUG-FILE:book_scraper.py-FUNC:_genres_from_soup-LINE:222-Harry Potter and the Sorcerer's Stone : Getting genres from soup
+2021-07-29 03:29:41,983-DEBUG-FILE:book_scraper.py-FUNC:_genres_from_soup-LINE:240-Harry Potter and the Sorcerer's Stone : Got genres from soup
+2021-07-29 03:29:41,983-DEBUG-FILE:book_scraper.py-FUNC:_author_from_soup-LINE:151-Harry Potter and the Sorcerer's Stone : Getting author from soup
+2021-07-29 03:29:41,985-DEBUG-FILE:book_scraper.py-FUNC:_author_from_soup-LINE:159-Harry Potter and the Sorcerer's Stone : Got author from soup
+2021-07-29 03:29:41,985-DEBUG-FILE:book_scraper.py-FUNC:_rating_from_soup-LINE:186-Harry Potter and the Sorcerer's Stone : Getting rating from soup
+2021-07-29 03:29:41,995-DEBUG-FILE:book_scraper.py-FUNC:_rating_from_soup-LINE:214-Harry Potter and the Sorcerer's Stone : Got rating from soup
+2021-07-29 03:29:41,995-DEBUG-FILE:book_scraper.py-FUNC:_description_from_soup-LINE:165-Getting description from soup: Harry Potter and the Sorcerer's Stone
+2021-07-29 03:29:41,996-DEBUG-FILE:book_scraper.py-FUNC:_description_from_soup-LINE:178-Got description from soup: Harry Potter and the Sorcerer's Stone
+2021-07-29 03:29:41,997-DEBUG-FILE:book_scraper.py-FUNC:_from_api-LINE:243-Harry Potter and the Sorcerer's Stone : Getting extra info from api
+2021-07-29 03:29:42,846-DEBUG-FILE:book_scraper.py-FUNC:_from_api-LINE:272-Harry Potter and the Sorcerer's Stone : Got extra info from api
+2021-07-29 03:29:42,847-DEBUG-FILE:book_scraper.py-FUNC:book_from_link-LINE:86-Scrapped a book from https://www.goodreads.com/book/show/3.Harry_Potter_and_the_Sorcerer_s_Stone
+2021-07-29 03:29:42,847-DEBUG-FILE:save_to_db.py-FUNC:add_book_object_to_db-LINE:213-Harry Potter and the Sorcerer's Stone : Starting to add information to the database
+2021-07-29 03:29:42,847-DEBUG-FILE:save_to_db.py-FUNC:add_book_to_db-LINE:36-Adding Harry Potter and the Sorcerer's Stone's data to the database
+2021-07-29 03:29:42,847-INFO-FILE:sql_utils.py-FUNC:sql_run-LINE:40-Querying SQL server: 
+ statement: SELECT EXISTS (
+                      SELECT * 
+                      FROM Books 
+                      WHERE title=%s and author=%s
+                  ); 
+ fields: ("Harry Potter and the Sorcerer's Stone", None)
+2021-07-29 03:29:42,850-INFO-FILE:sql_utils.py-FUNC:sql_run-LINE:40-Querying SQL server: 
+ statement: INSERT INTO 
+                      Books (
+                          best_of, title, author, average_rating, 
+                          number_of_reviews, published_date, page_count
+                      ) VALUES (
+                          %s, %s, %s, %s, %s, %s, %s
+                      ); 
+ fields: (None, "Harry Potter and the Sorcerer's Stone", None, 4.47, 7752883, '2018-06-26', 336)
+2021-07-29 03:29:42,861-INFO-FILE:sql_utils.py-FUNC:sql_run-LINE:40-Querying SQL server: 
+ statement: SELECT book_id 
+                                     FROM Books 
+                                     ORDER BY book_id
+                                     DESC LIMIT 1
+                                     ; 
+ fields: None
+2021-07-29 03:29:42,864-DEBUG-FILE:save_to_db.py-FUNC:add_book_to_db-LINE:62-Added Harry Potter and the Sorcerer's Stone's data to the database
+2021-07-29 03:29:42,864-DEBUG-FILE:save_to_db.py-FUNC:add_description_to_db-LINE:73-Harry Potter and the Sorcerer's Stone : adding description
+2021-07-29 03:29:42,865-INFO-FILE:sql_utils.py-FUNC:sql_run-LINE:40-Querying SQL server: 
+ statement: INSERT INTO 
+                  Description (
+                      book_id, description
+                  ) VALUES (
+                      %s, %s
+                  ); 
+ fields: (5, "Harry Potter's life is miserable. His parents are dead and he's stuck with his heartless relatives, who force him to live in a tiny closet under the stairs. But his fortune changes when he receives a letter that tells him the truth about himself: he's a wizard. A mysterious visitor rescues him from his relatives and takes him to his new home, Hogwarts School of Witchcraft and Wizardry.After a lifetime of bottling up his magical powers, Harry finally feels like a normal kid. But even within the Wizarding community, he is special. He is the boy who lived: the only person to have ever survived a killing curse inflicted by the evil Lord Voldemort, who launched a brutal takeover of the Wizarding world, only to vanish after failing to kill Harry.Though Harry's first year at Hogwarts is the best of his life, not everything is perfect. There is a dangerous secret object hidden within the castle walls, and Harry believes it's his responsibility to prevent it from falling into evil hands. But doing so will bring him into contact with forces more terrifying than he ever could have imagined.Full of sympathetic characters, wildly imaginative situations, and countless exciting details, the first installment in the series assembles an unforgettable magical world and sets the stage for many high-stakes adventures to come.")
+2021-07-29 03:29:42,871-DEBUG-FILE:save_to_db.py-FUNC:add_description_to_db-LINE:83-Harry Potter and the Sorcerer's Stone : added description
+2021-07-29 03:29:42,871-DEBUG-FILE:save_to_db.py-FUNC:add_genre_info-LINE:93-Harry Potter and the Sorcerer's Stone : adding genre info
+2021-07-29 03:29:42,871-INFO-FILE:sql_utils.py-FUNC:sql_run-LINE:40-Querying SQL server: 
+ statement: SELECT genre_id 
+                            FROM Genre
+                            WHERE genre='Fantasy'
+                          ; 
+ fields: None
+2021-07-29 03:29:42,873-INFO-FILE:sql_utils.py-FUNC:sql_run-LINE:40-Querying SQL server: 
+ statement: SELECT genre_id 
+                            FROM Genre
+                            WHERE genre='Fiction'
+                          ; 
+ fields: None
+2021-07-29 03:29:42,874-INFO-FILE:sql_utils.py-FUNC:sql_run-LINE:40-Querying SQL server: 
+ statement: SELECT genre_id 
+                            FROM Genre
+                            WHERE genre='Young Adult'
+                          ; 
+ fields: None
+2021-07-29 03:29:42,875-INFO-FILE:sql_utils.py-FUNC:sql_run-LINE:40-Querying SQL server: 
+ statement: SELECT genre_id 
+                            FROM Genre
+                            WHERE genre='Fantasy,Magic'
+                          ; 
+ fields: None
+2021-07-29 03:29:42,876-INFO-FILE:sql_utils.py-FUNC:sql_run-LINE:40-Querying SQL server: 
+ statement: INSERT INTO 
+                                      Genre (
+                                          genre
+                                      ) VALUES (
+                                          'Fantasy,Magic'
+                                      ); 
+ fields: None
+2021-07-29 03:29:42,881-INFO-FILE:sql_utils.py-FUNC:sql_run-LINE:40-Querying SQL server: 
+ statement: SELECT LAST_INSERT_ID(); 
+ fields: None
+2021-07-29 03:29:42,883-INFO-FILE:sql_utils.py-FUNC:sql_run-LINE:40-Querying SQL server: 
+ statement: SELECT genre_id 
+                            FROM Genre
+                            WHERE genre='Childrens'
+                          ; 
+ fields: None
+2021-07-29 03:29:42,884-INFO-FILE:sql_utils.py-FUNC:sql_run-LINE:40-Querying SQL server: 
+ statement: INSERT INTO 
+                                      Genre (
+                                          genre
+                                      ) VALUES (
+                                          'Childrens'
+                                      ); 
+ fields: None
+2021-07-29 03:29:42,888-INFO-FILE:sql_utils.py-FUNC:sql_run-LINE:40-Querying SQL server: 
+ statement: SELECT LAST_INSERT_ID(); 
+ fields: None
+2021-07-29 03:29:42,889-INFO-FILE:sql_utils.py-FUNC:sql_run-LINE:40-Querying SQL server: 
+ statement: SELECT genre_id 
+                            FROM Genre
+                            WHERE genre='Childrens,Middle Grade'
+                          ; 
+ fields: None
+2021-07-29 03:29:42,889-INFO-FILE:sql_utils.py-FUNC:sql_run-LINE:40-Querying SQL server: 
+ statement: INSERT INTO 
+                                      Genre (
+                                          genre
+                                      ) VALUES (
+                                          'Childrens,Middle Grade'
+                                      ); 
+ fields: None
+2021-07-29 03:29:42,893-INFO-FILE:sql_utils.py-FUNC:sql_run-LINE:40-Querying SQL server: 
+ statement: SELECT LAST_INSERT_ID(); 
+ fields: None
+2021-07-29 03:29:42,893-INFO-FILE:sql_utils.py-FUNC:sql_run-LINE:40-Querying SQL server: 
+ statement: SELECT genre_id 
+                            FROM Genre
+                            WHERE genre='Adventure'
+                          ; 
+ fields: None
+2021-07-29 03:29:42,894-INFO-FILE:sql_utils.py-FUNC:sql_run-LINE:40-Querying SQL server: 
+ statement: INSERT INTO 
+                                      Genre (
+                                          genre
+                                      ) VALUES (
+                                          'Adventure'
+                                      ); 
+ fields: None
+2021-07-29 03:29:42,897-INFO-FILE:sql_utils.py-FUNC:sql_run-LINE:40-Querying SQL server: 
+ statement: SELECT LAST_INSERT_ID(); 
+ fields: None
+2021-07-29 03:29:42,897-INFO-FILE:sql_utils.py-FUNC:sql_run-LINE:40-Querying SQL server: 
+ statement: SELECT genre_id 
+                            FROM Genre
+                            WHERE genre='Classics'
+                          ; 
+ fields: None
+2021-07-29 03:29:42,897-INFO-FILE:sql_utils.py-FUNC:sql_run-LINE:40-Querying SQL server: 
+ statement: SELECT genre_id 
+                            FROM Genre
+                            WHERE genre='Audiobook'
+                          ; 
+ fields: None
+2021-07-29 03:29:42,898-INFO-FILE:sql_utils.py-FUNC:sql_run-LINE:40-Querying SQL server: 
+ statement: INSERT INTO 
+                                      Genre (
+                                          genre
+                                      ) VALUES (
+                                          'Audiobook'
+                                      ); 
+ fields: None
+2021-07-29 03:29:42,901-INFO-FILE:sql_utils.py-FUNC:sql_run-LINE:40-Querying SQL server: 
+ statement: SELECT LAST_INSERT_ID(); 
+ fields: None
+2021-07-29 03:29:42,902-INFO-FILE:sql_utils.py-FUNC:sql_run-LINE:40-Querying SQL server: 
+ statement: SELECT genre_id 
+                            FROM Genre
+                            WHERE genre='Science Fiction Fantasy'
+                          ; 
+ fields: None
+2021-07-29 03:29:42,902-INFO-FILE:sql_utils.py-FUNC:sql_run-LINE:40-Querying SQL server: 
+ statement: INSERT INTO 
+                                      Genre (
+                                          genre
+                                      ) VALUES (
+                                          'Science Fiction Fantasy'
+                                      ); 
+ fields: None
+2021-07-29 03:29:42,905-INFO-FILE:sql_utils.py-FUNC:sql_run-LINE:40-Querying SQL server: 
+ statement: SELECT LAST_INSERT_ID(); 
+ fields: None
+2021-07-29 03:29:42,905-DEBUG-FILE:save_to_db.py-FUNC:add_genre_info-LINE:98-Harry Potter and the Sorcerer's Stone : added genre info
+2021-07-29 03:29:42,905-DEBUG-FILE:save_to_db.py-FUNC:add_books_genre_info-LINE:111-Harry Potter and the Sorcerer's Stone : adding books-genres info
+2021-07-29 03:29:42,905-INFO-FILE:sql_utils.py-FUNC:sql_run-LINE:40-Querying SQL server: 
+ statement: INSERT INTO 
+                      Books_Genre (
+                          book_id, genre_id, top_voted, top_voted_num
+                      ) VALUES (
+                          %s, %s, %s, %s
+                      ); 
+ fields: (5, 14, 1, 65911)
+2021-07-29 03:29:42,908-INFO-FILE:sql_utils.py-FUNC:sql_run-LINE:40-Querying SQL server: 
+ statement: INSERT INTO 
+                      Books_Genre (
+                          book_id, genre_id, top_voted, top_voted_num
+                      ) VALUES (
+                          %s, %s, %s, %s
+                      ); 
+ fields: (5, 2, 2, 19515)
+2021-07-29 03:29:42,911-INFO-FILE:sql_utils.py-FUNC:sql_run-LINE:40-Querying SQL server: 
+ statement: INSERT INTO 
+                      Books_Genre (
+                          book_id, genre_id, top_voted, top_voted_num
+                      ) VALUES (
+                          %s, %s, %s, %s
+                      ); 
+ fields: (5, 6, 3, 19133)
+2021-07-29 03:29:42,915-INFO-FILE:sql_utils.py-FUNC:sql_run-LINE:40-Querying SQL server: 
+ statement: INSERT INTO 
+                      Books_Genre (
+                          book_id, genre_id, top_voted, top_voted_num
+                      ) VALUES (
+                          %s, %s, %s, %s
+                      ); 
+ fields: (5, 18, 4, 5299)
+2021-07-29 03:29:42,918-INFO-FILE:sql_utils.py-FUNC:sql_run-LINE:40-Querying SQL server: 
+ statement: INSERT INTO 
+                      Books_Genre (
+                          book_id, genre_id, top_voted, top_voted_num
+                      ) VALUES (
+                          %s, %s, %s, %s
+                      ); 
+ fields: (5, 19, 5, 4958)
+2021-07-29 03:29:42,920-INFO-FILE:sql_utils.py-FUNC:sql_run-LINE:40-Querying SQL server: 
+ statement: INSERT INTO 
+                      Books_Genre (
+                          book_id, genre_id, top_voted, top_voted_num
+                      ) VALUES (
+                          %s, %s, %s, %s
+                      ); 
+ fields: (5, 20, 6, 3710)
+2021-07-29 03:29:42,923-INFO-FILE:sql_utils.py-FUNC:sql_run-LINE:40-Querying SQL server: 
+ statement: INSERT INTO 
+                      Books_Genre (
+                          book_id, genre_id, top_voted, top_voted_num
+                      ) VALUES (
+                          %s, %s, %s, %s
+                      ); 
+ fields: (5, 21, 7, 3202)
+2021-07-29 03:29:42,926-INFO-FILE:sql_utils.py-FUNC:sql_run-LINE:40-Querying SQL server: 
+ statement: INSERT INTO 
+                      Books_Genre (
+                          book_id, genre_id, top_voted, top_voted_num
+                      ) VALUES (
+                          %s, %s, %s, %s
+                      ); 
+ fields: (5, 1, 8, 3024)
+2021-07-29 03:29:42,929-INFO-FILE:sql_utils.py-FUNC:sql_run-LINE:40-Querying SQL server: 
+ statement: INSERT INTO 
+                      Books_Genre (
+                          book_id, genre_id, top_voted, top_voted_num
+                      ) VALUES (
+                          %s, %s, %s, %s
+                      ); 
+ fields: (5, 22, 9, 2707)
+2021-07-29 03:29:42,933-INFO-FILE:sql_utils.py-FUNC:sql_run-LINE:40-Querying SQL server: 
+ statement: INSERT INTO 
+                      Books_Genre (
+                          book_id, genre_id, top_voted, top_voted_num
+                      ) VALUES (
+                          %s, %s, %s, %s
+                      ); 
+ fields: (5, 23, 10, 1828)
+2021-07-29 03:29:42,936-DEBUG-FILE:save_to_db.py-FUNC:add_books_genre_info-LINE:127-Harry Potter and the Sorcerer's Stone : added books-genres info
+2021-07-29 03:29:42,936-DEBUG-FILE:save_to_db.py-FUNC:add_author_info-LINE:137-Harry Potter and the Sorcerer's Stone : adding authors
+2021-07-29 03:29:42,936-INFO-FILE:sql_utils.py-FUNC:sql_run-LINE:40-Querying SQL server: 
+ statement: SELECT author_id 
+                            FROM Authors
+                            WHERE author='J.K. Rowling'
+                          ; 
+ fields: None
+2021-07-29 03:29:42,936-INFO-FILE:sql_utils.py-FUNC:sql_run-LINE:40-Querying SQL server: 
+ statement: INSERT INTO 
+                                      Authors (
+                                          author
+                                      ) VALUES (
+                                          'J.K. Rowling'
+                                      ); 
+ fields: None
+2021-07-29 03:29:42,939-INFO-FILE:sql_utils.py-FUNC:sql_run-LINE:40-Querying SQL server: 
+ statement: SELECT LAST_INSERT_ID(); 
+ fields: None
+2021-07-29 03:29:42,939-DEBUG-FILE:save_to_db.py-FUNC:add_author_info-LINE:141-Harry Potter and the Sorcerer's Stone : added authors info
+2021-07-29 03:29:42,939-DEBUG-FILE:save_to_db.py-FUNC:add_books_authors_info-LINE:156-Harry Potter and the Sorcerer's Stone : adding books-authors info
+2021-07-29 03:29:42,939-INFO-FILE:sql_utils.py-FUNC:sql_run-LINE:40-Querying SQL server: 
+ statement: INSERT INTO 
+                      Books_Authors (
+                          book_id, author_id
+                      ) VALUES (
+                          5, 4
+                      ); 
+ fields: None
+2021-07-29 03:29:42,943-DEBUG-FILE:save_to_db.py-FUNC:add_books_authors_info-LINE:168-Harry Potter and the Sorcerer's Stone : added books-authors info
+2021-07-29 03:29:42,943-DEBUG-FILE:save_to_db.py-FUNC:add_rating_info_to_db-LINE:179-Harry Potter and the Sorcerer's Stone : adding rating info
+2021-07-29 03:29:42,943-INFO-FILE:sql_utils.py-FUNC:sql_run-LINE:40-Querying SQL server: 
+ statement: INSERT INTO 
+                  Rating_Info (
+                      book_id, rated_5, rated_4 ,rated_3 ,rated_2, rated_1
+                  ) VALUES (
+                      5
+                  , 5041534, 1769265, 655790, 153676, 132618); 
+ fields: None
+2021-07-29 03:29:42,946-DEBUG-FILE:save_to_db.py-FUNC:add_rating_info_to_db-LINE:192-Harry Potter and the Sorcerer's Stone : added rating info
+2021-07-29 03:29:42,946-DEBUG-FILE:save_to_db.py-FUNC:add_book_object_to_db-LINE:240-Harry Potter and the Sorcerer's Stone : Successfully added information to the database
+2021-07-29 03:29:42,946-DEBUG-FILE:book_scraper.py-FUNC:book_from_link-LINE:73-Scraping a book from https://www.goodreads.com/book/show/5107.The_Catcher_in_the_Rye
+2021-07-29 03:29:42,946-DEBUG-FILE:book_scraper.py-FUNC:soup_from_link-LINE:102-Getting soup for https://www.goodreads.com/book/show/5107.The_Catcher_in_the_Rye
