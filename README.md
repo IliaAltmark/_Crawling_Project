@@ -61,7 +61,7 @@ described in the dependencies section.
 The programme create and uses a MySQL relational database. The following 
 diagram describes the structure of this database:
 
-![alt text](erd_for_readme.png "Erd of good_reads_data")
+![alt text](good_reads_erd.png "Erd of good_reads_data")
 
 ### Tables
 #### books
