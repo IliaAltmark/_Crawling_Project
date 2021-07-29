@@ -1,0 +1,5 @@
+2021-07-29 16:52:23,184-INFO-FILE:goodreads_scraper.py-FUNC:main-LINE:22-Program has started.
+2021-07-29 16:54:05,937-INFO-FILE:book_scraper.py-FUNC:_from_api-LINE:263-The Magpie Lord : couldn't find page_count using the api
+2021-07-29 16:54:20,929-INFO-FILE:book_scraper.py-FUNC:_from_api-LINE:263-A Thousand Splendid Suns : couldn't find page_count using the api
+2021-07-29 16:56:35,789-INFO-FILE:book_scraper.py-FUNC:_from_api-LINE:263-Then Came You : couldn't find page_count using the api
+2021-07-29 16:56:38,878-INFO-FILE:goodreads_scraper.py-FUNC:main-LINE:54-Program finished successfully

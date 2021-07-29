@@ -219,7 +219,7 @@ class Book:
         The genre attribute is a dictionary with genres as keys
         and users vote about what genre fits the book as values.
         """
-        logger.debug(f'{self.name} : Getting genres from soup')
+        logger.debug(f'{self.link} : Getting genres from soup')
 
         self.check_soup()
         genres_dict = {}
@@ -237,10 +237,10 @@ class Book:
                 rating.text.strip().split(" ")[0].replace(",", ""))
         self.genres = genres_dict
 
-        logger.debug(f'{self.name} : Got genres from soup')
+        logger.debug(f'{self.link} : Got genres from soup')
 
     def _from_api(self):
-        logger.debug(f'{self.name} : Getting extra info from api')
+        logger.debug(f'{self.link} : Getting extra info from api')
 
         search_title = self.name.lower()
         response = requests.get(
@@ -255,12 +255,12 @@ class Book:
             if 'publishedDate' in first_book.keys():
                 published_date = first_book['publishedDate']
             else:
-                logger.info(f"{self.name} : couldn't find published_data using the api")
+                logger.info(f"{self.link} : couldn't find published_data using the api")
                 published_date = None
             if 'pageCount' in first_book.keys():
                 page_count = first_book['pageCount']
             else:
-                logger.info(f"{self.name} : couldn't find page_count using the api")
+                logger.info(f"{self.link} : couldn't find page_count using the api")
                 page_count = None
         else:
             published_date = None
