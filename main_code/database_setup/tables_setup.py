@@ -74,8 +74,7 @@ def _set_up_books_tables(connection):
                                Books (
                                    book_id INT AUTO_INCREMENT PRIMARY KEY, 
                                    best_of VARCHAR(255), 
-                                   title VARCHAR(255), 
-                                   author VARCHAR(255), 
+                                   title VARCHAR(255),  
                                    average_rating FLOAT, 
                                    number_of_reviews INT,
                                    published_date VARCHAR(255),
