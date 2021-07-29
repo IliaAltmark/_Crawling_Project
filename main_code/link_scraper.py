@@ -3,12 +3,15 @@ Authors: Ilia Altmark and Tovi Benoni
 scrapes and saves links which contain book data for further scraping
 """
 # imports from project files
-from utils import USER_AGENT, DOMAIN, URL_GENRE, URL_TOP, \
-    quiet_selenium_chrome_driver, LOGIN_PAGE, EMAIL, PASS
+from main_code.utils.utils import quiet_selenium_chrome_driver, get_logger
+from main_code.config.config import USER_AGENT, DOMAIN, URL_GENRE, URL_TOP, \
+    LOGIN_PAGE, EMAIL, PASS
 
 # imports from packages
 from bs4 import BeautifulSoup as bs
 import requests
+
+logger = get_logger(__name__)
 
 
 def get_soup(link):
@@ -17,16 +20,31 @@ def get_soup(link):
     :param link: link string.
     :return: BeautifulSoup object.
     """
-    response = requests.get(link, headers=USER_AGENT)
-    return bs(response.content, "lxml")
+    logger.debug(f'Getting Soup for {link}')
+    try:
+        response = requests.get(link, headers=USER_AGENT)
+    except TimeoutError as ex:
+        logger.error(f'Could not get source of {link} due to a timeout error')
+        raise ex
+
+    soup = bs(response.content, "lxml")
+
+    logger.debug(f'Got Soup for {link}')
+    return soup
 
 
 def extract_links(url, class_tag, driver=None):
     """
     Extracts the necessary links from given url and class tag.
     """
+    logger.debug(f'Extracting links to books from {url}')
+
     if driver:
-        driver.get(url)
+        try:
+            driver.get(url)
+        except TimeoutError as ex:
+            logger.error(f'Could not get source of {url}')
+            raise ex
         soup = bs(driver.page_source, features="lxml")
     else:
         soup = get_soup(url)
@@ -38,6 +56,7 @@ def extract_links(url, class_tag, driver=None):
     links_to_books = [t['href'] for t in tag]
     links_to_books = [DOMAIN + link for link in links_to_books]
 
+    logger.debug(f'Extracted links to books from {url}')
     return links_to_books
 
 
@@ -63,10 +82,14 @@ def site_login(driver):
     """
     logins to the website
     """
+    logger.debug(f'Logging in to the site')
+
     driver.get(LOGIN_PAGE)
     driver.find_element_by_id("user_email").send_keys(EMAIL)
     driver.find_element_by_id("user_password").send_keys(PASS)
     driver.find_element_by_name("next").click()
+
+    logger.debug(f'Logged in to the site')
 
 
 def fills_links(driver, links, page_range, page, target_url, genre_url, genre):
@@ -81,9 +104,11 @@ def fills_links(driver, links, page_range, page, target_url, genre_url, genre):
     :param genre: genre to scrape
     :return:
     """
-    print(f"Scraping {genre} page...")
+    logger.debug(f'Scraping {genre} pages')
+    print(f"Scraping {genre} pages...")
 
     for p in range(page_range):
+        logger.debug(f'Scraping page {page}')
         print(f"Scraping page {page}...")
         links_to_books = extract_links(target_url, "bookTitle", driver)
         links[None] += links_to_books
@@ -91,6 +116,7 @@ def fills_links(driver, links, page_range, page, target_url, genre_url, genre):
         if page:
             page += 1
             target_url = genre_url + f"?page={page}"
+    logger.debug(f'Scrapped {genre} pages')
 
 
 def get_links_to_books_genre(genre, page, to_page):
@@ -121,7 +147,9 @@ def get_links_to_books_genre(genre, page, to_page):
         fills_links(driver, links, page_range, page, target_url, genre_url,
                     genre)
         return links
-
+    except OSError:
+        logger.debug(f"Failed to scrap books' links for genre {genre}, pages {page}-{to_page}")
+        return []
     finally:
         driver.close()
 
@@ -131,6 +159,8 @@ def get_links_to_top_genres():
     Goes to the predefined URL and extracts the links to the top books
     :return: a list containing the top books per genre
     """
+    logger.debug(f"Getting links to top genres")
+
     soup = get_soup(URL_TOP)
 
     # finds the div with id="categories"
@@ -146,4 +176,5 @@ def get_links_to_top_genres():
     # turning into actual links and not dirs
     links_to_pages = [DOMAIN + link for link in links_to_pages]
 
+    logger.debug(f"Got links to top genres")
     return links_to_pages

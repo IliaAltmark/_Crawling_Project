@@ -4,8 +4,9 @@ Contains the Book class which is used for scraping the required data from a
 link containing book data
 """
 # imports from project files
-from API_key import API_KEY
-from utils import quiet_selenium_chrome_driver, USER_AGENT
+from main_code.config.API_key import API_KEY
+from main_code.utils.utils import quiet_selenium_chrome_driver, get_logger
+from main_code.config.config import USER_AGENT
 
 # imports from packages
 from bs4 import BeautifulSoup
@@ -16,6 +17,9 @@ from selenium.webdriver.support.wait import WebDriverWait
 from selenium.common.exceptions import TimeoutException
 import json
 import requests
+
+
+logger = get_logger(__name__)
 
 
 class BookRating:
@@ -66,6 +70,7 @@ class Book:
         :return: a Book object
         :TODO change callings to include top_of
         """
+        logger.debug(f'Scraping a book from {link}')
         book = Book(name=None, author=None, rating=None, genres=None,
                     description=None, link=link, published_date=None,
                     page_count=None, soup=None)
@@ -78,6 +83,7 @@ class Book:
         book._from_api()
         if not to_save_soup:
             book.soup = None
+        logger.debug(f'Scrapped a book from {link}')
         return book
 
     def check_soup(self):
@@ -93,6 +99,8 @@ class Book:
         :param web_driver: a web driver to get the link's source code with.
         :param timeout: the maximum time to wait for self.link to loud.
         """
+        logger.debug(f'Getting soup for {self.link}')
+
         # runs chrome, browse to the link
         if not web_driver:
             driver = quiet_selenium_chrome_driver()
@@ -109,37 +117,53 @@ class Book:
             elem.send_keys(Keys.RETURN)
 
             self.soup = BeautifulSoup(driver.page_source, features="lxml")
+
         except TimeoutException:
-            raise TimeoutException(
-                f"Unable to load book. Either the link {self.link} "
-                f"is wrong or the page took "
-                f"too much time to load")
+            excp_str = f"Unable to load book. Either the link {self.link} "
+            f'is wrong or the page took too much time to load'
+            logger.error(excp_str)
+            raise TimeoutException(excp_str)
+
         finally:
             if not web_driver:
                 driver.close()
+        logger.debug(f'Got soup for {self.link}')
 
     def _name_from_soup(self):
         """
         Initializes self.name from self.soup
         """
+        logger.debug(f'Getting name from soup')
+
         self.check_soup()
         tag = self.soup.find("h1", attrs={"id": "bookTitle"})
         name = tag.text.strip()
         self.name = name
+
+        logger.debug(f'{name} : Got name from soup')
 
     def _author_from_soup(self):
         """
         Initializes self.author from self.soup
         """
         self.check_soup()
+
+        logger.debug(f'{self.name} : Getting author from soup')
+
         tag = self.soup.find("a", attrs={"class": "authorName"})
-        author = tag.text
-        self.author = author
+        authors = []
+        for tag1 in tag.findAll("span", attrs={"itemprop": "name"}):
+            authors.append(tag1.text)
+        self.author = authors
+
+        logger.debug(f'{self.name} : Got author from soup')
 
     def _description_from_soup(self):
         """
         Initializes self.description from self.soup
         """
+        logger.debug(f'Getting description from soup: {self.name}')
+
         self.check_soup()
         tag = self.soup.find("div", attrs={"id": "description"})
 
@@ -151,11 +175,15 @@ class Book:
         description = tag.text.strip()
         self.description = description
 
+        logger.debug(f'Got description from soup: {self.name}')
+
     def _rating_from_soup(self):
         """
         Initializes self.rating from self.soup
         """
         self.check_soup()
+
+        logger.debug(f'{self.name} : Getting rating from soup')
 
         # finds the rating_average value
         rating_value_tag = self.soup.find("span",
@@ -183,12 +211,16 @@ class Book:
                                  number_of_ratings=num_ratings,
                                  rating_histogram=rating_histogram)
 
+        logger.debug(f'{self.name} : Got rating from soup')
+
     def _genres_from_soup(self):
         """
         Initializes self.genres from self.soup.
         The genre attribute is a dictionary with genres as keys
         and users vote about what genre fits the book as values.
         """
+        logger.debug(f'{self.link} : Getting genres from soup')
+
         self.check_soup()
         genres_dict = {}
 
@@ -205,7 +237,11 @@ class Book:
                 rating.text.strip().split(" ")[0].replace(",", ""))
         self.genres = genres_dict
 
+        logger.debug(f'{self.link} : Got genres from soup')
+
     def _from_api(self):
+        logger.debug(f'{self.link} : Getting extra info from api')
+
         search_title = self.name.lower()
         response = requests.get(
             f'''https://www.googleapis.com/books/v1/volumes?q=
@@ -216,13 +252,15 @@ class Book:
         first_book = response_d['items'][0]['volumeInfo']
         title = first_book['title'].lower()
         if search_title in title:
-            try:
+            if 'publishedDate' in first_book.keys():
                 published_date = first_book['publishedDate']
-            except KeyError:
+            else:
+                logger.info(f"{self.link} : couldn't find published_data using the api")
                 published_date = None
-            try:
+            if 'pageCount' in first_book.keys():
                 page_count = first_book['pageCount']
-            except KeyError:
+            else:
+                logger.info(f"{self.link} : couldn't find page_count using the api")
                 page_count = None
         else:
             published_date = None
@@ -230,6 +268,8 @@ class Book:
 
         self.published_date = published_date
         self.page_count = page_count
+
+        logger.debug(f'{self.name} : Got extra info from api')
 
     def __str__(self):
         return f"-------------------------------------------------------" \

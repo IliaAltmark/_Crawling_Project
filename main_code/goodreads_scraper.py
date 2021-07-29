@@ -4,35 +4,43 @@ wrapper for link_scraper and save_to_csv
 scrapes the necessary links and saves book info
 """
 # imports from project files
-import link_scraper as ls
-from save_to_db import save_info_in_db
+import main_code.link_scraper as ls
+import main_code.database_setup.tables_setup as ts
+from main_code.save_to_db import save_info_in_db
+from main_code.config.config import SHELL_DESCRIPTION, \
+    SHELL_GENRE_HELP, SHELL_PAGE_NUM_HELP, SHELL_TO_PAGE_HELP, \
+    SHELL_RELOAD_TABLES_HELP
+from main_code.utils.utils import get_logger
 
 # imports from packages
 import argparse
 
+logger = get_logger(__name__)
+
 
 def main():
+    logger.info('Program has started.')
     # Setting up terminal interface using argparse.
     parser = argparse.ArgumentParser(
-        description='Has several optional arguments for scraping specific '
-                    'genres. By default if no arguments are provided will '
-                    'scrape the "best books of 2020" page.')
+        description=SHELL_DESCRIPTION)
 
     parser.add_argument('-g', '--genre',
-                        help='genre -- Must be a string representing the '
-                             'desired genre/shelf from Goodreads '
-                             '(goodreads.com/shelf)',
+                        help=SHELL_GENRE_HELP,
                         type=str)
     parser.add_argument('-p', '--page_num',
-                        help='page_num -- The page number to be scraped '
-                             '(E.g. goodreads.com/shelf/show/(genre)?page=1)',
+                        help=SHELL_PAGE_NUM_HELP,
                         type=int)
     parser.add_argument('-t', '--to_page',
-                        help='to_page -- To which page to scrape ',
+                        help=SHELL_TO_PAGE_HELP,
                         type=int)
+    parser.add_argument('-r', '--reload-tables', action='store_true',
+                        help=SHELL_RELOAD_TABLES_HELP,
+                        )
     args = parser.parse_args()
 
     # Does a genre specific scrape or a full scrape.
+    if args.reload_tables:
+        ts.set_up_tables()
     if args.genre:
         links_to_books_genre = ls.get_links_to_books_genre(args.genre,
                                                            args.page_num,
@@ -42,6 +50,8 @@ def main():
         links_to_top_genres = ls.get_links_to_top_genres()
         links_to_top_books = ls.get_link_to_books(links_to_top_genres)
         save_info_in_db(links_to_top_books)
+
+    logger.info('Program finished successfully')
 
 
 if __name__ == "__main__":
