@@ -7,7 +7,9 @@
 
 # User-specific stuff
 main_code/config/API_key.py
+main_code/API_key.py
 main_code/testing_api.py
+main_code/config/__pycache__/API_key.cpython-38.pyc
 main_code/__pycache__/API_key.cpython-38.pyc
 .idea/**/workspace.xml
 .idea/**/tasks.xml

@@ -33,7 +33,7 @@ def add_book_to_db(book, connection, genre):
     :param genre: the genre the book corresponds to.
     :return the id of the book in the database
     """
-    logger.debug(f"Adding {book.name}'s data to the database")
+    logger.debug(f"Adding {book.link}'s data to the database")
 
     if is_in_db(book, connection):
         return -1
@@ -59,7 +59,7 @@ def add_book_to_db(book, connection, genre):
                                      ;"""
         book_id = sql_run(connection, command_get_book_number)
 
-    logger.debug(f"Added {book.name}'s data to the database")
+    logger.debug(f"Added {book.link}'s data to the database")
     return book_id[0]['book_id']
 
 
@@ -70,7 +70,7 @@ def add_description_to_db(book, connection, book_number):
     :param connection: a connection object to an sql server.
     :param book_number: the id number of the book in the database.
     """
-    logger.debug(f"{book.name} : adding description")
+    logger.debug(f"{book.link} : adding description")
 
     command = """INSERT INTO 
                   Description (
@@ -80,7 +80,7 @@ def add_description_to_db(book, connection, book_number):
                   );"""
     sql_run(connection, command, (book_number, book.description))
 
-    logger.debug(f"{book.name} : added description")
+    logger.debug(f"{book.link} : added description")
     return True
 
 
@@ -90,12 +90,12 @@ def add_genre_info(book, connection):
     :param book: a book object
     :param connection: a connection object to an sql server.
     """
-    logger.debug(f"{book.name} : adding genre info")
+    logger.debug(f"{book.link} : adding genre info")
 
     data = [','.join(genre) for genre in book.genres]
     res = autoinc_uniques_insertion(connection, 'Genre', 'genre_id', 'genre', data)
 
-    logger.debug(f"{book.name} : added genre info")
+    logger.debug(f"{book.link} : added genre info")
     return res
 
 
@@ -108,7 +108,7 @@ def add_books_genre_info(book, connection, book_number, genres_ids):
     :param connection: a connection object to an sql server.
     :param book_number: the id number of the book in the database.
     """
-    logger.debug(f"{book.name} : adding books-genres info")
+    logger.debug(f"{book.link} : adding books-genres info")
 
     genres_dict = book.genres
     # loop over the genres_dict and for each iteration add a row to the
@@ -124,7 +124,7 @@ def add_books_genre_info(book, connection, book_number, genres_ids):
         sql_run(connection, command, (book_number, genre_id,
                                       i + 1, genres_dict[k]))
 
-    logger.debug(f"{book.name} : added books-genres info")
+    logger.debug(f"{book.link} : added books-genres info")
     return True
 
 
@@ -134,11 +134,11 @@ def add_author_info(book, connection):
     :param book: a book object
     :param connection: a connection object to an sql server.
     """
-    logger.debug(f"{book.name} : adding authors")
+    logger.debug(f"{book.link} : adding authors")
 
     res = autoinc_uniques_insertion(connection, 'Authors', 'author_id', 'author', book.authors)
 
-    logger.debug(f"{book.name} : added authors info")
+    logger.debug(f"{book.link} : added authors info")
     return res
 
 
@@ -153,7 +153,7 @@ def add_books_authors_info(book, connection, book_number, authors_ids):
     """
     # loop over the genres_dict and for each iteration add a row to the
     # books_genres table
-    logger.debug(f"{book.name} : adding books-authors info")
+    logger.debug(f"{book.link} : adding books-authors info")
 
     for i in range(len(book.authors)):
         author_id = authors_ids[i]
@@ -165,7 +165,7 @@ def add_books_authors_info(book, connection, book_number, authors_ids):
                       );"""
         sql_run(connection, command)
 
-    logger.debug(f"{book.name} : added books-authors info")
+    logger.debug(f"{book.link} : added books-authors info")
     return True
 
 
@@ -176,7 +176,7 @@ def add_rating_info_to_db(book, connection, book_number):
     :param connection: a connection object to an sql server.
     :param book_number: the id number of the book in the database.
     """
-    logger.debug(f"{book.name} : adding rating info")
+    logger.debug(f"{book.link} : adding rating info")
 
     command = f"""INSERT INTO 
                   Rating_Info (
@@ -189,7 +189,7 @@ def add_rating_info_to_db(book, connection, book_number):
     command += ");"
     sql_run(connection, command)
 
-    logger.debug(f"{book.name} : added rating info")
+    logger.debug(f"{book.link} : added rating info")
     return True
 
 
@@ -210,7 +210,7 @@ def add_book_object_to_db(book, connection, genre, i):
     :param genre: the genre the book corresponds to.
     :param i: used for progress prints.
     """
-    logger.debug(f"{book.name} : Starting to add information to the database")
+    logger.debug(f"{book.link} : Starting to add information to the database")
 
     # adding book to books table and save his id number
     book_id = add_book_to_db(book, connection, genre)
@@ -237,7 +237,7 @@ def add_book_object_to_db(book, connection, genre, i):
     # adding book rating to rating_info table
     add_rating_info_to_db(book, connection, book_id)
 
-    logger.debug(f"{book.name} : Successfully added information to the database")
+    logger.debug(f"{book.link} : Successfully added information to the database")
     return True
 
 

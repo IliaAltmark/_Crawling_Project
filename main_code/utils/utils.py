@@ -2,6 +2,8 @@
 Utility functions for the project
 """
 import logging
+import sys
+
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
 
@@ -31,4 +33,11 @@ def get_logger(name, output=LOGGING_FILE_NAME, level=DEFAULT_LOG_LEVEL):
     file_handler.setLevel(level)
     file_handler.setFormatter(formatter)
     logger.addHandler(file_handler)
+
+    # Stream Handler
+    stream_handler = logging.StreamHandler(sys.stdout)
+    stream_handler.setLevel(logging.ERROR)
+    stream_handler.setFormatter(formatter)
+    logger.addHandler(stream_handler)
+
     return logger

@@ -32,7 +32,7 @@ SHELL_TO_PAGE_HELP = 'to_page -- To which page to scrape '
 SHELL_RELOAD_TABLES_HELP = 'reset-tables -- reloads the sql tables'
 
 # Logging
-DEFAULT_LOG_LEVEL = logging.DEBUG
+DEFAULT_LOG_LEVEL = logging.INFO
 LOGGING_FILE_NAME = 'log\\crawling.log'
 LOGGING_FORMAT = '%(asctime)s-%(levelname)s-FILE:%(filename)s-FUNC' \
                  ':%(funcName)s-LINE:%(lineno)d-%(message)s'

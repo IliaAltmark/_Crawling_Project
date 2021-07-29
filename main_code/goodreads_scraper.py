@@ -19,7 +19,7 @@ logger = get_logger(__name__)
 
 
 def main():
-    logger.debug('Program is starting')
+    logger.info('Program has started.')
     # Setting up terminal interface using argparse.
     parser = argparse.ArgumentParser(
         description=SHELL_DESCRIPTION)
@@ -51,7 +51,7 @@ def main():
         links_to_top_books = ls.get_link_to_books(links_to_top_genres)
         save_info_in_db(links_to_top_books)
 
-    logger.debug('Program finished successfully')
+    logger.info('Program finished successfully')
 
 
 if __name__ == "__main__":

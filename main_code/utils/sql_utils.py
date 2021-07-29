@@ -37,7 +37,6 @@ def sql_run(connection, mysql_statement, fields=None):
     :param fields: fields for the execution of the statement.
     :return: the result of the sql request.
     """
-    logger.info(f'Querying SQL server: \n statement: {mysql_statement} \n fields: {fields}')
     with connection.cursor() as cursor:
         # Read a single record
         if not fields:
