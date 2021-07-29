@@ -56,7 +56,7 @@ def extract_links(url, class_tag, driver=None):
     links_to_books = [t['href'] for t in tag]
     links_to_books = [DOMAIN + link for link in links_to_books]
 
-    logger.debug(f'Extracted links to books from {url}')
+    logger.info(f'Extracted links to books from {url}')
     return links_to_books
 
 
@@ -116,7 +116,7 @@ def fills_links(driver, links, page_range, page, target_url, genre_url, genre):
         if page:
             page += 1
             target_url = genre_url + f"?page={page}"
-    logger.debug(f'Scrapped {genre} pages')
+    logger.info(f'Scrapped {genre} pages')
 
 
 def get_links_to_books_genre(genre, page, to_page):
@@ -148,8 +148,8 @@ def get_links_to_books_genre(genre, page, to_page):
                     genre)
         return links
     except OSError:
-        logger.debug(f"Failed to scrap books' links for genre {genre}, pages {page}-{to_page}")
-        return []
+        logger.error(f"Failed to scrap books' links for genre {genre}, pages {page}-{to_page}")
+        return {None: []}
     finally:
         driver.close()
 

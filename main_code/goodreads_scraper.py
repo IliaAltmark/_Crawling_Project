@@ -52,7 +52,3 @@ def main():
         save_info_in_db(links_to_top_books)
 
     logger.info('Program finished successfully')
-
-
-if __name__ == "__main__":
-    main()

@@ -83,7 +83,7 @@ class Book:
         book._from_api()
         if not to_save_soup:
             book.soup = None
-        logger.debug(f'Scrapped a book from {link}')
+        logger.info(f'Scrapped a book from {link}')
         return book
 
     def check_soup(self):
@@ -140,7 +140,7 @@ class Book:
         name = tag.text.strip()
         self.name = name
 
-        logger.debug(f'{name} : Got name from soup')
+        logger.debug(f'{self.link} : Got name from soup')
 
     def _author_from_soup(self):
         """
@@ -148,7 +148,7 @@ class Book:
         """
         self.check_soup()
 
-        logger.debug(f'{self.name} : Getting author from soup')
+        logger.debug(f'{self.link} : Getting author from soup')
 
         tag = self.soup.find("a", attrs={"class": "authorName"})
         authors = []
@@ -156,7 +156,7 @@ class Book:
             authors.append(tag1.text)
         self.author = authors
 
-        logger.debug(f'{self.name} : Got author from soup')
+        logger.debug(f'{self.link} : Got author from soup')
 
     def _description_from_soup(self):
         """
@@ -269,7 +269,7 @@ class Book:
         self.published_date = published_date
         self.page_count = page_count
 
-        logger.debug(f'{self.name} : Got extra info from api')
+        logger.debug(f'{self.link} : Got extra info from api')
 
     def __str__(self):
         return f"-------------------------------------------------------" \

@@ -1,12 +1,10 @@
 import pymysql
 
-from main_code.utils.utils import get_logger
 from main_code.config.config import LOCAL_USER as LU, LOCAL_PASSWORD as LP
 
-
-logger = get_logger(__name__)
 LOCAL_USER = LU
 LOCAL_PASSWORD = LP
+
 
 def establish_connection():
     """
@@ -57,7 +55,8 @@ def close_connection(connection):
     return "The connection is closed"
 
 
-def autoinc_uniques_insertion(connection, table_name, pk_name, data_column_name, data):
+def autoinc_uniques_insertion(connection, table_name, pk_name,
+                              data_column_name, data):
     """
         Add the given data to table named table_name, in the given connection's database.
         :param data: 
@@ -83,7 +82,8 @@ def autoinc_uniques_insertion(connection, table_name, pk_name, data_column_name,
                                       );"""
             id_value_query = "SELECT LAST_INSERT_ID();"
             sql_run(connection, command_insert)
-            item_id = sql_run(connection, id_value_query)[0]['LAST_INSERT_ID()']
+            item_id = sql_run(connection, id_value_query)[0][
+                'LAST_INSERT_ID()']
         else:
             item_id = item_ids[0][pk_name]
         items_ids.append(item_id)

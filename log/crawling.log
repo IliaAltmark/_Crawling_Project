@@ -3,3 +3,75 @@
 2021-07-29 16:54:20,929-INFO-FILE:book_scraper.py-FUNC:_from_api-LINE:263-A Thousand Splendid Suns : couldn't find page_count using the api
 2021-07-29 16:56:35,789-INFO-FILE:book_scraper.py-FUNC:_from_api-LINE:263-Then Came You : couldn't find page_count using the api
 2021-07-29 16:56:38,878-INFO-FILE:goodreads_scraper.py-FUNC:main-LINE:54-Program finished successfully
+2021-07-29 17:51:55,436-INFO-FILE:goodreads_scraper.py-FUNC:main-LINE:22-Program has started.
+2021-07-29 17:55:58,590-INFO-FILE:goodreads_scraper.py-FUNC:main-LINE:54-Program finished successfully
+2021-07-29 18:23:22,634-INFO-FILE:goodreads_scraper.py-FUNC:main-LINE:22-Program has started.
+2021-07-29 18:23:52,226-INFO-FILE:goodreads_scraper.py-FUNC:main-LINE:23-Program has started.
+2021-07-29 18:27:16,968-INFO-FILE:goodreads_scraper.py-FUNC:main-LINE:22-Program has started.
+2021-07-29 18:29:44,243-INFO-FILE:book_scraper.py-FUNC:_from_api-LINE:263-https://www.goodreads.com/book/show/4989.The_Red_Tent : couldn't find page_count using the api
+2021-07-29 18:29:58,477-INFO-FILE:book_scraper.py-FUNC:_from_api-LINE:263-https://www.goodreads.com/book/show/1953.A_Tale_of_Two_Cities : couldn't find page_count using the api
+2021-07-29 18:31:46,896-INFO-FILE:goodreads_scraper.py-FUNC:main-LINE:54-Program finished successfully
+2021-07-29 18:48:42,861-INFO-FILE:goodreads_scraper.py-FUNC:main-LINE:22-Program has started.
+2021-07-29 18:49:39,168-INFO-FILE:link_scraper.py-FUNC:extract_links-LINE:59-Extracted links to books from https://www.goodreads.com/shelf/show/historical?page=1
+2021-07-29 18:49:39,169-INFO-FILE:link_scraper.py-FUNC:fills_links-LINE:119-Scrapped historical pages
+2021-07-29 18:49:47,560-INFO-FILE:book_scraper.py-FUNC:book_from_link-LINE:86-Scrapped a book from https://www.goodreads.com/book/show/19063.The_Book_Thief
+2021-07-29 18:49:51,078-INFO-FILE:book_scraper.py-FUNC:book_from_link-LINE:86-Scrapped a book from https://www.goodreads.com/book/show/10964.Outlander
+2021-07-29 18:49:53,640-INFO-FILE:book_scraper.py-FUNC:book_from_link-LINE:86-Scrapped a book from https://www.goodreads.com/book/show/18143977-all-the-light-we-cannot-see
+2021-07-29 18:49:58,299-INFO-FILE:book_scraper.py-FUNC:book_from_link-LINE:86-Scrapped a book from https://www.goodreads.com/book/show/1885.Pride_and_Prejudice
+2021-07-29 18:50:00,900-INFO-FILE:book_scraper.py-FUNC:book_from_link-LINE:86-Scrapped a book from https://www.goodreads.com/book/show/48855.The_Diary_of_a_Young_Girl
+2021-07-29 18:50:03,286-INFO-FILE:book_scraper.py-FUNC:book_from_link-LINE:86-Scrapped a book from https://www.goodreads.com/book/show/929.Memoirs_of_a_Geisha
+2021-07-29 18:50:05,989-INFO-FILE:book_scraper.py-FUNC:book_from_link-LINE:86-Scrapped a book from https://www.goodreads.com/book/show/4667024-the-help
+2021-07-29 18:50:11,915-INFO-FILE:book_scraper.py-FUNC:book_from_link-LINE:86-Scrapped a book from https://www.goodreads.com/book/show/13623848-the-song-of-achilles
+2021-07-29 18:50:19,545-INFO-FILE:book_scraper.py-FUNC:book_from_link-LINE:86-Scrapped a book from https://www.goodreads.com/book/show/110391.The_Duke_and_I
+2021-07-29 18:50:23,730-INFO-FILE:book_scraper.py-FUNC:book_from_link-LINE:86-Scrapped a book from https://www.goodreads.com/book/show/5043.The_Pillars_of_the_Earth
+2021-07-29 18:50:32,678-INFO-FILE:book_scraper.py-FUNC:book_from_link-LINE:86-Scrapped a book from https://www.goodreads.com/book/show/2657.To_Kill_a_Mockingbird
+2021-07-29 18:50:37,046-INFO-FILE:book_scraper.py-FUNC:book_from_link-LINE:86-Scrapped a book from https://www.goodreads.com/book/show/21853621-the-nightingale
+2021-07-29 18:50:43,991-INFO-FILE:book_scraper.py-FUNC:book_from_link-LINE:86-Scrapped a book from https://www.goodreads.com/book/show/29283884-the-gentleman-s-guide-to-vice-and-virtue
+2021-07-29 18:50:46,784-INFO-FILE:book_scraper.py-FUNC:book_from_link-LINE:86-Scrapped a book from https://www.goodreads.com/book/show/39832183-the-guernsey-literary-and-potato-peel-pie-society
+2021-07-29 18:50:52,900-INFO-FILE:book_scraper.py-FUNC:book_from_link-LINE:86-Scrapped a book from https://www.goodreads.com/book/show/5364.Dragonfly_in_Amber
+2021-07-29 18:51:21,489-INFO-FILE:book_scraper.py-FUNC:book_from_link-LINE:86-Scrapped a book from https://www.goodreads.com/book/show/37470.The_Other_Boleyn_Girl
+2021-07-29 18:51:24,841-INFO-FILE:book_scraper.py-FUNC:book_from_link-LINE:86-Scrapped a book from https://www.goodreads.com/book/show/11925514-code-name-verity
+2021-07-29 18:51:27,864-INFO-FILE:book_scraper.py-FUNC:book_from_link-LINE:86-Scrapped a book from https://www.goodreads.com/book/show/18405.Gone_with_the_Wind
+2021-07-29 18:51:32,405-INFO-FILE:book_scraper.py-FUNC:book_from_link-LINE:86-Scrapped a book from https://www.goodreads.com/book/show/114166.Devil_in_Winter
+2021-07-29 18:51:38,882-INFO-FILE:book_scraper.py-FUNC:book_from_link-LINE:86-Scrapped a book from https://www.goodreads.com/book/show/861326.The_Viscount_Who_Loved_Me
+2021-07-29 18:51:42,276-INFO-FILE:book_scraper.py-FUNC:book_from_link-LINE:86-Scrapped a book from https://www.goodreads.com/book/show/1617.Night
+2021-07-29 18:51:45,376-INFO-FILE:book_scraper.py-FUNC:book_from_link-LINE:86-Scrapped a book from https://www.goodreads.com/book/show/39999.The_Boy_in_the_Striped_Pajamas
+2021-07-29 18:51:49,077-INFO-FILE:book_scraper.py-FUNC:book_from_link-LINE:86-Scrapped a book from https://www.goodreads.com/book/show/10210.Jane_Eyre
+2021-07-29 18:51:53,474-INFO-FILE:book_scraper.py-FUNC:book_from_link-LINE:86-Scrapped a book from https://www.goodreads.com/book/show/10987.Voyager
+2021-07-29 18:51:56,773-INFO-FILE:book_scraper.py-FUNC:book_from_link-LINE:86-Scrapped a book from https://www.goodreads.com/book/show/7824322-between-shades-of-gray
+2021-07-29 18:52:00,591-INFO-FILE:book_scraper.py-FUNC:book_from_link-LINE:86-Scrapped a book from https://www.goodreads.com/book/show/25614492-salt-to-the-sea
+2021-07-29 18:52:04,845-INFO-FILE:book_scraper.py-FUNC:book_from_link-LINE:86-Scrapped a book from https://www.goodreads.com/book/show/110384.Romancing_Mister_Bridgerton
+2021-07-29 18:52:11,979-INFO-FILE:book_scraper.py-FUNC:book_from_link-LINE:86-Scrapped a book from https://www.goodreads.com/book/show/4671.The_Great_Gatsby
+2021-07-29 18:52:19,071-INFO-FILE:book_scraper.py-FUNC:book_from_link-LINE:86-Scrapped a book from https://www.goodreads.com/book/show/1934.Little_Women
+2021-07-29 18:52:22,414-INFO-FILE:book_scraper.py-FUNC:book_from_link-LINE:86-Scrapped a book from https://www.goodreads.com/book/show/114162.Secrets_of_a_Summer_Night
+2021-07-29 18:52:24,611-INFO-FILE:book_scraper.py-FUNC:book_from_link-LINE:86-Scrapped a book from https://www.goodreads.com/book/show/43641.Water_for_Elephants
+2021-07-29 18:52:27,599-INFO-FILE:book_scraper.py-FUNC:book_from_link-LINE:86-Scrapped a book from https://www.goodreads.com/book/show/6101138-wolf-hall
+2021-07-29 18:52:34,192-INFO-FILE:book_scraper.py-FUNC:book_from_link-LINE:86-Scrapped a book from https://www.goodreads.com/book/show/693016.Mine_Till_Midnight
+2021-07-29 18:52:38,832-INFO-FILE:book_scraper.py-FUNC:book_from_link-LINE:86-Scrapped a book from https://www.goodreads.com/book/show/9408584-an-offer-from-a-gentleman
+2021-07-29 18:52:43,512-INFO-FILE:book_scraper.py-FUNC:book_from_link-LINE:86-Scrapped a book from https://www.goodreads.com/book/show/5981872-the-madness-of-lord-ian-mackenzie
+2021-07-29 18:52:46,837-INFO-FILE:book_scraper.py-FUNC:book_from_link-LINE:86-Scrapped a book from https://www.goodreads.com/book/show/32620332-the-seven-husbands-of-evelyn-hugo
+2021-07-29 18:52:49,581-INFO-FILE:book_scraper.py-FUNC:book_from_link-LINE:86-Scrapped a book from https://www.goodreads.com/book/show/2865.Girl_with_a_Pearl_Earring
+2021-07-29 18:52:52,642-INFO-FILE:book_scraper.py-FUNC:book_from_link-LINE:86-Scrapped a book from https://www.goodreads.com/book/show/6584134-nine-rules-to-break-when-romancing-a-rake
+2021-07-29 18:52:57,872-INFO-FILE:book_scraper.py-FUNC:book_from_link-LINE:86-Scrapped a book from https://www.goodreads.com/book/show/40909452-drums-of-autumn
+2021-07-29 18:53:02,019-INFO-FILE:book_scraper.py-FUNC:book_from_link-LINE:86-Scrapped a book from https://www.goodreads.com/book/show/35959740-circe
+2021-07-29 18:53:04,450-INFO-FILE:book_scraper.py-FUNC:book_from_link-LINE:86-Scrapped a book from https://www.goodreads.com/book/show/38359036-the-tattooist-of-auschwitz
+2021-07-29 18:53:07,187-INFO-FILE:book_scraper.py-FUNC:book_from_link-LINE:86-Scrapped a book from https://www.goodreads.com/book/show/47281.Number_the_Stars
+2021-07-29 18:53:18,566-INFO-FILE:book_scraper.py-FUNC:book_from_link-LINE:86-Scrapped a book from https://www.goodreads.com/book/show/33259027-the-duchess-deal
+2021-07-29 18:53:24,529-INFO-FILE:book_scraper.py-FUNC:book_from_link-LINE:86-Scrapped a book from https://www.goodreads.com/book/show/7728889-the-diviners
+2021-07-29 18:53:28,718-INFO-FILE:book_scraper.py-FUNC:book_from_link-LINE:86-Scrapped a book from https://www.goodreads.com/book/show/9361589-the-night-circus
+2021-07-29 18:53:32,729-INFO-FILE:book_scraper.py-FUNC:book_from_link-LINE:86-Scrapped a book from https://www.goodreads.com/book/show/3682.A_Great_and_Terrible_Beauty
+2021-07-29 18:53:38,705-INFO-FILE:book_scraper.py-FUNC:book_from_link-LINE:86-Scrapped a book from https://www.goodreads.com/book/show/827412.It_Happened_One_Autumn
+2021-07-29 18:53:41,758-INFO-FILE:book_scraper.py-FUNC:book_from_link-LINE:86-Scrapped a book from https://www.goodreads.com/book/show/397483.The_Devil_in_the_White_City
+2021-07-29 18:53:44,687-INFO-FILE:book_scraper.py-FUNC:book_from_link-LINE:86-Scrapped a book from https://www.goodreads.com/book/show/1232.The_Shadow_of_the_Wind
+2021-07-29 18:53:47,781-INFO-FILE:book_scraper.py-FUNC:book_from_link-LINE:86-Scrapped a book from https://www.goodreads.com/book/show/77203.The_Kite_Runner
+2021-07-29 18:53:47,903-INFO-FILE:goodreads_scraper.py-FUNC:main-LINE:54-Program finished successfully
+2021-07-29 18:53:55,923-INFO-FILE:goodreads_scraper.py-FUNC:main-LINE:22-Program has started.
+2021-07-29 18:54:04,176-INFO-FILE:link_scraper.py-FUNC:extract_links-LINE:59-Extracted links to books from https://www.goodreads.com/shelf/show/historical?page=1
+2021-07-29 18:54:04,177-INFO-FILE:link_scraper.py-FUNC:fills_links-LINE:119-Scrapped historical pages
+2021-07-29 18:54:18,125-INFO-FILE:book_scraper.py-FUNC:book_from_link-LINE:86-Scrapped a book from https://www.goodreads.com/book/show/19063.The_Book_Thief
+2021-07-29 18:54:21,496-INFO-FILE:book_scraper.py-FUNC:book_from_link-LINE:86-Scrapped a book from https://www.goodreads.com/book/show/10964.Outlander
+2021-07-29 18:54:25,163-INFO-FILE:book_scraper.py-FUNC:book_from_link-LINE:86-Scrapped a book from https://www.goodreads.com/book/show/18143977-all-the-light-we-cannot-see
+2021-07-29 18:54:29,434-INFO-FILE:book_scraper.py-FUNC:book_from_link-LINE:86-Scrapped a book from https://www.goodreads.com/book/show/1885.Pride_and_Prejudice
+2021-07-29 18:54:32,419-INFO-FILE:book_scraper.py-FUNC:book_from_link-LINE:86-Scrapped a book from https://www.goodreads.com/book/show/48855.The_Diary_of_a_Young_Girl
+2021-07-29 18:54:34,696-INFO-FILE:book_scraper.py-FUNC:book_from_link-LINE:86-Scrapped a book from https://www.goodreads.com/book/show/929.Memoirs_of_a_Geisha
+2021-07-29 18:54:37,156-INFO-FILE:book_scraper.py-FUNC:book_from_link-LINE:86-Scrapped a book from https://www.goodreads.com/book/show/4667024-the-help
