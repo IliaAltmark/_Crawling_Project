@@ -20,7 +20,7 @@ def is_in_db(book, connection):
                                 Books_Authors.author_id, Authors.author 
                                 FROM books 
                                 JOIN books_authors on 
-                                books.book_id=books_authors.book_id 
+                                Books.book_id=Books_authors.book_id 
                                 JOIN authors on 
                                 Authors.author_id=Books_Authors.author_id 
                                 WHERE title=%s and Authors.author=%s
