@@ -15,9 +15,16 @@ def is_in_db(book, connection):
     :param connection: a connection object to an sql server.
     :return True if the book is in the connection's DB, else False.
     """
-    command = """SELECT EXISTS ( select books.title, books.book_id, books_authors.author_id , authors.author from 
-    books join books_authors on books.book_id = books_authors.book_id join authors on 
-    authors.author_id=books_authors.author_id where title= %s and authors.author= %s ); """
+    command = """SELECT EXISTS (
+                                SELECT Books.title, Books.book_id, 
+                                Books_Authors.author_id, Authors.author 
+                                FROM books 
+                                JOIN books_authors on 
+                                books.book_id=books_authors.book_id 
+                                JOIN authors on 
+                                Authors.author_id=Books_Authors.author_id 
+                                WHERE title=%s and Authors.author=%s
+                                );"""
     is_exists = sql_run(connection, command, (book.name, book.author[0]))
     is_exists = list(is_exists[0].values())[0]
     return is_exists == 1
