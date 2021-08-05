@@ -18,10 +18,10 @@ def is_in_db(book, connection):
     command = """SELECT EXISTS (
                                 SELECT Books.title, Books.book_id, 
                                 Books_Authors.author_id, Authors.author 
-                                FROM books 
-                                JOIN books_authors on 
-                                Books.book_id=Books_authors.book_id 
-                                JOIN authors on 
+                                FROM Books 
+                                JOIN Books_Authors on 
+                                Books.book_id=Books_Authors.book_id 
+                                JOIN Authors on 
                                 Authors.author_id=Books_Authors.author_id 
                                 WHERE title=%s and Authors.author=%s
                                 );"""
