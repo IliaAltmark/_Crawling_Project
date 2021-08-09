@@ -67,21 +67,21 @@ def autoinc_uniques_insertion(connection, table_name, pk_name,
         """
     items_ids = []
     for it in data:
-        command = f"""SELECT {pk_name} 
-                            FROM {table_name}
-                            WHERE {data_column_name}='{it}'
-                          ;"""
-        item_ids = sql_run(connection, command)
+        command = f"""SELECT {pk_name}
+                      FROM {table_name}
+                      WHERE {data_column_name}=%s
+                      ;"""
+        item_ids = sql_run(connection, command, it)
 
         if len(item_ids) == 0:
             command_insert = f"""INSERT INTO 
                                       {table_name} (
                                           {data_column_name}
                                       ) VALUES (
-                                          '{it}'
+                                          %s
                                       );"""
             id_value_query = "SELECT LAST_INSERT_ID();"
-            sql_run(connection, command_insert)
+            sql_run(connection, command_insert, it)
             item_id = sql_run(connection, id_value_query)[0][
                 'LAST_INSERT_ID()']
         else:
