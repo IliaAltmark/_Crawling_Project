@@ -97,6 +97,9 @@ def _set_up_descriptions_table(connection):
                                REFERENCES Books(book_id)
                            );""")
 
+    sql_run(connection, """ALTER TABLE Description 
+                           CONVERT TO CHARACTER SET utf8""")
+
     logger.debug('Created descriptions table')
     print('Done.')
 
