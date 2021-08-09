@@ -249,20 +249,24 @@ class Book:
 
         response_j = response.content.decode("utf-8")
         response_d = json.loads(response_j)
-        first_book = response_d['items'][0]['volumeInfo']
-        title = first_book['title'].lower()
-        if search_title in title:
-            if 'publishedDate' in first_book.keys():
-                published_date = first_book['publishedDate']
+        try:
+            first_book = response_d['items'][0]['volumeInfo']
+            title = first_book['title'].lower()
+            if search_title in title:
+                if 'publishedDate' in first_book.keys():
+                    published_date = first_book['publishedDate']
+                else:
+                    logger.info(f"{self.link} : couldn't find published_data using the api")
+                    published_date = None
+                if 'pageCount' in first_book.keys():
+                    page_count = first_book['pageCount']
+                else:
+                    logger.info(f"{self.link} : couldn't find page_count using the api")
+                    page_count = None
             else:
-                logger.info(f"{self.link} : couldn't find published_data using the api")
                 published_date = None
-            if 'pageCount' in first_book.keys():
-                page_count = first_book['pageCount']
-            else:
-                logger.info(f"{self.link} : couldn't find page_count using the api")
                 page_count = None
-        else:
+        except:
             published_date = None
             page_count = None
 
