@@ -59,7 +59,11 @@ def _set_up_database(connection):
     logger.debug('Creating database')
     # create the good_reads_data database
     print('Creating Good_Reads_Data database...', end='')
-    sql_run(connection, "CREATE DATABASE Good_Reads_Data")
+    sql_run(connection, "CREATE DATABASE Good_Reads_Data;")
+    sql_run(connection, """ALTER DATABASE Good_Reads_Data 
+                           CHARACTER SET utf8 
+                           COLLATE utf8_general_ci;""")
+    sql_run(connection, """SET collation_connection = 'utf8_general_ci';""")
     connection.select_db("Good_Reads_Data")
 
     logger.debug('Created database')
